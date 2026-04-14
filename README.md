@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 > **Paper:** Topology-Guided Multi-View Ensemble Learning for Evidence-Aware Somatic Variant Pathogenicity Classification in Cancer Genomics   
-> **Authors:** Asif Ahamed, Md. Tanvir Hasan, Most. Alisa Tabassum, Ahammad Hossain*, Md. Kamruzzaman, Jayanta Das, A.H.M. Rahmatullah Imon  
+> **Authors:** Asif Ahamed, Md. Tanvir Hasan, Most. Alisa Tabassum, Ahammad Hossain*, A.H.M. Rahmatullah Imon  
 > **Corresponding Author:** Ahammad Hossain — ahammadstatru@gmail.com
 
 ---
