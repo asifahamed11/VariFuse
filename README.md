@@ -1,161 +1,148 @@
+
 # TF-DFE: Topology-Guided Multi-View Ensemble Learning for Evidence-Aware Somatic Variant Pathogenicity Classification in Cancer Genomics
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Status: Under Review](https://img.shields.io/badge/Status-Under_Review-orange.svg)]()
 
-> **Paper:** Topology-Guided Multi-View Ensemble Learning for Evidence-Aware Somatic Variant Pathogenicity Classification in Cancer Genomics   
-> **Authors:** Asif Ahamed, Md. Tanvir Hasan, Most. Alisa Tabassum, Ahammad Hossain*, A.H.M. Rahmatullah Imon  
-> **Corresponding Author:** Ahammad Hossain — ahammadstatru@gmail.com
+> **Paper:** Topology-Guided Multi-View Ensemble Learning for Evidence-Aware Somatic Variant Pathogenicity Classification in Cancer Genomics  
+> **Status:** Under Review at BMC Bioinformatics
+> 
 
----
+## 📌 Overview
 
-## Overview
+**TF-DFE** (Topo-Fractal Dynamic Fuzzy Ensemble) is a highly scalable, evidence-aware machine learning framework designed to classify somatic single nucleotide variants (SNVs) as either pathogenic drivers or benign passengers. To address the complexities of cancer genomics, this framework integrates three distinct feature views:
 
-TF-DFE (Topo-Fractal Dynamic Fuzzy Ensemble) is a scalable, evidence-aware framework for classifying somatic single nucleotide variants (SNVs) as pathogenic drivers or benign passengers. The framework combines:
+*   🧬 **Biological Predictors:** Standard functional scores (REVEL, CADD, SIFT, PolyPhen2), evolutionary conservation measures (GERP++, phyloP), and 3D structural/UniProt annotations.
+*   🌀 **Fractal Sequence Features:** DNA sequence composition captured via Frequency Chaos Game Representation (FCGR) at $k=3$ and $k=4$ (320 dimensions).
+*   🕸️ **Topological Features:** Complex spatial relationships extracted using persistent homology via `giotto-tda` (6 dimensions).
+*   🤖 **Dynamic Ensemble Selection:** An enhanced KNORA-Eliminate strategy that adaptively selects the most competent base models for each specific variant.
 
-- **Standard biological predictors** - REVEL, CADD, SIFT, PolyPhen2, GERP++, phyloP, structural/UniProt features
-- **Fractal sequence features** - Frequency Chaos Game Representation (FCGR) at k=3 and k=4 (320 dimensions)
-- **Topological features** - Persistent homology via giotto-tda (6 dimensions)
-- **Dynamic ensemble selection** - Enhanced KNORA-Eliminate strategy
+**Performance Highlights:**  
+`MCC: 0.8702` | `AUROC: 0.9666` | `AUPRC: 0.9768` | `Accuracy: 93.48%`
 
-**Final dataset:** 207,266 balanced somatic SNVs curated from dbNSFP v5.3a (GRCh37)  
-**Performance:** MCC = 0.8702 | AUROC = 0.9666 | AUPRC = 0.9768 | Accuracy = 93.48%
 
----
+## 🗂️ Repository Structure
 
-## Repository Structure
-
-```
+```text
 TF-DFE/
 ├── README.md
 ├── requirements.txt
 ├── scripts/
-│   ├── 01_somatic_variant_processor.py       # dbNSFP parsing, CIViC/COSMIC rescue, labeling
-│   ├── 02_remove_missing_values.py           # Selective missing value removal
-│   ├── 03_remove_duplicates.py               # Deduplication on chr/pos/ref/alt
-│   ├── 04_structural_feature_engineering.py  # UniProt + AlphaFold2 + SASA features
-│   ├── 05_remove_leakage_columns.py          # Leakage column removal
-│   ├── 06_dataset_balancing.py               # Downsample to balanced 207,266 variants
-│   ├── 07_eda.py                             # Exploratory data analysis + figures
-│   └── 08_tf_dfe_model.py                    # Main TF-DFE model, evaluation, SHAP
+│   ├── 01_somatic_variant_processor.py      # dbNSFP parsing, CIViC/COSMIC rescue, labeling
+│   ├── 02_remove_missing_values.py          # Selective missing value removal
+│   ├── 03_remove_duplicates.py              # Deduplication on chr/pos/ref/alt
+│   ├── 04_structural_feature_engineering.py # UniProt + AlphaFold2 + SASA features
+│   ├── 05_remove_leakage_columns.py         # Data leakage prevention
+│   ├── 06_dataset_balancing.py              # Downsampling to 207,266 balanced variants
+│   ├── 07_eda.py                            # Exploratory data analysis (EDA) & visualizations
+│   └── 08_tf_dfe_model.py                   # Main TF-DFE model training, evaluation & SHAP analysis
 └── data/
-    └── Final_Dataset.csv                     # Balanced dataset (207,266 variants, 24 features)
+    └── Final_Dataset.csv                    # Balanced dataset (207,266 variants, 24 features)
 ```
 
----
+## ⚙️ Data Processing Pipeline
 
-## Pipeline
+To reproduce the study from scratch, execute the scripts sequentially. Each script generates a CSV file that serves as the input for the subsequent step.
 
-Run the scripts in order. Each script outputs a CSV that is used as input to the next step.
+```mermaid
+graph TD;
+    A[dbNSFP5.3a_grch37.gz] -->|01_somatic_variant_processor.py| B(somatic_variant_dbNSFP.csv <br> 19.6M variants)
+    B -->|02_remove_missing_values.py| C(Removed Missing Values <br> 9.2M variants)
+    C -->|05_remove_leakage_columns.py| D(Removed Leakage Columns)
+    D -->|03_remove_duplicates.py| E(Deduplicated Variants <br> 6.4M variants)
+    E -->|04_structural_feature_engineering.py| F(Added UniProt & AlphaFold2 Features)
+    F -->|06_dataset_balancing.py| G[(data/Final_Dataset.csv <br> 207,266 balanced variants)]
+    G -->|07_eda.py| H[EDA_Results/ <br> Figures & Stats]
+    G -->|08_tf_dfe_model.py| I[results_publication/ <br> Model Results & SHAP]
 
 ```
-dbNSFP5.3a_grch37.gz
-        │
-        ▼
-01_somatic_variant_processor.py  →  somatic_variant_dbNSFP.csv  (19,613,687 variants)
-        │
-        ▼
-02_remove_missing_values.py      →  somatic_variant_dbNSFP_Removes_missing_values.csv  (9,241,413)
-        │
-        ▼
-05_remove_leakage_columns.py     →  somatic_variant_dbNSFP_Removes_leakage.csv
-        │
-        ▼
-03_remove_duplicates.py          →  somatic_variant_dbNSFP_Removes_leakage_missing_values_Deduplication.csv  (6,461,982)
-        │
-        ▼
-04_structural_feature_engineering.py  →  Final_Dataset_UniProt_Removes_leakage.csv  (adds UniProt/AlphaFold2 features)
-        │
-        ▼
-06_dataset_balancing.py          →  data/Final_Dataset.csv  (207,266 balanced variants)
-        │
-        ▼
-07_eda.py                        →  EDA_Results/  (figures and statistics)
-        │
-        ▼
-08_tf_dfe_model.py               →  results_publication/  (model results, figures, SHAP)
-```
 
----
+*(Note: Scripts `03` and `05` can be executed as per the pipeline flow above).*
 
-## External Data Requirements
 
-These large/licensed files must be downloaded separately before running the pipeline.
+## 💾 External Data Requirements
 
-| File | Source | Used In |
-|------|--------|---------|
-| `dbNSFP5.3a_grch37.gz` | [dbNSFP](https://dbnsfp.org) | Script 01 |
+Before running the pipeline, ensure the following large/licensed datasets are downloaded and placed in the working directory (or update the file paths inside the respective scripts).
+
+| File Name | Source | Used In |
+| --- | --- | --- |
+| `dbNSFP5.3a_grch37.gz` | [dbNSFP Portal](https://dbnsfp.org) | Script 01 |
 | `01-Jan-2026-VariantSummaries.tsv` | [CIViC Releases](https://civicdb.org/releases) | Script 01 |
 | `Cosmic_CancerGeneCensus_v102_GRCh37.tsv` | [COSMIC](https://cancer.sanger.ac.uk/cosmic) | Script 01 |
 | `cmc_export.tsv` | [COSMIC Mutant Census](https://cancer.sanger.ac.uk/cosmic) | Script 01 |
 | `oncokb_biomarker_drug_associations.tsv` | [OncoKB](https://www.oncokb.org) | Script 01 |
-| `uniprot_sprot_human.dat` | [UniProt](https://www.uniprot.org/downloads) | Script 04 |
+| `uniprot_sprot_human.dat` | [UniProt Downloads](https://www.uniprot.org/downloads) | Script 04 |
 | AlphaFold2 PDB files (`AF-*-model_v*.pdb`) | [AlphaFold DB](https://alphafold.ebi.ac.uk/download) | Script 04 |
 
-> **Note:** Place all external files in the same directory as the scripts before running, or update the file paths inside each script accordingly.
 
----
+## 🚀 Installation & Quick Start
 
-## Installation
+**1. Clone the repository and install dependencies:**
 
 ```bash
-git clone https://github.com/asifahamed11/TF-DFE.git
+git clone [https://github.com/asifahamed11/TF-DFE.git](https://github.com/asifahamed11/TF-DFE.git)
 cd TF-DFE
 pip install -r requirements.txt
+
 ```
 
-Python 3.8 or higher is required.
+*(Requires Python 3.8 or higher)*
 
----
-
-## Quick Start (Skip to Model Training)
-
-If you only want to reproduce the model results using the pre-processed dataset:
+**2. Skip to Model Training:**
+If you wish to bypass the data curation steps and directly evaluate the model using our pre-processed dataset:
 
 ```bash
-# Dataset is already available in data/Final_Dataset.csv
-# Update DATA_PATH in script 08 if needed, then run:
+# Ensure DATA_PATH in script 08 points to data/Final_Dataset.csv
 python scripts/08_tf_dfe_model.py
+
 ```
 
-Results will be saved to `results_publication/`.
+All outputs, including performance metrics and figures, will be generated in the `results_publication/` directory.
 
----
 
-## Dataset
+## 📊 Dataset Features
 
-The final balanced dataset (`data/Final_Dataset.csv`) contains **207,266 somatic SNVs** (103,633 pathogenic / 103,633 benign) with the following features:
+The final balanced dataset (`data/Final_Dataset.csv`) contains **207,266 somatic SNVs** (103,633 pathogenic and 103,633 benign).
 
-| Feature Group | Features | Dimensions |
-|---------------|----------|------------|
-| Genomic coordinates | chr, pos, ref, alt | 4 |
-| Pathogenicity scores | REVEL, CADD, SIFT, PolyPhen2, GERP++, phyloP | 6 |
-| Cancer gene annotations | IS_CANCER_GENE, IS_TIER1, IS_ONCOGENE, IS_TSG | 4 |
-| Structural features | SASA, RELATIVE_SASA, PLDDT_SCORE | 3 |
-| UniProt functional sites | IS_IN_DOMAIN, IS_ACTIVE_SITE, IS_BINDING_SITE, IS_TRANSMEMBRANE, DISTANCE_TO_ACTIVE_SITE | 5 |
-| Label | LABEL_PATHOGENIC (0=benign, 1=pathogenic) | 1 |
+| Feature Category | Included Features | Dimensions |
+| --- | --- | --- |
+| **Genomic Coordinates** | `chr`, `pos`, `ref`, `alt` | 4 |
+| **Pathogenicity Scores** | `REVEL`, `CADD`, `SIFT`, `PolyPhen2`, `GERP++`, `phyloP` | 6 |
+| **Cancer Annotations** | `IS_CANCER_GENE`, `IS_TIER1`, `IS_ONCOGENE`, `IS_TSG` | 4 |
+| **Structural (3D)** | `SASA`, `RELATIVE_SASA`, `PLDDT_SCORE` | 3 |
+| **Functional Sites** | `IS_IN_DOMAIN`, `IS_ACTIVE_SITE`, `IS_BINDING_SITE`, `IS_TRANSMEMBRANE`, `DISTANCE_TO_ACTIVE_SITE` | 5 |
+| **Target Label** | `LABEL_PATHOGENIC` (0 = Benign, 1 = Pathogenic) | 1 |
 
-FCGR (320-dim) and TDA (6-dim) features are computed on-the-fly inside `08_tf_dfe_model.py`.
+*(Note: The 320-dim FCGR and 6-dim TDA features are computed dynamically during model execution inside `08_tf_dfe_model.py`).*
 
----
 
-## Reproducing Paper Figures
+## 📈 Reproducing Figures
 
-All figures in the manuscript are generated by `08_tf_dfe_model.py` and saved to `results_publication/` as both `.png` and `.tiff`.
+All manuscript figures are fully reproducible:
 
-EDA figures (Fig 4a, 4b, 4c, 5, 5b) are generated by `07_eda.py` and saved to `EDA_Results/`.
+* **Model Evaluation & SHAP:** Run `08_tf_dfe_model.py`. Outputs are saved in `results_publication/` (both `.png` and `.tiff` formats).
+* **Exploratory Data Analysis (EDA):** Run `07_eda.py` to generate the exploratory figures (e.g., class distributions, mutation spectrums) saved in `EDA_Results/`.
 
----
+## 📖 Citation
 
-## License
+This repository contains the code and dataset for our manuscript currently under peer review. Full citation details will be updated upon publication.
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+```bibtex
+@unpublished{tfdfe2026,
+  title={Topology-Guided Multi-View Ensemble Learning for Evidence-Aware Somatic Variant Pathogenicity Classification in Cancer Genomics},
+  author={Anonymous Authors},
+  note={Under Review at BMC Bioinformatics},
+  year={2026}
+}
 
----
+```
 
-## Contact
+## 📜 License
 
-**Ahammad Hossain** (Corresponding Author)  
-Department of Computer Science & Engineering, Varendra University, Bangladesh  
-Email: ahammadstatru@gmail.com  
-ORCID: [0000-0001-9081-5905](https://orcid.org/0000-0001-9081-5905)
+This project is licensed under the MIT License. See the [LICENSE](https://www.google.com/search?q=LICENSE) file for full details.
+
+
+## ✉️ Contact
+
+For any questions, discussions, or issues regarding this repository or the dataset during the review process, please open an **Issue** directly in this GitHub repository. Contact details will be updated once the manuscript is published.
