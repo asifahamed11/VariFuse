@@ -1,3 +1,5 @@
+"""Stage 01 - parse and filter dbNSFP records into the base somatic-variant table."""
+
 import pandas as pd
 from config import DATA_DIR, STAGE01_OUT
 import numpy as np
@@ -135,13 +137,9 @@ print("Loading Cancer Gene Census and COSMIC data")
 cgc = pd.read_csv(DATA_DIR / "Cosmic_CancerGeneCensus_v102_GRCh37.tsv", sep="\t")
 cancer_genes = set(cgc["GENE_SYMBOL"].unique())
 oncogenes = set(
-    cgc[cgc["ROLE_IN_CANCER"].str.contains("oncogene", na=False, case=False)][
-        "GENE_SYMBOL"
-    ]
+    cgc[cgc["ROLE_IN_CANCER"].str.contains("oncogene", na=False, case=False)]["GENE_SYMBOL"]
 )
-tsgs = set(
-    cgc[cgc["ROLE_IN_CANCER"].str.contains("TSG", na=False, case=False)]["GENE_SYMBOL"]
-)
+tsgs = set(cgc[cgc["ROLE_IN_CANCER"].str.contains("TSG", na=False, case=False)]["GENE_SYMBOL"])
 tier1_genes = set(cgc[cgc["TIER"] == 1]["GENE_SYMBOL"])
 
 cgc_slim = cgc[["GENE_SYMBOL", "ROLE_IN_CANCER", "TIER"]].copy()
@@ -177,9 +175,7 @@ cmc_agg = (
     .reset_index()
 )
 cmc_agg.columns = ["genename", "aapos", "COSMIC_RECURRENCE", "COSMIC_TESTED"]
-cmc_agg["COSMIC_FREQUENCY"] = cmc_agg["COSMIC_RECURRENCE"] / cmc_agg[
-    "COSMIC_TESTED"
-].replace(0, 1)
+cmc_agg["COSMIC_FREQUENCY"] = cmc_agg["COSMIC_RECURRENCE"] / cmc_agg["COSMIC_TESTED"].replace(0, 1)
 
 cosmic_rescue = cmc_agg[cmc_agg["COSMIC_RECURRENCE"] >= MIN_COSMIC_RESCUE].copy()
 cosmic_rescue["rescue_gene_pos"] = (
@@ -258,8 +254,7 @@ for i, raw_chunk in enumerate(chunk_iterator):
 
     raw_chunk["gnomAD_non_cancer_AF"] = np.nan
     non_cancer_mask = (
-        pd.to_numeric(raw_chunk["gnomAD2.1.1_exomes_non_cancer_AN"], errors="coerce")
-        > 0
+        pd.to_numeric(raw_chunk["gnomAD2.1.1_exomes_non_cancer_AN"], errors="coerce") > 0
     )
     if non_cancer_mask.any():
         raw_chunk.loc[non_cancer_mask, "gnomAD_non_cancer_AF"] = (
@@ -282,9 +277,7 @@ for i, raw_chunk in enumerate(chunk_iterator):
         + ":"
         + raw_chunk["alt"]
     )
-    raw_chunk["rescue_gene_pos"] = (
-        raw_chunk["genename"] + "_" + raw_chunk["aapos"].astype(str)
-    )
+    raw_chunk["rescue_gene_pos"] = raw_chunk["genename"] + "_" + raw_chunk["aapos"].astype(str)
 
     in_civic = raw_chunk["rescue_key"].isin(rescue_keys_civic)
     in_cosmic = raw_chunk["rescue_gene_pos"].isin(cosmic_rescue_keys)
@@ -293,22 +286,16 @@ for i, raw_chunk in enumerate(chunk_iterator):
     possible_hotspots = raw_chunk[raw_chunk["genename"].isin(RESCUE_HOTSPOTS.keys())]
     if not possible_hotspots.empty:
         for gene, positions in RESCUE_HOTSPOTS.items():
-            mask = (raw_chunk["genename"] == gene) & (
-                raw_chunk["aapos"].isin(positions)
-            )
+            mask = (raw_chunk["genename"] == gene) & (raw_chunk["aapos"].isin(positions))
             in_hotspot = in_hotspot | mask
 
     is_rescued = in_civic | in_hotspot | in_cosmic
 
-    af_to_use = raw_chunk["gnomAD_non_cancer_AF"].fillna(
-        raw_chunk["gnomAD4.1_joint_AF"]
-    )
+    af_to_use = raw_chunk["gnomAD_non_cancer_AF"].fillna(raw_chunk["gnomAD4.1_joint_AF"])
     passes_af = (af_to_use.isna()) | (af_to_use < GNOMAD_AF_THRESHOLD)
 
     quality_ok = (
-        (raw_chunk["CADD_phred"] >= MIN_CADD_SCORE)
-        | (raw_chunk["CADD_phred"].isna())
-        | is_rescued
+        (raw_chunk["CADD_phred"] >= MIN_CADD_SCORE) | (raw_chunk["CADD_phred"].isna()) | is_rescued
     )
     keep_variant = passes_af | is_rescued
 
@@ -329,13 +316,11 @@ for i, raw_chunk in enumerate(chunk_iterator):
         somatic_subset["HGVSp_snpEff"].str.contains("Ter|\\*", na=False, regex=True)
     )
     somatic_subset.loc[nonsense_mask, "variant_type"] = "nonsense"
-    frameshift_mask = somatic_subset["HGVSp_snpEff"].str.contains(
-        "fs", na=False, case=False
-    )
+    frameshift_mask = somatic_subset["HGVSp_snpEff"].str.contains("fs", na=False, case=False)
     somatic_subset.loc[frameshift_mask, "variant_type"] = "frameshift"
-    synonymous_mask = (
-        somatic_subset["aaref"] == somatic_subset["aaalt"]
-    ) & somatic_subset["aaref"].notna()
+    synonymous_mask = (somatic_subset["aaref"] == somatic_subset["aaalt"]) & somatic_subset[
+        "aaref"
+    ].notna()
     somatic_subset.loc[synonymous_mask, "variant_type"] = "synonymous"
 
     somatic_subset = somatic_subset.merge(cgc_slim, on="genename", how="left")
@@ -349,19 +334,11 @@ for i, raw_chunk in enumerate(chunk_iterator):
     )
     somatic_subset["COSMIC_RECURRENCE"].fillna(0, inplace=True)
 
-    somatic_subset["IS_CANCER_GENE"] = (
-        somatic_subset["genename"].isin(cancer_genes).astype(int)
-    )
-    somatic_subset["IS_ONCOGENE"] = (
-        somatic_subset["genename"].isin(oncogenes).astype(int)
-    )
+    somatic_subset["IS_CANCER_GENE"] = somatic_subset["genename"].isin(cancer_genes).astype(int)
+    somatic_subset["IS_ONCOGENE"] = somatic_subset["genename"].isin(oncogenes).astype(int)
     somatic_subset["IS_TSG"] = somatic_subset["genename"].isin(tsgs).astype(int)
-    somatic_subset["IS_TIER1"] = (
-        somatic_subset["genename"].isin(tier1_genes).astype(int)
-    )
-    somatic_subset["IS_ONCOKB"] = (
-        somatic_subset["genename"].isin(oncokb_genes).astype(int)
-    )
+    somatic_subset["IS_TIER1"] = somatic_subset["genename"].isin(tier1_genes).astype(int)
+    somatic_subset["IS_ONCOKB"] = somatic_subset["genename"].isin(oncokb_genes).astype(int)
     somatic_subset["IS_KNOWN_HOTSPOT"] = in_hotspot[somatic_subset.index].astype(int)
 
     somatic_subset["CONSENSUS_SCORE"] = (

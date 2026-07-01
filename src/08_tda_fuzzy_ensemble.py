@@ -1,3 +1,5 @@
+"""Stage 08 - TDA + fuzzy KNORA-E ensemble: feature build, training, and evaluation."""
+
 import pandas as pd
 from config import DATA_DIR, STAGE07_OUT, STAGE08_OUT
 import numpy as np
@@ -19,7 +21,7 @@ from tqdm import tqdm
 from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
-from sklearn.neural_network import MLPClassifier               # NEW (Change 1)
+from sklearn.neural_network import MLPClassifier  # NEW (Change 1)
 from joblib import Parallel, delayed
 import multiprocessing
 from sklearn.model_selection import (
@@ -63,6 +65,7 @@ from sklearn.linear_model import LogisticRegression
 
 try:
     from xgboost import XGBClassifier
+
     XGBOOST_AVAILABLE = True
 except ImportError:
     print("Warning: XGBoost not available")
@@ -70,6 +73,7 @@ except ImportError:
 
 try:
     from lightgbm import LGBMClassifier
+
     LGBM_AVAILABLE = True
 except ImportError:
     print("Warning: LightGBM not available")
@@ -77,6 +81,7 @@ except ImportError:
 
 try:
     from catboost import CatBoostClassifier
+
     CATBOOST_AVAILABLE = True
 except ImportError:
     print("Warning: CatBoost not available")
@@ -85,6 +90,7 @@ except ImportError:
 try:
     from gtda.homology import VietorisRipsPersistence
     from gtda.diagrams import PersistenceEntropy, Amplitude, BettiCurve, PersistenceLandscape
+
     TDA_AVAILABLE = True
 except ImportError:
     print("Warning: giotto-tda not available. Install with: pip install giotto-tda")
@@ -92,6 +98,7 @@ except ImportError:
 
 try:
     from pyfaidx import Fasta
+
     PYFAIDX_AVAILABLE = True
 except ImportError:
     print("Warning: pyfaidx not available. Install with: pip install pyfaidx")
@@ -99,6 +106,7 @@ except ImportError:
 
 try:
     import shap
+
     SHAP_AVAILABLE = True
 except ImportError:
     print("Warning: SHAP not available. Install with: pip install shap")
@@ -108,7 +116,7 @@ warnings.filterwarnings("ignore")
 
 
 class Config:
-    """Configuration with optimized hyperparameters — v4.0 (Supervisor Revision)"""
+    """Model, feature-engineering, and training hyper-parameters."""
 
     RANDOM_STATE = 42
     TEST_SIZE = 0.2
@@ -119,39 +127,30 @@ class Config:
     TDA_N_NEIGHBORS = 75
     SEQUENCE_WINDOW = 75
     FCGR_K_VALUES = [3, 4]
-    # -----------------------------------------------------------------------
-    # CHANGE 2: TDA homology dims kept at (0, 1); the extractor now produces
+    # TDA homology dims kept at (0, 1); the extractor now produces
     # ~24 features instead of 6, all computed over the FCGR representation.
-    # -----------------------------------------------------------------------
     TDA_HOMOLOGY_DIMS = (0, 1)
 
-    # FIX 3 (retained from v3)
     FCGR_PCA_COMPONENTS = 20
 
-    # FIX 2 (retained from v3)
     WEAK_LEARNER_MARGIN = 0.10
 
-    # FIX 5 (retained from v3)
-    THRESHOLD_SEARCH_LOW  = 0.45
+    THRESHOLD_SEARCH_LOW = 0.45
     THRESHOLD_SEARCH_HIGH = 0.65
 
-    # -----------------------------------------------------------------------
-    # CHANGE 3: Selective prediction — abstain when neighbourhood purity is
-    # below this threshold.  Set to 0.0 to disable (returns all predictions).
-    # -----------------------------------------------------------------------
-    SELECTIVE_ABSTAIN_THRESHOLD = 0.60   # neighbourhood purity ≥ 0.60 to predict
+    # Selective prediction — abstain when neighbourhood purity is
+    # below this threshold. Set to 0.0 to disable (returns all predictions).
+    SELECTIVE_ABSTAIN_THRESHOLD = 0.60  # neighbourhood purity ≥ 0.60 to predict
 
-    # -----------------------------------------------------------------------
-    # CHANGE 3: Consensus margin — variants whose |CONSENSUS_SCORE − 0.5| is
+    # Consensus margin — variants whose |CONSENSUS_SCORE − 0.5| is
     # below this value are treated as ambiguous; their sample weight during
     # base-learner training is scaled down to AMBIGUOUS_SAMPLE_WEIGHT.
-    # -----------------------------------------------------------------------
-    AMBIGUOUS_MARGIN       = 0.10
+    AMBIGUOUS_MARGIN = 0.10
     AMBIGUOUS_SAMPLE_WEIGHT = 0.30
 
-    DATA_PATH   = STAGE07_OUT / "Final_Dataset_Balanced.csv"
+    DATA_PATH = STAGE07_OUT / "Final_Dataset_Balanced.csv"
     GENOME_PATH = DATA_DIR / "hg19.fa"
-    OUTPUT_DIR  = Path(STAGE08_OUT)
+    OUTPUT_DIR = Path(STAGE08_OUT)
 
     LEAKAGE_COLS = ["chr", "pos", "ref", "alt", "CONSENSUS_SCORE", "TIER"]
 
@@ -190,16 +189,15 @@ plt.style.use("seaborn-v0_8-white")
 sns.set_palette("colorblind")
 
 
-# ---------------------------------------------------------------------------
-# FCGR encoders  (unchanged)
-# ---------------------------------------------------------------------------
+# FCGR encoders (unchanged)
+
 
 class FCGREncoder:
     """Frequency Chaos Game Representation encoder"""
 
     def __init__(self, k=4):
         self.k = k
-        self.grid_size = 2 ** k
+        self.grid_size = 2**k
         self.vertices = {
             "A": (0.0, 0.0),
             "C": (0.0, 1.0),
@@ -243,38 +241,34 @@ class MultiScaleFCGR:
         return np.hstack(encoded_features)
 
 
-# ---------------------------------------------------------------------------
-# CHANGE 2: Expanded TopologicalFeatureExtractor
-#
-# Key changes vs v3:
-#   1. TDA is now computed over the FCGR/sequence representation (X_fcgr_raw
-#      is passed in as `X_fcgr` from TFDFEPreprocessor) instead of the
-#      biological feature space.  Topology over the genomic sequence captures
-#      information that tree-based models trained on scalar biological scores
-#      fundamentally cannot access.
-#   2. Feature set expanded from 6 → ~24:
-#      - total_persistence_h{0,1}   (2)
-#      - entropy_h{0,1}             (2)
-#      - n_components_h{0,1}        (2)
-#      - amplitude_h{0,1}           (2)   (max-normalised persistence amplitude)
-#      - betti_mean_h{0,1}          (2)   (mean Betti number over filtration)
-#      - landscape_l1_h{0,1}        (2)   (L1 norm of first persistence landscape)
-#      - birth_mean_h{0,1}          (2)   (mean birth time)
-#      - death_mean_h{0,1}          (2)   (mean death time)
-#      - persistence_std_h{0,1}     (2)   (std of persistence lifetimes)
-#      - persistence_max_h{0,1}     (2)   (longest-lived feature)
-#      Total: 20 features per sample  (6 original + 14 new)
-# ---------------------------------------------------------------------------
+# Expanded TopologicalFeatureExtractor
+# Key changes vs:
+# 1. TDA is now computed over the FCGR/sequence representation (X_fcgr_raw
+# is passed in as `X_fcgr` from TFDFEPreprocessor) instead of the
+# biological feature space. Topology over the genomic sequence captures
+# information that tree-based models trained on scalar biological scores
+# fundamentally cannot access.
+# 2. Feature set expanded from 6 → ~24:
+# - total_persistence_h{0,1} (2)
+# - entropy_h{0,1} (2)
+# - n_components_h{0,1} (2)
+# - amplitude_h{0,1} (2) (max-normalised persistence amplitude)
+# - betti_mean_h{0,1} (2) (mean Betti number over filtration)
+# - landscape_l1_h{0,1} (2) (L1 norm of first persistence landscape)
+# - birth_mean_h{0,1} (2) (mean birth time)
+# - death_mean_h{0,1} (2) (mean death time)
+# - persistence_std_h{0,1} (2) (std of persistence lifetimes)
+# - persistence_max_h{0,1} (2) (longest-lived feature)
+# Total: 20 features per sample (6 original + 14 new)
+
 
 class TopologicalFeatureExtractor:
-    """Extract topological features using persistent homology.
+    """Extract topological features via persistent homology.
 
-    CHANGE 2 (v4.0):
-    ----------------
-    - Now operates on the **FCGR/sequence representation** rather than the
-      biological feature space.  Call `extract_global_tda(X_fcgr)` where
-      X_fcgr is the PCA-compressed FCGR matrix (n_samples × 20).
-    - Feature vector expanded to ~20 descriptors per sample (was 6).
+    Operates on the FCGR/sequence representation rather than the biological
+    feature space: call ``extract_global_tda(X_fcgr)`` where ``X_fcgr`` is the
+    PCA-compressed FCGR matrix (n_samples x 20). Produces ~20 topological
+    descriptors per sample.
     """
 
     def __init__(self, homology_dimensions=(0, 1), n_neighbors=75):
@@ -302,43 +296,48 @@ class TopologicalFeatureExtractor:
             diagram = diagrams[0][diagrams[0][:, 2] == dim]
             prefix = f"h{dim}"
             if len(diagram) > 0:
-                birth       = diagram[:, 0]
-                death       = diagram[:, 1]
+                birth = diagram[:, 0]
+                death = diagram[:, 1]
                 persistence = death - birth
 
                 # ---- original 3 features ----
                 total_pers = float(np.sum(persistence))
                 features[f"total_persistence_{prefix}"] = total_pers
                 if total_pers > 0:
-                    p_norm   = persistence / total_pers
-                    entropy  = -np.sum(p_norm * np.log(p_norm + 1e-10))
+                    p_norm = persistence / total_pers
+                    entropy = -np.sum(p_norm * np.log(p_norm + 1e-10))
                     features[f"entropy_{prefix}"] = float(entropy)
                 else:
                     features[f"entropy_{prefix}"] = 0.0
                 features[f"n_components_{prefix}"] = float(len(diagram))
 
-                # ---- new features (CHANGE 2) ----
-                features[f"amplitude_{prefix}"]        = float(np.max(persistence))
-                features[f"persistence_std_{prefix}"]  = float(np.std(persistence))
-                features[f"persistence_max_{prefix}"]  = float(np.max(persistence))
-                features[f"birth_mean_{prefix}"]       = float(np.mean(birth))
-                features[f"death_mean_{prefix}"]       = float(np.mean(death))
+                # ---- new features ----
+                features[f"amplitude_{prefix}"] = float(np.max(persistence))
+                features[f"persistence_std_{prefix}"] = float(np.std(persistence))
+                features[f"persistence_max_{prefix}"] = float(np.max(persistence))
+                features[f"birth_mean_{prefix}"] = float(np.mean(birth))
+                features[f"death_mean_{prefix}"] = float(np.mean(death))
                 # Betti mean: proportion of filtration steps where feature lives
                 # Approximate as ratio of mean persistence to total filtration span
                 span = float(np.max(death) - np.min(birth)) if len(death) > 0 else 1.0
                 span = max(span, 1e-10)
-                features[f"betti_mean_{prefix}"]       = float(np.mean(persistence) / span)
+                features[f"betti_mean_{prefix}"] = float(np.mean(persistence) / span)
                 # L1 norm of first persistence landscape (simplified)
                 sorted_p = np.sort(persistence)[::-1]
-                l1_land  = float(np.sum(sorted_p * np.arange(1, len(sorted_p) + 1)))
-                features[f"landscape_l1_{prefix}"]     = l1_land
+                l1_land = float(np.sum(sorted_p * np.arange(1, len(sorted_p) + 1)))
+                features[f"landscape_l1_{prefix}"] = l1_land
             else:
                 for key in [
-                    f"total_persistence_{prefix}", f"entropy_{prefix}",
-                    f"n_components_{prefix}", f"amplitude_{prefix}",
-                    f"persistence_std_{prefix}", f"persistence_max_{prefix}",
-                    f"birth_mean_{prefix}", f"death_mean_{prefix}",
-                    f"betti_mean_{prefix}", f"landscape_l1_{prefix}",
+                    f"total_persistence_{prefix}",
+                    f"entropy_{prefix}",
+                    f"n_components_{prefix}",
+                    f"amplitude_{prefix}",
+                    f"persistence_std_{prefix}",
+                    f"persistence_max_{prefix}",
+                    f"birth_mean_{prefix}",
+                    f"death_mean_{prefix}",
+                    f"betti_mean_{prefix}",
+                    f"landscape_l1_{prefix}",
                 ]:
                     features[key] = 0.0
         return features
@@ -348,11 +347,16 @@ class TopologicalFeatureExtractor:
         for dim in self.homology_dimensions:
             prefix = f"h{dim}"
             for key in [
-                f"total_persistence_{prefix}", f"entropy_{prefix}",
-                f"n_components_{prefix}", f"amplitude_{prefix}",
-                f"persistence_std_{prefix}", f"persistence_max_{prefix}",
-                f"birth_mean_{prefix}", f"death_mean_{prefix}",
-                f"betti_mean_{prefix}", f"landscape_l1_{prefix}",
+                f"total_persistence_{prefix}",
+                f"entropy_{prefix}",
+                f"n_components_{prefix}",
+                f"amplitude_{prefix}",
+                f"persistence_std_{prefix}",
+                f"persistence_max_{prefix}",
+                f"birth_mean_{prefix}",
+                f"death_mean_{prefix}",
+                f"betti_mean_{prefix}",
+                f"landscape_l1_{prefix}",
             ]:
                 features[key] = 0.0
         return features
@@ -362,10 +366,10 @@ class TopologicalFeatureExtractor:
         return self.extract_local_tda(X, indices[0])
 
     def extract_global_tda(self, X, n_jobs=-1):
-        """Extract TDA features with parallel processing.
+        """Extract TDA features in parallel across samples.
 
-        CHANGE 2: X should be the FCGR representation (PCA-compressed,
-        n_samples × 20) — NOT the biological/standard features.
+        ``X`` must be the FCGR representation (PCA-compressed, n_samples x 20),
+        not the biological/standard features.
         """
         n_samples = X.shape[0]
         n_neighbors = min(self.n_neighbors, n_samples)
@@ -377,27 +381,23 @@ class TopologicalFeatureExtractor:
             n_jobs = max(1, multiprocessing.cpu_count() + 1 + n_jobs)
         print(f"Extracting TDA features (over FCGR space) using {n_jobs} CPU cores...")
         tda_features_list = Parallel(n_jobs=n_jobs, backend="loky", verbose=10)(
-            delayed(self._process_single_sample)(X, nbrs, i, n_neighbors)
-            for i in range(n_samples)
+            delayed(self._process_single_sample)(X, nbrs, i, n_neighbors) for i in range(n_samples)
         )
         tda_df = pd.DataFrame(tda_features_list)
         return tda_df.values
 
 
-# ---------------------------------------------------------------------------
-# TFDFEPreprocessor  (updated: TDA now runs over FCGR space — CHANGE 2)
-# ---------------------------------------------------------------------------
+# TFDFEPreprocessor
+
 
 class TFDFEPreprocessor:
-    """Complete preprocessing pipeline for TF-DFE v4.0.
+    """End-to-end preprocessing pipeline for the framework.
 
-    CHANGE 2 applied here:
-    The TDA extractor now receives `X_fcgr` (PCA-compressed FCGR matrix) as
-    input instead of `X_standard` (biological features).  This produces
-    topological features that are structurally independent of the biological
-    scalar scores, giving the ensemble a genuinely orthogonal signal axis.
-
-    FIX 3 (retained): FCGR PCA compression 320 → 20 features.
+    The TDA extractor receives ``X_fcgr`` (the PCA-compressed FCGR matrix)
+    rather than ``X_standard`` (biological features), so the topological
+    features are structurally independent of the biological scalar scores and
+    give the ensemble an orthogonal signal axis. FCGR is PCA-compressed from
+    320 to 20 features.
     """
 
     def __init__(self, use_fcgr=True, use_tda=True, genome_path="hg19.fa"):
@@ -410,7 +410,7 @@ class TFDFEPreprocessor:
         self.use_tda = use_tda
         self.genome_path = genome_path
 
-        # FIX 3: PCA to compress FCGR features
+        # PCA to compress FCGR features
         self.fcgr_pca = None
         self.fcgr_pca_n_components = Config.FCGR_PCA_COMPONENTS
 
@@ -441,8 +441,10 @@ class TFDFEPreprocessor:
         sequences = []
         failed_extractions = 0
         for idx, row in tqdm(
-            variant_df.iterrows(), total=len(variant_df),
-            desc="Sequence Extraction", ncols=80,
+            variant_df.iterrows(),
+            total=len(variant_df),
+            desc="Sequence Extraction",
+            ncols=80,
         ):
             try:
                 chrom = str(row["chr"])
@@ -482,7 +484,8 @@ class TFDFEPreprocessor:
         X_num = X_tabular[num_cols].copy()
         X_num = pd.DataFrame(
             self.imputer_num.fit_transform(X_num),
-            columns=num_cols, index=X_tabular.index,
+            columns=num_cols,
+            index=X_tabular.index,
         )
         cat_cols = X_tabular.select_dtypes(include=["object"]).columns
         X_cat = X_tabular[cat_cols].copy()
@@ -495,9 +498,7 @@ class TFDFEPreprocessor:
         X_standard = self.scaler.fit_transform(X_combined)
         print(f"Standard features: {len(self.feature_names)}")
 
-        # ----------------------------------------------------------------
-        # FCGR encoding + PCA compression (FIX 3 retained)
-        # ----------------------------------------------------------------
+        # FCGR encoding + PCA compression
         if self.use_fcgr:
             print("\nGenerating FCGR fractal features...")
             sequences = self._extract_sequence_context(variant_df)
@@ -506,30 +507,28 @@ class TFDFEPreprocessor:
             print(f"FCGR raw features: {X_fcgr_raw.shape[1]}")
 
             n_comp = min(self.fcgr_pca_n_components, X_fcgr_raw.shape[1], X_fcgr_raw.shape[0] - 1)
-            print(f"Compressing FCGR {X_fcgr_raw.shape[1]}D -> {n_comp}D via PCA (FIX 3)...")
+            print(f"Compressing FCGR {X_fcgr_raw.shape[1]}D -> {n_comp}D via PCA...")
             self.fcgr_pca = PCA(n_components=n_comp, random_state=Config.RANDOM_STATE)
             X_fcgr = self.fcgr_pca.fit_transform(X_fcgr_raw)
             evr = float(np.sum(self.fcgr_pca.explained_variance_ratio_)) * 100
             print(f"FCGR PCA features: {X_fcgr.shape[1]}  (explained variance: {evr:.1f}%)")
             self.fcgr_feature_names = [f"fcgr_pca_{i}" for i in range(X_fcgr.shape[1])]
-            # Store raw FCGR for TDA (used below — CHANGE 2)
+            # Store raw FCGR for TDA
             self._X_fcgr_for_tda = X_fcgr
         else:
             X_fcgr = np.array([]).reshape(X_standard.shape[0], 0)
             self.fcgr_feature_names = []
             self._X_fcgr_for_tda = None
 
-        # ----------------------------------------------------------------
-        # CHANGE 2: TDA now over FCGR representation, not biological space
-        # ----------------------------------------------------------------
+        # TDA now over FCGR representation, not biological space
         if self.use_tda and TDA_AVAILABLE:
-            print("\nGenerating TDA topological features (over FCGR space — CHANGE 2)...")
+            print("\nGenerating TDA topological features (over FCGR space)...")
             # Use PCA-compressed FCGR as input when available; fallback to standard
             X_for_tda = self._X_fcgr_for_tda if self._X_fcgr_for_tda is not None else X_standard
             X_tda = self.tda_extractor.extract_global_tda(X_for_tda)
             n_tda_features = X_tda.shape[1]
             self.tda_feature_names = [f"tda_{i}" for i in range(n_tda_features)]
-            print(f"TDA features (expanded): {X_tda.shape[1]}  (was 6, now ~20 — CHANGE 2)")
+            print(f"TDA features (expanded): {X_tda.shape[1]}")
         else:
             X_tda = np.array([]).reshape(X_standard.shape[0], 0)
             self.tda_feature_names = []
@@ -543,18 +542,26 @@ class TFDFEPreprocessor:
 
         print(f"\nFinal feature space: {X_final.shape[1]} features")
         print(f"  Standard: {len(self.feature_names)}")
-        print(f"  FCGR PCA: {len(self.fcgr_feature_names)}  (FIX 3: was {sum(4**k for k in Config.FCGR_K_VALUES)} raw)")
-        print(f"  TDA:      {len(self.tda_feature_names)}   (CHANGE 2: over FCGR space, was 6)")
+        print(f"  FCGR PCA: {len(self.fcgr_feature_names)}")
+        print(f"  TDA:      {len(self.tda_feature_names)}")
         return X_final, y
 
     def transform(self, variant_df, target_col="LABEL_PATHOGENIC"):
-        """Transform new data using fitted preprocessor (for Code 9 compatibility)"""
+        """Transform new data with the fitted preprocessor."""
         df_clean = variant_df.drop(columns=self.leakage_cols, errors="ignore")
         y = df_clean[target_col] if target_col in df_clean.columns else None
-        X_tabular = df_clean.drop(target_col, axis=1, errors="ignore") if target_col in df_clean.columns else df_clean
+        X_tabular = (
+            df_clean.drop(target_col, axis=1, errors="ignore")
+            if target_col in df_clean.columns
+            else df_clean
+        )
 
-        num_cols = [c for c in self.feature_names if c in X_tabular.columns and X_tabular[c].dtype != object]
-        cat_cols = [c for c in self.feature_names if c in X_tabular.columns and X_tabular[c].dtype == object]
+        num_cols = [
+            c for c in self.feature_names if c in X_tabular.columns and X_tabular[c].dtype != object
+        ]
+        cat_cols = [
+            c for c in self.feature_names if c in X_tabular.columns and X_tabular[c].dtype == object
+        ]
 
         X_num = X_tabular[num_cols].copy() if num_cols else pd.DataFrame(index=X_tabular.index)
         X_num = pd.DataFrame(
@@ -564,7 +571,9 @@ class TFDFEPreprocessor:
         for col in cat_cols:
             enc = self.label_encoders[col]
             known = set(enc.classes_)
-            X_cat[col] = X_cat[col].astype(str).apply(lambda v: v if v in known else enc.classes_[0])
+            X_cat[col] = (
+                X_cat[col].astype(str).apply(lambda v: v if v in known else enc.classes_[0])
+            )
             X_cat[col] = enc.transform(X_cat[col])
 
         X_combined = pd.concat([X_num, X_cat], axis=1)
@@ -573,11 +582,13 @@ class TFDFEPreprocessor:
         if self.use_fcgr:
             sequences = self._extract_sequence_context(variant_df)
             X_fcgr_raw = self.fcgr_encoder.encode_variants(sequences)
-            X_fcgr = self.fcgr_pca.transform(X_fcgr_raw) if self.fcgr_pca is not None else X_fcgr_raw
+            X_fcgr = (
+                self.fcgr_pca.transform(X_fcgr_raw) if self.fcgr_pca is not None else X_fcgr_raw
+            )
         else:
             X_fcgr = np.array([]).reshape(X_standard.shape[0], 0)
 
-        # CHANGE 2: TDA over FCGR at inference too
+        # TDA over FCGR at inference too
         if self.use_tda and TDA_AVAILABLE:
             X_for_tda = X_fcgr if X_fcgr.shape[1] > 0 else X_standard
             X_tda = self.tda_extractor.extract_global_tda(X_for_tda)
@@ -589,9 +600,8 @@ class TFDFEPreprocessor:
         return X_final, y
 
 
-# ---------------------------------------------------------------------------
-# Supervised metric learner  (unchanged)
-# ---------------------------------------------------------------------------
+# Supervised metric learner (unchanged)
+
 
 class SupervisedMetricLearner:
     """Learns discriminative metric space for KNORA neighbor selection"""
@@ -631,9 +641,8 @@ class SupervisedMetricLearner:
         return self.scaler.transform(X_combined)
 
 
-# ---------------------------------------------------------------------------
-# MultiViewFeatureManager  (updated for expanded TDA count — CHANGE 2)
-# ---------------------------------------------------------------------------
+# MultiViewFeatureManager
+
 
 class MultiViewFeatureManager:
     """Manages multi-view feature representation"""
@@ -650,19 +659,16 @@ class MultiViewFeatureManager:
         }
 
 
-# ---------------------------------------------------------------------------
-# CHANGE 1 + CHANGE 2: Pairwise Q-statistic diversity analyser
-# ---------------------------------------------------------------------------
+# Pairwise Q-statistic diversity analyser
+
 
 def compute_pairwise_diversity(trained_models, feature_indices, X_val, y_val, output_dir):
-    """Compute pairwise Q-statistic and disagreement matrix.
+    """Compute the pairwise Q-statistic and disagreement matrices.
 
-    CHANGE 1: Measures inter-learner error correlation on the validation set.
-    Lower Q-statistic and higher disagreement = more diverse, more useful pool.
-    Results are saved as:
-      - pairwise_q_statistic.csv
-      - pairwise_disagreement.csv
-      - Fig_Diversity_Heatmap.png
+    Measures inter-learner error correlation on the validation set; a lower
+    Q-statistic and higher disagreement indicate a more diverse pool. Results
+    are saved as pairwise_q_statistic.csv, pairwise_disagreement.csv, and
+    Fig_Diversity_Heatmap.png.
 
     Returns (q_matrix_df, disagreement_matrix_df).
     """
@@ -675,13 +681,13 @@ def compute_pairwise_diversity(trained_models, feature_indices, X_val, y_val, ou
         preds[name] = model.predict(X_view)
 
     y_arr = np.array(y_val)
-    q_matrix   = np.zeros((n, n))
+    q_matrix = np.zeros((n, n))
     dis_matrix = np.zeros((n, n))
 
     for i, ni in enumerate(names):
         for j, nj in enumerate(names):
             if i == j:
-                q_matrix[i, j]   = 1.0
+                q_matrix[i, j] = 1.0
                 dis_matrix[i, j] = 0.0
                 continue
             ci = (preds[ni] == y_arr).astype(int)
@@ -692,50 +698,71 @@ def compute_pairwise_diversity(trained_models, feature_indices, X_val, y_val, ou
             N01 = np.sum((ci == 0) & (cj == 1))
             denom = N11 * N00 - N10 * N01
             q_denom = N11 * N00 + N10 * N01
-            q_matrix[i, j]   = denom / (q_denom + 1e-12)
+            q_matrix[i, j] = denom / (q_denom + 1e-12)
             dis_matrix[i, j] = (N10 + N01) / (N11 + N00 + N10 + N01 + 1e-12)
 
-    q_df  = pd.DataFrame(q_matrix,   index=names, columns=names)
+    q_df = pd.DataFrame(q_matrix, index=names, columns=names)
     dis_df = pd.DataFrame(dis_matrix, index=names, columns=names)
     q_df.to_csv(output_dir / "pairwise_q_statistic.csv")
     dis_df.to_csv(output_dir / "pairwise_disagreement.csv")
 
     # Plot heatmap
     fig, axes = plt.subplots(1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 1.2))
-    sns.heatmap(q_df, ax=axes[0], cmap="RdYlGn_r", vmin=-1, vmax=1,
-                annot=True, fmt=".2f", linewidths=0.2, annot_kws={"size": 4})
-    axes[0].set_title("(A) Q-Statistic\n(−1=diverse, +1=correlated)",
-                      fontweight="bold", loc="left")
-    sns.heatmap(dis_df, ax=axes[1], cmap="Blues", vmin=0, vmax=0.3,
-                annot=True, fmt=".2f", linewidths=0.2, annot_kws={"size": 4})
-    axes[1].set_title("(B) Pairwise Disagreement Rate\n(higher=more diverse)",
-                      fontweight="bold", loc="left")
+    sns.heatmap(
+        q_df,
+        ax=axes[0],
+        cmap="RdYlGn_r",
+        vmin=-1,
+        vmax=1,
+        annot=True,
+        fmt=".2f",
+        linewidths=0.2,
+        annot_kws={"size": 4},
+    )
+    axes[0].set_title("(A) Q-Statistic\n(−1=diverse, +1=correlated)", fontweight="bold", loc="left")
+    sns.heatmap(
+        dis_df,
+        ax=axes[1],
+        cmap="Blues",
+        vmin=0,
+        vmax=0.3,
+        annot=True,
+        fmt=".2f",
+        linewidths=0.2,
+        annot_kws={"size": 4},
+    )
+    axes[1].set_title(
+        "(B) Pairwise Disagreement Rate\n(higher=more diverse)", fontweight="bold", loc="left"
+    )
     plt.tight_layout()
-    plt.savefig(output_dir / "Fig_Diversity_Heatmap.png",  dpi=FIG_DPI, bbox_inches="tight")
+    plt.savefig(output_dir / "Fig_Diversity_Heatmap.png", dpi=FIG_DPI, bbox_inches="tight")
     plt.savefig(output_dir / "Fig_Diversity_Heatmap.tiff", dpi=FIG_DPI, bbox_inches="tight")
     plt.close()
 
-    mean_q   = np.mean(q_matrix[np.triu_indices(n, k=1)])
+    mean_q = np.mean(q_matrix[np.triu_indices(n, k=1)])
     mean_dis = np.mean(dis_matrix[np.triu_indices(n, k=1)])
-    print(f"\n  [Diversity Analysis] Mean Q-statistic: {mean_q:.4f}  "
-          f"(target < 0.50 for diverse pool)")
-    print(f"  [Diversity Analysis] Mean Disagreement: {mean_dis:.4f}  "
-          f"(target > 0.05 for diverse pool)")
-    print(f"  Saved: pairwise_q_statistic.csv, pairwise_disagreement.csv, "
-          f"Fig_Diversity_Heatmap.png")
+    print(
+        f"\n  [Diversity Analysis] Mean Q-statistic: {mean_q:.4f}  "
+        f"(target < 0.50 for diverse pool)"
+    )
+    print(
+        f"  [Diversity Analysis] Mean Disagreement: {mean_dis:.4f}  "
+        f"(target > 0.05 for diverse pool)"
+    )
+    print(
+        f"  Saved: pairwise_q_statistic.csv, pairwise_disagreement.csv, "
+        f"Fig_Diversity_Heatmap.png"
+    )
     return q_df, dis_df
 
 
-# ---------------------------------------------------------------------------
-# DiverseFeatureSubspaceFactory  (updated — CHANGE 1: new diverse models)
-# ---------------------------------------------------------------------------
+# DiverseFeatureSubspaceFactory
+
 
 class DiverseFeatureSubspaceFactory:
     """Creates diverse base models with different feature subspaces.
 
-    CHANGE 1 (v4.0 — Supervisor Request 1):
-    -----------------------------------------
-    Three new learners with structurally different inductive biases are added
+    Three learners with structurally different inductive biases are added
     to break the error-correlated tree pool:
 
       1. MLP_BioTDA — calibrated MLP on standard+TDA block.
@@ -754,135 +781,171 @@ class DiverseFeatureSubspaceFactory:
          where trees succeed, and vice versa — exactly the complementary error
          pattern needed.
 
-    FIX 6 (retained): Isotonic calibration on RF, ExtraTrees, GradientBoosting.
-    CHANGE 1: MLP also calibrated (isotonic, 3-fold CV).
+    Isotonic calibration is applied to RandomForest, ExtraTrees,
+    GradientBoosting, and the MLP (3-fold CV).
     """
 
     def __init__(self, n_standard=18, n_fcgr=20, n_tda=20):
         self.view_manager = MultiViewFeatureManager(n_standard, n_fcgr, n_tda)
         self.models = {}
         self.feature_indices = {}
-        self._metric_learner = None   # set by train_ensemble() for kNN_SML
+        self._metric_learner = None  # set by train_ensemble() for kNN_SML
 
     def create_diverse_ensemble(self, random_state=42):
-        n_std  = self.view_manager.n_standard
+        n_std = self.view_manager.n_standard
         n_fcgr = self.view_manager.n_fcgr
-        n_tda  = self.view_manager.n_tda
+        n_tda = self.view_manager.n_tda
 
         models = {}
         feature_indices = {}
 
-        bio_idx      = list(range(n_std))
-        fcgr_idx     = list(range(n_std, n_std + n_fcgr))
-        tda_bio_idx  = bio_idx + list(range(n_std + n_fcgr, n_std + n_fcgr + n_tda))
+        bio_idx = list(range(n_std))
+        fcgr_idx = list(range(n_std, n_std + n_fcgr))
+        tda_bio_idx = bio_idx + list(range(n_std + n_fcgr, n_std + n_fcgr + n_tda))
         bio_fcgr_idx = bio_idx + fcgr_idx
-        full_idx     = list(range(n_std + n_fcgr + n_tda))
+        full_idx = list(range(n_std + n_fcgr + n_tda))
 
         if XGBOOST_AVAILABLE:
             models["Bio_XGBoost"] = XGBClassifier(
-                n_estimators=200, max_depth=5, learning_rate=0.05,
-                random_state=random_state, n_jobs=-1, verbosity=0,
+                n_estimators=200,
+                max_depth=5,
+                learning_rate=0.05,
+                random_state=random_state,
+                n_jobs=-1,
+                verbosity=0,
             )
             feature_indices["Bio_XGBoost"] = bio_idx
 
         if CATBOOST_AVAILABLE:
             models["Bio_CatBoost"] = CatBoostClassifier(
-                iterations=200, depth=5, learning_rate=0.05,
-                random_state=random_state, verbose=False,
+                iterations=200,
+                depth=5,
+                learning_rate=0.05,
+                random_state=random_state,
+                verbose=False,
             )
             feature_indices["Bio_CatBoost"] = bio_idx
 
         if LGBM_AVAILABLE:
             models["BioFCGR_LightGBM"] = LGBMClassifier(
-                n_estimators=150, num_leaves=63, learning_rate=0.05,
-                feature_fraction=0.7, random_state=random_state,
-                n_jobs=-1, verbose=-1,
+                n_estimators=150,
+                num_leaves=63,
+                learning_rate=0.05,
+                feature_fraction=0.7,
+                random_state=random_state,
+                n_jobs=-1,
+                verbose=-1,
             )
             feature_indices["BioFCGR_LightGBM"] = bio_fcgr_idx
 
-        # FIX 6: Calibrated RandomForest
+        # Calibrated RandomForest
         _rf_base = RandomForestClassifier(
-            n_estimators=200, max_depth=15, max_features="sqrt",
-            min_samples_leaf=5, random_state=random_state + 1, n_jobs=-1,
+            n_estimators=200,
+            max_depth=15,
+            max_features="sqrt",
+            min_samples_leaf=5,
+            random_state=random_state + 1,
+            n_jobs=-1,
         )
         models["BioFCGR_RF"] = CalibratedClassifierCV(_rf_base, method="isotonic", cv=3)
         feature_indices["BioFCGR_RF"] = bio_fcgr_idx
 
-        # FIX 6: Calibrated ExtraTrees
+        # Calibrated ExtraTrees
         _et_base = ExtraTreesClassifier(
-            n_estimators=200, max_depth=12, max_features="sqrt",
-            random_state=random_state + 2, n_jobs=-1,
+            n_estimators=200,
+            max_depth=12,
+            max_features="sqrt",
+            random_state=random_state + 2,
+            n_jobs=-1,
         )
         models["TDABio_ExtraTrees"] = CalibratedClassifierCV(_et_base, method="isotonic", cv=3)
         feature_indices["TDABio_ExtraTrees"] = tda_bio_idx
 
         if XGBOOST_AVAILABLE:
             models["BioFCGR_XGBoost"] = XGBClassifier(
-                n_estimators=150, max_depth=4, learning_rate=0.03,
-                colsample_bytree=0.5, subsample=0.7,
-                random_state=random_state + 3, n_jobs=-1, verbosity=0,
+                n_estimators=150,
+                max_depth=4,
+                learning_rate=0.03,
+                colsample_bytree=0.5,
+                subsample=0.7,
+                random_state=random_state + 3,
+                n_jobs=-1,
+                verbosity=0,
             )
             feature_indices["BioFCGR_XGBoost"] = bio_fcgr_idx
 
-        # FIX 6: Calibrated GradientBoosting
+        # Calibrated GradientBoosting
         _gb_base = GradientBoostingClassifier(
-            n_estimators=100, max_depth=4, learning_rate=0.05,
-            subsample=0.8, max_features="sqrt", random_state=random_state + 4,
+            n_estimators=100,
+            max_depth=4,
+            learning_rate=0.05,
+            subsample=0.8,
+            max_features="sqrt",
+            random_state=random_state + 4,
         )
         models["Full_GradientBoosting"] = CalibratedClassifierCV(_gb_base, method="isotonic", cv=3)
         feature_indices["Full_GradientBoosting"] = full_idx
 
         models["Full_HistGradient"] = HistGradientBoostingClassifier(
-            max_iter=150, max_depth=6, learning_rate=0.05,
+            max_iter=150,
+            max_depth=6,
+            learning_rate=0.05,
             random_state=random_state + 5,
         )
         feature_indices["Full_HistGradient"] = full_idx
 
-        # ==================================================================
-        # CHANGE 1 (Supervisor Request 1): Inject algorithmic diversity
-        # ==================================================================
+        # Inject algorithmic diversity
 
         # 1. Elastic-net logistic regression — linear, biologically interpretable,
-        #    systematically fails on nonlinear regions where trees succeed.
+        # systematically fails on nonlinear regions where trees succeed.
         models["ElasticNet_Bio"] = LogisticRegression(
-            penalty="elasticnet", solver="saga", l1_ratio=0.5,
-            C=0.5, max_iter=3000, random_state=random_state + 6, n_jobs=-1,
+            penalty="elasticnet",
+            solver="saga",
+            l1_ratio=0.5,
+            C=0.5,
+            max_iter=3000,
+            random_state=random_state + 6,
+            n_jobs=-1,
         )
         feature_indices["ElasticNet_Bio"] = bio_idx
 
         # 2. MLP on bio+TDA — smooth nonlinear boundaries; calibrated (isotonic)
-        #    so its probabilities are directly comparable to the tree models.
+        # so its probabilities are directly comparable to the tree models.
         _mlp_base = MLPClassifier(
-            hidden_layer_sizes=(128, 64, 32), activation="relu",
-            solver="adam", alpha=1e-4, learning_rate_init=1e-3,
-            max_iter=300, early_stopping=True, validation_fraction=0.1,
+            hidden_layer_sizes=(128, 64, 32),
+            activation="relu",
+            solver="adam",
+            alpha=1e-4,
+            learning_rate_init=1e-3,
+            max_iter=300,
+            early_stopping=True,
+            validation_fraction=0.1,
             random_state=random_state + 7,
         )
         models["MLP_BioTDA"] = CalibratedClassifierCV(_mlp_base, method="isotonic", cv=3)
         feature_indices["MLP_BioTDA"] = tda_bio_idx
 
         # 3. k-NN in supervised metric space — registered here with a sentinel
-        #    index of -1 (full index); train_ensemble() will replace the feature
-        #    matrix with the pre-projected SML space before fitting.
+        # index of -1 (full index); train_ensemble will replace the feature
+        # matrix with the pre-projected SML space before fitting.
         models["kNN_SML"] = KNeighborsClassifier(
-            n_neighbors=15, metric="euclidean", n_jobs=-1,
+            n_neighbors=15,
+            metric="euclidean",
+            n_jobs=-1,
         )
-        feature_indices["kNN_SML"] = full_idx   # overridden in train_ensemble()
-        # ==================================================================
+        feature_indices["kNN_SML"] = full_idx  # overridden in train_ensemble()
 
         self.models = models
         self.feature_indices = feature_indices
-        print(f"\nCreated {len(models)} diverse base models  "
-              f"(CHANGE 1: +MLP, +kNN_SML, +ElasticNet)")
+        print(f"\nCreated {len(models)} diverse base models  " f"(+MLP, +kNN_SML, +ElasticNet)")
         return models, feature_indices
 
-    def train_ensemble(self, X_train, y_train, X_val=None, y_val=None,
-                       consensus_scores=None):
+    def train_ensemble(self, X_train, y_train, X_val=None, y_val=None, consensus_scores=None):
         """Train all base models; returns fitted models, val set, and OOF probas.
 
-        FIX 4 (retained): OOF predicted probabilities via StratifiedKFold.
+        Out-of-fold predicted probabilities are produced via StratifiedKFold.
 
-        CHANGE 3 (Supervisor Request 3): consensus-margin sample weighting.
+        Consensus-margin sample weighting:
         When `consensus_scores` is provided (a 1-D array of CONSENSUS_SCORE
         values aligned with X_train/y_train), variants whose score is within
         Config.AMBIGUOUS_MARGIN of 0.5 are down-weighted to
@@ -890,7 +953,7 @@ class DiverseFeatureSubspaceFactory:
         prevents the ambiguous boundary zone from dominating the loss of each
         base model and reduces correlated FP/FN on hard variants.
 
-        CHANGE 1: The kNN_SML model is trained in the 15-D supervised metric
+        The kNN_SML model is trained in the 15-D supervised metric
         space produced by SupervisedMetricLearner (fitted on the validation
         set here to avoid leakage into the training set).
         """
@@ -898,19 +961,19 @@ class DiverseFeatureSubspaceFactory:
 
         if X_val is None or y_val is None:
             X_train, X_val, y_train, y_val = train_test_split(
-                X_train, y_train, test_size=0.15,
-                stratify=y_train, random_state=42,
+                X_train,
+                y_train,
+                test_size=0.15,
+                stratify=y_train,
+                random_state=42,
             )
 
-        # ------------------------------------------------------------------
-        # CHANGE 3: Build sample weights from consensus margin
-        # ------------------------------------------------------------------
+        # Build sample weights from consensus margin
         if consensus_scores is not None:
             cs = np.array(consensus_scores)
             # Align consensus to training rows if needed
             if len(cs) != len(y_train):
-                print("  [CHANGE 3] WARNING: consensus_scores length mismatch; "
-                      "ignoring sample weights.")
+                print("  WARNING: consensus_scores length mismatch; " "ignoring sample weights.")
                 sample_weights = None
             else:
                 margin = np.abs(cs - 0.5)
@@ -920,9 +983,11 @@ class DiverseFeatureSubspaceFactory:
                     1.0,
                 )
                 n_ambig = int(np.sum(sample_weights < 1.0))
-                pct     = 100 * n_ambig / len(sample_weights)
-                print(f"  [CHANGE 3] Down-weighted {n_ambig:,} ambiguous variants "
-                      f"({pct:.1f}%) in training set.")
+                pct = 100 * n_ambig / len(sample_weights)
+                print(
+                    f"  Down-weighted {n_ambig:,} ambiguous variants "
+                    f"({pct:.1f}%) in training set."
+                )
         else:
             sample_weights = None
 
@@ -933,15 +998,13 @@ class DiverseFeatureSubspaceFactory:
         oof_probas = np.zeros((n_train, n_classifiers))
         skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=Config.RANDOM_STATE)
 
-        # ------------------------------------------------------------------
-        # CHANGE 1: Pre-fit SML on validation set so kNN_SML can use it.
-        #           SML only needs X_val/y_val; it doesn't see test labels.
-        # ------------------------------------------------------------------
+        # Pre-fit SML on validation set so kNN_SML can use it.
+        # SML only needs X_val/y_val; it doesn't see test labels.
         sml = SupervisedMetricLearner(n_components=15)
         sml.fit(X_val, y_val)
         self._metric_learner = sml
         X_train_sml = sml.transform(X_train)
-        X_val_sml   = sml.transform(X_val)
+        X_val_sml = sml.transform(X_val)
         # Map kNN_SML feature index to the SML-projected space:
         # We replace the full feature matrix with X_train_sml / X_val_sml
         # when fitting/predicting kNN_SML, via a flag checked below.
@@ -950,8 +1013,8 @@ class DiverseFeatureSubspaceFactory:
         for clf_idx, (name, model) in enumerate(
             tqdm(self.models.items(), desc="Training Models", ncols=80)
         ):
-            is_knn_sml = (name == KNN_SML_NAME)
-            indices    = self.feature_indices[name]
+            is_knn_sml = name == KNN_SML_NAME
+            indices = self.feature_indices[name]
 
             if is_knn_sml:
                 X_train_view = X_train_sml
@@ -965,8 +1028,7 @@ class DiverseFeatureSubspaceFactory:
                     fold_model = copy.deepcopy(model)
                     Xf = X_train_view[fold_train_idx]
                     yf = y_train[fold_train_idx]
-                    sw_fold = (sample_weights[fold_train_idx]
-                               if sample_weights is not None else None)
+                    sw_fold = sample_weights[fold_train_idx] if sample_weights is not None else None
                     try:
                         if sw_fold is not None and hasattr(fold_model, "fit"):
                             fold_model.fit(Xf, yf, sample_weight=sw_fold)
@@ -999,16 +1061,14 @@ class DiverseFeatureSubspaceFactory:
                 oof_probas[:, clf_idx] = 0.5
 
         # Store SML-projected val set for kNN_SML inference in EnhancedKNORAEnsemble
-        self._X_val_sml   = X_val_sml
+        self._X_val_sml = X_val_sml
         self._X_train_sml = X_train_sml
 
         self.models = trained_models
-        self.oof_probas   = oof_probas
-        self.oof_y_train  = y_train
+        self.oof_probas = oof_probas
+        self.oof_y_train = y_train
 
-        # ------------------------------------------------------------------
-        # CHANGE 1: Compute diversity matrix right after training
-        # ------------------------------------------------------------------
+        # Compute diversity matrix right after training
         print("\n[Diversity Analysis] Computing pairwise Q-statistic matrix...")
         try:
             # For kNN_SML we need to predict in SML space — wrap for diversity call
@@ -1017,10 +1077,10 @@ class DiverseFeatureSubspaceFactory:
             for nm, mdl in trained_models.items():
                 if nm == KNN_SML_NAME:
                     # Create a thin wrapper that projects to SML before predict
-                    tmp_models[nm]  = _SMLWrappedKNN(mdl, sml, n_total=X_val.shape[1])
+                    tmp_models[nm] = _SMLWrappedKNN(mdl, sml, n_total=X_val.shape[1])
                     tmp_indices[nm] = self.feature_indices[nm]
                 else:
-                    tmp_models[nm]  = mdl
+                    tmp_models[nm] = mdl
                     tmp_indices[nm] = self.feature_indices[nm]
             self.q_df, self.dis_df = compute_pairwise_diversity(
                 tmp_models, tmp_indices, X_val, y_val, Config.OUTPUT_DIR
@@ -1032,25 +1092,26 @@ class DiverseFeatureSubspaceFactory:
         return trained_models, X_val, y_val
 
 
-# ---------------------------------------------------------------------------
-# Helper: SML-wrapped kNN for diversity matrix computation (CHANGE 1)
-# ---------------------------------------------------------------------------
+# Helper: SML-wrapped kNN for diversity matrix computation
+
 
 class _SMLWrappedKNN:
     """Thin wrapper so kNN_SML's predict() can be called with the full X."""
+
     def __init__(self, knn_model, sml, n_total):
-        self.knn   = knn_model
-        self.sml   = sml
+        self.knn = knn_model
+        self.sml = sml
         self.n_total = n_total
+
     def predict(self, X):
         return self.knn.predict(self.sml.transform(X))
+
     def predict_proba(self, X):
         return self.knn.predict_proba(self.sml.transform(X))
 
 
-# ---------------------------------------------------------------------------
-# FeatureSubspaceWrapper  (updated for kNN_SML — CHANGE 1)
-# ---------------------------------------------------------------------------
+# FeatureSubspaceWrapper
+
 
 class FeatureSubspaceWrapper:
     """Wrapper for models with feature subspace.
@@ -1080,23 +1141,18 @@ class FeatureSubspaceWrapper:
         return np.column_stack([1 - pred, pred])
 
 
-# ---------------------------------------------------------------------------
-# EnhancedKNORAEnsemble  (bug fix + CHANGE 3 selective prediction)
-# ---------------------------------------------------------------------------
+# EnhancedKNORAEnsemble
+
 
 class EnhancedKNORAEnsemble:
     """Enhanced KNORA-E with Supervised Metric Learning.
 
-    v4.0 changes on top of all seven v3 fixes:
+    When the best-base fallback is active, ``predict_proba`` returns
+    ``active_preds[:, best_idx]``; ``run_final_model`` looks up the model object
+    from ``base_classifiers`` (rather than passing its name) so the SHAP
+    explainer receives the fitted estimator.
 
-    BUG FIX (SHAP, Supervisor): When FIX 7 fallback is active, predict_proba()
-    was returning `active_preds[:, best_idx]` (correct), but the calling code
-    in run_final_model() was passing `self.enhanced_knora.best_base_name`
-    (a STRING) to the SHAP explainer instead of the actual model object.  Fixed
-    in run_final_model() by looking up the model object from base_classifiers.
-
-    CHANGE 3 (Supervisor Request 3): `selective_predict()` method added.
-    Uses KNORA neighbourhood purity (fraction of k-NN neighbours in the
+    ``selective_predict`` uses KNORA neighbourhood purity (fraction of k-NN neighbours in the
     validation set that share the predicted class) as a confidence signal.
     Samples whose purity < Config.SELECTIVE_ABSTAIN_THRESHOLD are flagged as
     ABSTAIN (-1).  This turns TF-DFE's local-competence design into a
@@ -1125,15 +1181,15 @@ class EnhancedKNORAEnsemble:
         self.metric_learner = None
         self.classifier_names = list(base_classifiers.keys())
 
-        self.oof_probas  = oof_probas
+        self.oof_probas = oof_probas
         self.oof_y_train = oof_y_train
 
         self.meta_model = None
         self.stacking_weight = 0.7
 
         self.decision_threshold = 0.5
-        self.best_base_mcc   = -1.0
-        self.best_base_name  = None
+        self.best_base_mcc = -1.0
+        self.best_base_name = None
 
         self.active_classifier_names = list(base_classifiers.keys())
 
@@ -1142,7 +1198,7 @@ class EnhancedKNORAEnsemble:
 
         self.X_val = X_val
         self.y_val = np.array(y_val)
-        n_samples     = len(y_val)
+        n_samples = len(y_val)
         n_classifiers = len(self.base_classifiers)
 
         print("\n[Step 1/4] Computing per-classifier validation accuracy...")
@@ -1152,38 +1208,38 @@ class EnhancedKNORAEnsemble:
             val_accuracies[name] = float(np.mean(preds == self.y_val))
             print(f"  {name:40} - Val Acc: {val_accuracies[name]:.4f}")
 
-        best_val_acc    = max(val_accuracies.values())
+        best_val_acc = max(val_accuracies.values())
         prune_threshold = best_val_acc - Config.WEAK_LEARNER_MARGIN
         self.active_classifier_names = [
-            name for name, acc in val_accuracies.items()
-            if acc >= prune_threshold
+            name for name, acc in val_accuracies.items() if acc >= prune_threshold
         ]
         pruned_names = [
-            name for name in self.base_classifiers
-            if name not in self.active_classifier_names
+            name for name in self.base_classifiers if name not in self.active_classifier_names
         ]
         if pruned_names:
-            print(f"\n  [FIX 2] Pruned {len(pruned_names)} weak learner(s): {pruned_names}")
+            print(f"\n  Pruned {len(pruned_names)} weak learner(s): {pruned_names}")
         print(f"  Active pool: {self.active_classifier_names}")
 
         active_classifiers = {
-            name: clf for name, clf in self.base_classifiers.items()
+            name: clf
+            for name, clf in self.base_classifiers.items()
             if name in self.active_classifier_names
         }
         n_active = len(active_classifiers)
 
         best_base_mcc_val = -1.0
         for name, clf in active_classifiers.items():
-            preds   = clf.predict(X_val)
+            preds = clf.predict(X_val)
             mcc_val = matthews_corrcoef(self.y_val, preds)
             if mcc_val > best_base_mcc_val:
-                best_base_mcc_val   = mcc_val
+                best_base_mcc_val = mcc_val
                 self.best_base_name = name
         self.best_base_mcc = best_base_mcc_val
-        # Store the actual model object, not just its name (BUG FIX)
+        # Store the actual model object, not just its name
         self.best_base_model = active_classifiers[self.best_base_name]
-        print(f"\n  [FIX 7] Best base learner: {self.best_base_name} "
-              f"(Val MCC={self.best_base_mcc:.4f})")
+        print(
+            f"\n  Best base learner: {self.best_base_name} " f"(Val MCC={self.best_base_mcc:.4f})"
+        )
 
         if self.use_metric_learning:
             print("\n[Step 2/4] Supervised Metric Learning...")
@@ -1192,9 +1248,7 @@ class EnhancedKNORAEnsemble:
             self.X_val_metric = self.metric_learner.transform(X_val)
 
             print(f"\n[Step 3/4] Building k-NN index (k={self.k})...")
-            self.nn_model = NearestNeighbors(
-                n_neighbors=self.k, metric="euclidean", n_jobs=-1
-            )
+            self.nn_model = NearestNeighbors(n_neighbors=self.k, metric="euclidean", n_jobs=-1)
             self.nn_model.fit(self.X_val_metric)
 
         print(f"\n[Step 4/4] Computing oracle matrix ({n_samples} x {n_active})")
@@ -1208,15 +1262,14 @@ class EnhancedKNORAEnsemble:
         self._fit_stacking_meta_model(X_val, active_classifiers)
 
     def _fit_stacking_meta_model(self, X_val, active_classifiers):
-        n_active     = len(active_classifiers)
+        n_active = len(active_classifiers)
         active_names = list(active_classifiers.keys())
 
         if self.oof_probas is not None and self.oof_y_train is not None:
-            print("\n[Stacking / FIX 4] Fitting meta-model on OOF probabilities...")
+            print("\nStacking: fitting meta-model on OOF probabilities...")
             all_names = list(self.base_classifiers.keys())
             active_col_indices = [
-                all_names.index(name) for name in active_names
-                if name in all_names
+                all_names.index(name) for name in active_names if name in all_names
             ]
             meta_train_X = self.oof_probas[:, active_col_indices]
             meta_train_y = self.oof_y_train
@@ -1234,9 +1287,7 @@ class EnhancedKNORAEnsemble:
                     meta_train_X[:, idx] = clf.predict(X_val).astype(float)
             meta_train_y = self.y_val
 
-        self.meta_model = LogisticRegression(
-            C=1.0, max_iter=2000, random_state=Config.RANDOM_STATE
-        )
+        self.meta_model = LogisticRegression(C=1.0, max_iter=2000, random_state=Config.RANDOM_STATE)
         self.meta_model.fit(meta_train_X, meta_train_y)
 
         # Build validation meta-features for threshold search
@@ -1253,26 +1304,24 @@ class EnhancedKNORAEnsemble:
 
         val_meta_proba = self.meta_model.predict_proba(val_meta_X)[:, 1]
 
-        # FIX 5: constrained threshold search
-        best_mcc  = -1.0
-        best_thr  = 0.5
-        thresholds = np.linspace(
-            Config.THRESHOLD_SEARCH_LOW, Config.THRESHOLD_SEARCH_HIGH, 41
-        )
+        # constrained threshold search
+        best_mcc = -1.0
+        best_thr = 0.5
+        thresholds = np.linspace(Config.THRESHOLD_SEARCH_LOW, Config.THRESHOLD_SEARCH_HIGH, 41)
         for thr in thresholds:
             preds = (val_meta_proba >= thr).astype(int)
-            mcc   = matthews_corrcoef(self.y_val, preds)
+            mcc = matthews_corrcoef(self.y_val, preds)
             if mcc > best_mcc:
                 best_mcc = mcc
                 best_thr = thr
 
         self.decision_threshold = best_thr
 
-        # FIX 7: compare ensemble vs best base on validation
+        # compare ensemble vs best base on validation
         ensemble_val_mcc = best_mcc
         if ensemble_val_mcc < self.best_base_mcc:
             print(
-                f"\n  [FIX 7] WARNING: Ensemble val MCC ({ensemble_val_mcc:.4f}) < "
+                f"\n  WARNING: Ensemble val MCC ({ensemble_val_mcc:.4f}) < "
                 f"best base MCC ({self.best_base_mcc:.4f}).  "
                 f"Fallback to '{self.best_base_name}' activated."
             )
@@ -1281,21 +1330,19 @@ class EnhancedKNORAEnsemble:
             self._use_fallback = False
 
         print(
-            f"  Meta-model trained (FIX 1/4/5). Threshold={best_thr:.2f} "
+            f"  Meta-model trained. Threshold={best_thr:.2f} "
             f"(val MCC={best_mcc:.4f})  |  fallback={self._use_fallback}"
         )
 
     def predict_proba(self, X):
-        """Return fused probability for the positive class.
+        """Return the fused probability for the positive class.
 
-        BUG FIX (v4.0 — Supervisor): When FIX 7 fallback is active, the old
-        code correctly returned `active_preds[:, best_idx]`.  The bug was
-        upstream in run_final_model() which passed `self.best_base_name`
-        (a string) to the SHAP explainer.  That is fixed in run_final_model();
-        this method remains structurally correct.
+        When the best-base fallback is active this returns
+        ``active_preds[:, best_idx]``. ``run_final_model`` passes the model
+        object (not its name) to the SHAP explainer.
         """
         n_samples = X.shape[0]
-        n_active  = len(self._active_clf_list)
+        n_active = len(self._active_clf_list)
 
         print(f"\nKNORA-E Inference ({n_samples} samples, {n_active} active classifiers)...")
 
@@ -1310,16 +1357,17 @@ class EnhancedKNORAEnsemble:
             else:
                 active_preds[:, idx] = clf.predict(X).astype(float)
 
-        # FIX 7: fallback to best base model object (not name string)
+        # fallback to best base model object (not name string)
         if getattr(self, "_use_fallback", False):
             best_idx = next(
-                i for i, (name, _) in enumerate(self._active_clf_list)
+                i
+                for i, (name, _) in enumerate(self._active_clf_list)
                 if name == self.best_base_name
             )
-            print(f"  [FIX 7] Using fallback: {self.best_base_name}")
+            print(f"  Using fallback: {self.best_base_name}")
             return active_preds[:, best_idx]
 
-        # Meta-model prediction (FIX 1)
+        # Meta-model prediction
         if self.meta_model is not None:
             meta_proba = self.meta_model.predict_proba(active_preds)[:, 1]
         else:
@@ -1335,42 +1383,37 @@ class EnhancedKNORAEnsemble:
 
         knora_predictions = np.zeros(n_samples)
         sigma = np.mean(distances) + 1e-10
-        distance_weights = np.exp(-(distances ** 2) / (2 * sigma ** 2))
-        distance_weights = distance_weights / (
-            distance_weights.sum(axis=1, keepdims=True) + 1e-10
-        )
+        distance_weights = np.exp(-(distances**2) / (2 * sigma**2))
+        distance_weights = distance_weights / (distance_weights.sum(axis=1, keepdims=True) + 1e-10)
 
         for i in range(n_samples):
             neighbor_indices = indices[i]
-            sample_weights   = distance_weights[i]
+            sample_weights = distance_weights[i]
             if np.sum(sample_weights) < 1e-10:
                 sample_weights = np.ones_like(sample_weights) / len(sample_weights)
 
-            neighbor_oracles  = self.oracle_matrix[neighbor_indices]
+            neighbor_oracles = self.oracle_matrix[neighbor_indices]
             competence_scores = np.average(neighbor_oracles, axis=0, weights=sample_weights)
-            sample_preds      = active_preds[i]
+            sample_preds = active_preds[i]
 
-            relative_threshold = max(
-                self.min_competence, np.percentile(competence_scores, 40)
-            )
+            relative_threshold = max(self.min_competence, np.percentile(competence_scores, 40))
             selected_mask = competence_scores >= relative_threshold
 
             if not np.any(selected_mask):
-                top_k_idx = np.argsort(competence_scores)[-max(1, n_active // 2):]
+                top_k_idx = np.argsort(competence_scores)[-max(1, n_active // 2) :]
                 selected_mask = np.zeros(n_active, dtype=bool)
                 selected_mask[top_k_idx] = True
 
             sel_preds = sample_preds[selected_mask]
             sel_comps = competence_scores[selected_mask]
 
-            temp      = 2.0
+            temp = 2.0
             exp_comps = np.exp(sel_comps / temp)
-            weights   = exp_comps / (np.sum(exp_comps) + 1e-10)
+            weights = exp_comps / (np.sum(exp_comps) + 1e-10)
             knora_predictions[i] = np.sum(weights * sel_preds)
 
         final_predictions = (
-            self.stacking_weight * meta_proba
-            + (1.0 - self.stacking_weight) * knora_predictions
+            self.stacking_weight * meta_proba + (1.0 - self.stacking_weight) * knora_predictions
         )
         return final_predictions
 
@@ -1380,15 +1423,12 @@ class EnhancedKNORAEnsemble:
         proba = self.predict_proba(X)
         return (proba >= threshold).astype(int)
 
-    # ------------------------------------------------------------------
-    # CHANGE 3 (Supervisor Request 3): Selective prediction
-    # ------------------------------------------------------------------
-    def selective_predict(self, X, threshold=None,
-                          abstain_threshold=None):
+    # Selective prediction
+    def selective_predict(self, X, threshold=None, abstain_threshold=None):
         """Predict with abstention for low-confidence samples.
 
-        CHANGE 3: Uses neighbourhood purity in the supervised metric space
-        as a confidence signal.  Samples whose purity (fraction of k-NN
+        Uses neighbourhood purity in the supervised metric space as a
+        confidence signal. Samples whose purity (fraction of k-NN
         validation neighbours sharing the predicted class) is below
         `abstain_threshold` (default: Config.SELECTIVE_ABSTAIN_THRESHOLD)
         are assigned label -1 (ABSTAIN).
@@ -1420,63 +1460,64 @@ class EnhancedKNORAEnsemble:
         purity_scores = np.zeros(len(X))
         for i in range(len(X)):
             neighbour_labels = self.y_val[indices[i]]
-            pred_label       = y_hard[i]
+            pred_label = y_hard[i]
             purity_scores[i] = np.mean(neighbour_labels == pred_label)
 
-        y_selective = np.where(
-            purity_scores >= abstain_threshold, y_hard, -1
-        ).astype(int)
+        y_selective = np.where(purity_scores >= abstain_threshold, y_hard, -1).astype(int)
 
         coverage = float(np.mean(y_selective >= 0))
         n_abstain = int(np.sum(y_selective == -1))
-        print(f"\n  [CHANGE 3 / Selective Prediction] "
-              f"Coverage: {coverage:.3%}  Abstentions: {n_abstain:,}")
+        print(
+            f"\n  [Selective Prediction] " f"Coverage: {coverage:.3%}  Abstentions: {n_abstain:,}"
+        )
 
         return y_selective, purity_scores, coverage
 
 
-# ---------------------------------------------------------------------------
-# EnhancedTFDFEEnsemble  (updated for v4 — CHANGE 1, 3 + BUG FIX)
-# ---------------------------------------------------------------------------
+# EnhancedTFDFEEnsemble
+
 
 class EnhancedTFDFEEnsemble:
-    """Enhanced TF-DFE v4.0 Ensemble — All 7 Fixes + Supervisor Changes 1, 2, 3."""
+    """Top-level TF-DFE ensemble combining all base learners and the stacker."""
 
     def __init__(self, n_standard=18, n_fcgr=20, n_tda=20):
         self.n_standard = n_standard
         self.n_fcgr = n_fcgr
         self.n_tda = n_tda
-        self.diverse_factory  = None
-        self.enhanced_knora   = None
-        self.is_fitted        = False
+        self.diverse_factory = None
+        self.enhanced_knora = None
+        self.is_fitted = False
 
-    def fit(self, X_train, y_train, X_val=None, y_val=None,
-            consensus_scores_train=None):
-        """
+    def fit(self, X_train, y_train, X_val=None, y_val=None, consensus_scores_train=None):
+        """Fit the full ensemble.
+
         consensus_scores_train : array-like, shape (n_train,), optional
-            CONSENSUS_SCORE values for training samples used for CHANGE 3
-            sample weighting.  Pass None to disable.
+            CONSENSUS_SCORE values for training samples, used for
+            consensus-margin sample weighting. Pass None to disable.
         """
-        print("\nEnhanced TF-DFE v4.0 Training (All 7 Fixes + Changes 1, 2, 3)")
+        print("\nEnhanced TF-DFE Training")
 
         n_features = X_train.shape[1]
-        expected   = self.n_standard + self.n_fcgr + self.n_tda
+        expected = self.n_standard + self.n_fcgr + self.n_tda
 
         if n_features != expected:
             print(f"Adjusting feature counts: {n_features} features")
             self.n_fcgr = max(0, n_features - self.n_standard - self.n_tda)
             if self.n_fcgr < 0:
                 self.n_fcgr = 0
-                self.n_tda  = max(0, n_features - self.n_standard)
+                self.n_tda = max(0, n_features - self.n_standard)
 
         if X_val is None or y_val is None:
             X_train, X_val, y_train, y_val = train_test_split(
-                X_train, y_train, test_size=0.15,
-                stratify=y_train, random_state=Config.RANDOM_STATE,
+                X_train,
+                y_train,
+                test_size=0.15,
+                stratify=y_train,
+                random_state=Config.RANDOM_STATE,
             )
 
-        self.X_val  = X_val
-        self.y_val  = np.array(y_val)
+        self.X_val = X_val
+        self.y_val = np.array(y_val)
         y_train_arr = np.array(y_train)
 
         self.diverse_factory = DiverseFeatureSubspaceFactory(
@@ -1484,17 +1525,20 @@ class EnhancedTFDFEEnsemble:
         )
         self.diverse_factory.create_diverse_ensemble()
 
-        # CHANGE 3: pass consensus scores through
+        # pass consensus scores through
         trained_models, _, _ = self.diverse_factory.train_ensemble(
-            X_train, y_train_arr, X_val, y_val,
+            X_train,
+            y_train_arr,
+            X_val,
+            y_val,
             consensus_scores=consensus_scores_train,
         )
 
-        # Wrap models — CHANGE 1: kNN_SML gets the SML projector
+        # Wrap models —: kNN_SML gets the SML projector
         sml = self.diverse_factory._metric_learner
         wrapped_models = {}
         for name, model in trained_models.items():
-            is_sml = (name == "kNN_SML")
+            is_sml = name == "kNN_SML"
             wrapped_models[name] = FeatureSubspaceWrapper(
                 model,
                 self.diverse_factory.feature_indices[name],
@@ -1528,15 +1572,14 @@ class EnhancedTFDFEEnsemble:
         return (proba >= threshold).astype(int)
 
     def selective_predict(self, X, threshold=None, abstain_threshold=None):
-        """CHANGE 3: Selective prediction with abstention."""
+        """Selective prediction with abstention."""
         return self.enhanced_knora.selective_predict(
             X, threshold=threshold, abstain_threshold=abstain_threshold
         )
 
 
-# ---------------------------------------------------------------------------
-# Plotting helpers  (unchanged from v3)
-# ---------------------------------------------------------------------------
+# Plotting helpers (unchanged from )
+
 
 def plot_class_distribution(variant_df, output_dir):
     print("  Generating class distribution plot...")
@@ -1546,50 +1589,64 @@ def plot_class_distribution(variant_df, output_dir):
     bars = ax.bar(
         ["Benign", "Pathogenic"],
         [class_counts.get(0, 0), class_counts.get(1, 0)],
-        color=colors, edgecolor="black", linewidth=0.5,
+        color=colors,
+        edgecolor="black",
+        linewidth=0.5,
     )
     ax.set_ylabel("Count")
     ax.set_title("(A) Class Distribution", fontweight="bold", loc="left")
     for bar, count in zip(bars, [class_counts.get(0, 0), class_counts.get(1, 0)]):
         ax.text(
-            bar.get_x() + bar.get_width() / 2.0, bar.get_height(),
-            f"{count:,}", ha="center", va="bottom", fontsize=FIG_FONT_SIZE,
+            bar.get_x() + bar.get_width() / 2.0,
+            bar.get_height(),
+            f"{count:,}",
+            ha="center",
+            va="bottom",
+            fontsize=FIG_FONT_SIZE,
         )
     plt.tight_layout()
-    plt.savefig(output_dir / "Fig1_class_distribution.png",  dpi=FIG_DPI, bbox_inches="tight")
+    plt.savefig(output_dir / "Fig1_class_distribution.png", dpi=FIG_DPI, bbox_inches="tight")
     plt.savefig(output_dir / "Fig1_class_distribution.tiff", dpi=FIG_DPI, bbox_inches="tight")
     plt.close()
 
 
 def plot_roc_pr_curves(y_true, y_pred_proba, model_name, output_dir):
     print("  Generating ROC and PR curves...")
-    fig, (ax1, ax2) = plt.subplots(
-        1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_DOUBLE_COL_WIDTH / 2.5)
-    )
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_DOUBLE_COL_WIDTH / 2.5))
     fpr, tpr, _ = roc_curve(y_true, y_pred_proba)
     auroc = roc_auc_score(y_true, y_pred_proba)
-    ax1.plot(fpr, tpr, linewidth=1.5, color="#0077BB",
-             label=f"{model_name} (AUC = {auroc:.3f})")
+    ax1.plot(fpr, tpr, linewidth=1.5, color="#0077BB", label=f"{model_name} (AUC = {auroc:.3f})")
     ax1.plot([0, 1], [0, 1], "k--", linewidth=0.8, alpha=0.7, label="Random")
-    ax1.set_xlabel("False Positive Rate"); ax1.set_ylabel("True Positive Rate")
+    ax1.set_xlabel("False Positive Rate")
+    ax1.set_ylabel("True Positive Rate")
     ax1.set_title("(A) ROC Curve", fontweight="bold", loc="left")
     ax1.legend(loc="lower right", frameon=True, fancybox=False, edgecolor="black")
-    ax1.set_xlim([-0.01, 1.01]); ax1.set_ylim([-0.01, 1.01])
+    ax1.set_xlim([-0.01, 1.01])
+    ax1.set_ylim([-0.01, 1.01])
     ax1.grid(False)
     precision, recall, _ = precision_recall_curve(y_true, y_pred_proba)
     auprc = average_precision_score(y_true, y_pred_proba)
-    ax2.plot(recall, precision, linewidth=1.5, color="#0077BB",
-             label=f"{model_name} (AP = {auprc:.3f})")
+    ax2.plot(
+        recall, precision, linewidth=1.5, color="#0077BB", label=f"{model_name} (AP = {auprc:.3f})"
+    )
     baseline = np.mean(y_true)
-    ax2.axhline(baseline, color="gray", linestyle="--", linewidth=0.8, alpha=0.7,
-                label=f"Baseline ({baseline:.3f})")
-    ax2.set_xlabel("Recall"); ax2.set_ylabel("Precision")
+    ax2.axhline(
+        baseline,
+        color="gray",
+        linestyle="--",
+        linewidth=0.8,
+        alpha=0.7,
+        label=f"Baseline ({baseline:.3f})",
+    )
+    ax2.set_xlabel("Recall")
+    ax2.set_ylabel("Precision")
     ax2.set_title("(B) Precision-Recall Curve", fontweight="bold", loc="left")
     ax2.legend(loc="upper right", frameon=True, fancybox=False, edgecolor="black")
-    ax2.set_xlim([-0.01, 1.01]); ax2.set_ylim([-0.01, 1.01])
+    ax2.set_xlim([-0.01, 1.01])
+    ax2.set_ylim([-0.01, 1.01])
     ax2.grid(False)
     plt.tight_layout()
-    plt.savefig(output_dir / "Fig1_ROC_PR_curves.png",  dpi=FIG_DPI, bbox_inches="tight")
+    plt.savefig(output_dir / "Fig1_ROC_PR_curves.png", dpi=FIG_DPI, bbox_inches="tight")
     plt.savefig(output_dir / "Fig1_ROC_PR_curves.tiff", dpi=FIG_DPI, bbox_inches="tight")
     plt.close()
 
@@ -1607,21 +1664,30 @@ def plot_confusion_matrix(y_true, y_pred, model_name, output_dir):
     cbar = ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     cbar.ax.set_ylabel("Proportion", rotation=-90, va="bottom")
     ax.set(
-        xticks=np.arange(cm.shape[1]), yticks=np.arange(cm.shape[0]),
-        xticklabels=classes, yticklabels=classes,
-        ylabel="True Label", xlabel="Predicted Label",
+        xticks=np.arange(cm.shape[1]),
+        yticks=np.arange(cm.shape[0]),
+        xticklabels=classes,
+        yticklabels=classes,
+        ylabel="True Label",
+        xlabel="Predicted Label",
     )
     ax.set_title(f"{model_name} Confusion Matrix", fontweight="bold", pad=10)
     thresh = cm_display.max() / 2.0
     for i in range(cm.shape[0]):
         for j in range(cm.shape[1]):
             text = f"{cm_display[i, j]:.1%}\n({cm[i, j]:,})"
-            ax.text(j, i, text, ha="center", va="center",
-                    color="white" if cm_display[i, j] > thresh else "black",
-                    fontsize=FIG_FONT_SIZE)
+            ax.text(
+                j,
+                i,
+                text,
+                ha="center",
+                va="center",
+                color="white" if cm_display[i, j] > thresh else "black",
+                fontsize=FIG_FONT_SIZE,
+            )
     plt.tight_layout()
     safe_name = model_name.replace(" ", "_").replace("(", "").replace(")", "")
-    plt.savefig(output_dir / f"Fig_CM_{safe_name}.png",  dpi=FIG_DPI, bbox_inches="tight")
+    plt.savefig(output_dir / f"Fig_CM_{safe_name}.png", dpi=FIG_DPI, bbox_inches="tight")
     plt.savefig(output_dir / f"Fig_CM_{safe_name}.tiff", dpi=FIG_DPI, bbox_inches="tight")
     plt.close()
 
@@ -1629,22 +1695,30 @@ def plot_confusion_matrix(y_true, y_pred, model_name, output_dir):
 def plot_tsne(X, y, title, output_dir):
     print("  Generating t-SNE visualization...")
     np.random.seed(Config.RANDOM_STATE)
-    idx   = np.random.choice(len(X), size=min(2000, len(X)), replace=False)
+    idx = np.random.choice(len(X), size=min(2000, len(X)), replace=False)
     X_sub = X[idx]
     y_sub = y.iloc[idx] if hasattr(y, "iloc") else y[idx]
-    tsne  = TSNE(n_components=2, random_state=Config.RANDOM_STATE, perplexity=30, n_iter=1000)
+    tsne = TSNE(n_components=2, random_state=Config.RANDOM_STATE, perplexity=30, n_iter=1000)
     X_embedded = tsne.fit_transform(X_sub)
     fig, ax = plt.subplots(figsize=(FIG_SINGLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 0.9))
     colors = {0: "#0077BB", 1: "#CC3311"}
     for label, name in [(0, "Benign"), (1, "Pathogenic")]:
         mask = (y_sub == label) if hasattr(y_sub, "values") else (np.array(y_sub) == label)
-        ax.scatter(X_embedded[mask, 0], X_embedded[mask, 1],
-                   c=colors[label], label=name, alpha=0.6, s=15, edgecolors="none")
-    ax.set_xlabel("t-SNE Dimension 1"); ax.set_ylabel("t-SNE Dimension 2")
+        ax.scatter(
+            X_embedded[mask, 0],
+            X_embedded[mask, 1],
+            c=colors[label],
+            label=name,
+            alpha=0.6,
+            s=15,
+            edgecolors="none",
+        )
+    ax.set_xlabel("t-SNE Dimension 1")
+    ax.set_ylabel("t-SNE Dimension 2")
     ax.set_title(title, fontweight="bold")
     ax.legend(title="Class", loc="best", frameon=True, fancybox=False, edgecolor="black")
     plt.tight_layout()
-    plt.savefig(output_dir / "Fig_tSNE_TFDFE.png",  dpi=FIG_DPI, bbox_inches="tight")
+    plt.savefig(output_dir / "Fig_tSNE_TFDFE.png", dpi=FIG_DPI, bbox_inches="tight")
     plt.savefig(output_dir / "Fig_tSNE_TFDFE.tiff", dpi=FIG_DPI, bbox_inches="tight")
     plt.close()
 
@@ -1660,7 +1734,7 @@ def perform_shap_analysis(model, X_sample, feature_names, output_dir, model_name
         else:
             print("    Using KernelExplainer (slower)...")
             background = shap.sample(X_sample, 100)
-            explainer  = shap.KernelExplainer(model.predict_proba, background)
+            explainer = shap.KernelExplainer(model.predict_proba, background)
         shap_values = explainer.shap_values(X_sample)
         if isinstance(shap_values, list) and len(shap_values) == 2:
             shap_values = shap_values[1]
@@ -1668,20 +1742,29 @@ def perform_shap_analysis(model, X_sample, feature_names, output_dir, model_name
             shap_values = shap_values[:, :, 1]
         short_names = [name[:25] + "..." if len(name) > 28 else name for name in feature_names]
         fig, ax = plt.subplots(figsize=(FIG_SINGLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 1.2))
-        shap.summary_plot(shap_values, X_sample, feature_names=short_names, plot_type="bar",
-                          show=False, max_display=20, color="#0077BB")
+        shap.summary_plot(
+            shap_values,
+            X_sample,
+            feature_names=short_names,
+            plot_type="bar",
+            show=False,
+            max_display=20,
+            color="#0077BB",
+        )
         plt.title(f"Feature Importance ({model_name})", fontweight="bold", loc="left")
         plt.xlabel("Mean |SHAP Value|")
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_SHAP_summary.png",  dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(output_dir / "Fig_SHAP_summary.png", dpi=FIG_DPI, bbox_inches="tight")
         plt.savefig(output_dir / "Fig_SHAP_summary.tiff", dpi=FIG_DPI, bbox_inches="tight")
         plt.close()
         fig, ax = plt.subplots(figsize=(FIG_DOUBLE_COL_WIDTH * 0.7, FIG_SINGLE_COL_WIDTH * 1.2))
-        shap.summary_plot(shap_values, X_sample, feature_names=short_names, show=False, max_display=20)
+        shap.summary_plot(
+            shap_values, X_sample, feature_names=short_names, show=False, max_display=20
+        )
         plt.title("SHAP Value Distribution", fontweight="bold", loc="left")
         plt.xlabel("SHAP Value (Impact on Pathogenicity)")
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_SHAP_beeswarm.png",  dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(output_dir / "Fig_SHAP_beeswarm.png", dpi=FIG_DPI, bbox_inches="tight")
         plt.savefig(output_dir / "Fig_SHAP_beeswarm.tiff", dpi=FIG_DPI, bbox_inches="tight")
         plt.close()
         print("  SHAP analysis complete")
@@ -1691,9 +1774,8 @@ def perform_shap_analysis(model, X_sample, feature_names, output_dir, model_name
         return None
 
 
-# ---------------------------------------------------------------------------
-# TFDFEvaluator  (unchanged from v3, aggregated SHAP bug-fix in run_final)
-# ---------------------------------------------------------------------------
+# TFDFEvaluator
+
 
 class TFDFEvaluator:
     @staticmethod
@@ -1703,51 +1785,94 @@ class TFDFEvaluator:
         bin_data = []
         for bl, bu in zip(bin_boundaries[:-1], bin_boundaries[1:]):
             in_bin = (y_pred_proba > bl) & (y_pred_proba <= bu)
-            prop   = np.mean(in_bin)
+            prop = np.mean(in_bin)
             if prop > 0:
                 avg_conf = np.mean(y_pred_proba[in_bin])
-                avg_acc  = np.mean(y_true[in_bin])
+                avg_acc = np.mean(y_true[in_bin])
                 ece += np.abs(avg_acc - avg_conf) * prop
-                bin_data.append({"bin_lower": bl, "bin_upper": bu,
-                                 "avg_confidence": avg_conf, "avg_accuracy": avg_acc,
-                                 "count": int(np.sum(in_bin)), "proportion": prop,
-                                 "calibration_error": np.abs(avg_acc - avg_conf)})
+                bin_data.append(
+                    {
+                        "bin_lower": bl,
+                        "bin_upper": bu,
+                        "avg_confidence": avg_conf,
+                        "avg_accuracy": avg_acc,
+                        "count": int(np.sum(in_bin)),
+                        "proportion": prop,
+                        "calibration_error": np.abs(avg_acc - avg_conf),
+                    }
+                )
             else:
-                bin_data.append({"bin_lower": bl, "bin_upper": bu,
-                                 "avg_confidence": np.nan, "avg_accuracy": np.nan,
-                                 "count": 0, "proportion": 0, "calibration_error": np.nan})
+                bin_data.append(
+                    {
+                        "bin_lower": bl,
+                        "bin_upper": bu,
+                        "avg_confidence": np.nan,
+                        "avg_accuracy": np.nan,
+                        "count": 0,
+                        "proportion": 0,
+                        "calibration_error": np.nan,
+                    }
+                )
         return ece, pd.DataFrame(bin_data)
 
     @staticmethod
     def plot_calibration_curve(y_true, y_pred_proba, output_dir, model_name="TF-DFE", n_bins=10):
         print("  Generating calibration curve...")
-        prob_true, prob_pred = calibration_curve(y_true, y_pred_proba, n_bins=n_bins, strategy="uniform")
-        ece, bin_data = TFDFEvaluator.calculate_ece(np.array(y_true), np.array(y_pred_proba), n_bins)
+        prob_true, prob_pred = calibration_curve(
+            y_true, y_pred_proba, n_bins=n_bins, strategy="uniform"
+        )
+        ece, bin_data = TFDFEvaluator.calculate_ece(
+            np.array(y_true), np.array(y_pred_proba), n_bins
+        )
         brier = brier_score_loss(y_true, y_pred_proba)
         fig = plt.figure(figsize=(FIG_SINGLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 1.2))
-        gs  = fig.add_gridspec(2, 1, height_ratios=[3, 1], hspace=0.05)
+        gs = fig.add_gridspec(2, 1, height_ratios=[3, 1], hspace=0.05)
         ax1 = fig.add_subplot(gs[0])
         ax1.plot([0, 1], [0, 1], "k--", linewidth=1, label="Perfect Calibration")
-        ax1.plot(prob_pred, prob_true, "s-", color="#0077BB", linewidth=1.5, markersize=6,
-                 label=f"{model_name}")
+        ax1.plot(
+            prob_pred,
+            prob_true,
+            "s-",
+            color="#0077BB",
+            linewidth=1.5,
+            markersize=6,
+            label=f"{model_name}",
+        )
         ax1.fill_between(prob_pred, prob_pred, prob_true, alpha=0.2, color="#CC3311")
         ax1.set_ylabel("Observed Probability")
-        ax1.set_xlim([-0.02, 1.02]); ax1.set_ylim([-0.02, 1.02])
+        ax1.set_xlim([-0.02, 1.02])
+        ax1.set_ylim([-0.02, 1.02])
         ax1.set_title("Calibration Plot", fontweight="bold", loc="left")
         ax1.legend(loc="upper left", frameon=True, fancybox=False, edgecolor="black")
         ax1.grid(False)
         textstr = f"ECE = {ece:.4f}\nBrier = {brier:.4f}"
         props = dict(boxstyle="round", facecolor="white", edgecolor="gray", alpha=0.9)
-        ax1.text(0.95, 0.05, textstr, transform=ax1.transAxes, fontsize=FIG_FONT_SIZE,
-                 va="bottom", ha="right", bbox=props)
+        ax1.text(
+            0.95,
+            0.05,
+            textstr,
+            transform=ax1.transAxes,
+            fontsize=FIG_FONT_SIZE,
+            va="bottom",
+            ha="right",
+            bbox=props,
+        )
         ax1.set_xticklabels([])
         ax2 = fig.add_subplot(gs[1], sharex=ax1)
-        ax2.hist(y_pred_proba, bins=n_bins, range=(0, 1), color="#0077BB",
-                 edgecolor="black", alpha=0.7, linewidth=0.5)
-        ax2.set_xlabel("Predicted Probability"); ax2.set_ylabel("Count")
+        ax2.hist(
+            y_pred_proba,
+            bins=n_bins,
+            range=(0, 1),
+            color="#0077BB",
+            edgecolor="black",
+            alpha=0.7,
+            linewidth=0.5,
+        )
+        ax2.set_xlabel("Predicted Probability")
+        ax2.set_ylabel("Count")
         ax2.set_xlim([-0.02, 1.02])
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_Calibration_Curve.png",  dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(output_dir / "Fig_Calibration_Curve.png", dpi=FIG_DPI, bbox_inches="tight")
         plt.savefig(output_dir / "Fig_Calibration_Curve.tiff", dpi=FIG_DPI, bbox_inches="tight")
         plt.close()
         bin_data.to_csv(output_dir / "calibration_bins.csv", index=False)
@@ -1758,8 +1883,15 @@ class TFDFEvaluator:
 
     @staticmethod
     def perform_repeated_cv(
-        X, y, model_factory_fn, n_splits=5, n_repeats=2,
-        n_standard=10, n_fcgr=20, n_tda=20, output_dir=None,
+        X,
+        y,
+        model_factory_fn,
+        n_splits=5,
+        n_repeats=2,
+        n_standard=10,
+        n_fcgr=20,
+        n_tda=20,
+        output_dir=None,
     ):
         print(f"\n  Running {n_repeats}x{n_splits}-fold Repeated Stratified CV...")
         rskf = RepeatedStratifiedKFold(
@@ -1769,50 +1901,63 @@ class TFDFEvaluator:
         fold_idx = 0
         y_arr = np.array(y) if hasattr(y, "values") else y
         for train_idx, test_idx in tqdm(
-            rskf.split(X, y_arr), total=n_splits * n_repeats,
-            desc="CV Progress", ncols=80,
+            rskf.split(X, y_arr),
+            total=n_splits * n_repeats,
+            desc="CV Progress",
+            ncols=80,
         ):
             fold_idx += 1
             X_tr, X_te = X[train_idx], X[test_idx]
             y_tr, y_te = y_arr[train_idx], y_arr[test_idx]
             model = model_factory_fn(n_standard, n_fcgr, n_tda)
             model.fit(X_tr, y_tr)
-            y_pred_cv       = model.predict(X_te)
+            y_pred_cv = model.predict(X_te)
             y_pred_proba_cv = model.predict_proba(X_te)
             fold_metrics = {
                 "repeat": (fold_idx - 1) // n_splits + 1,
-                "fold":   (fold_idx - 1) % n_splits + 1,
-                "mcc":      matthews_corrcoef(y_te, y_pred_cv),
-                "auprc":    average_precision_score(y_te, y_pred_proba_cv),
-                "auroc":    roc_auc_score(y_te, y_pred_proba_cv),
-                "f1":       f1_score(y_te, y_pred_cv, zero_division=0),
-                "precision":precision_score(y_te, y_pred_cv, zero_division=0),
-                "recall":   recall_score(y_te, y_pred_cv, zero_division=0),
+                "fold": (fold_idx - 1) % n_splits + 1,
+                "mcc": matthews_corrcoef(y_te, y_pred_cv),
+                "auprc": average_precision_score(y_te, y_pred_proba_cv),
+                "auroc": roc_auc_score(y_te, y_pred_proba_cv),
+                "f1": f1_score(y_te, y_pred_cv, zero_division=0),
+                "precision": precision_score(y_te, y_pred_cv, zero_division=0),
+                "recall": recall_score(y_te, y_pred_cv, zero_division=0),
                 "accuracy": accuracy_score(y_te, y_pred_cv),
-                "brier":    brier_score_loss(y_te, y_pred_proba_cv),
+                "brier": brier_score_loss(y_te, y_pred_proba_cv),
             }
             cv_results.append(fold_metrics)
         cv_df = pd.DataFrame(cv_results)
         summary_stats = {}
         for metric in ["mcc", "auprc", "auroc", "f1", "precision", "recall", "accuracy", "brier"]:
-            values   = cv_df[metric].values
+            values = cv_df[metric].values
             mean_val = np.mean(values)
-            std_val  = np.std(values, ddof=1)
-            n        = len(values)
-            ci_95    = stats.t.ppf(0.975, n - 1) * (std_val / np.sqrt(n))
+            std_val = np.std(values, ddof=1)
+            n = len(values)
+            ci_95 = stats.t.ppf(0.975, n - 1) * (std_val / np.sqrt(n))
             summary_stats[metric] = {
-                "mean": mean_val, "std": std_val, "ci_95": ci_95,
-                "ci_lower": mean_val - ci_95, "ci_upper": mean_val + ci_95,
+                "mean": mean_val,
+                "std": std_val,
+                "ci_95": ci_95,
+                "ci_lower": mean_val - ci_95,
+                "ci_upper": mean_val + ci_95,
                 "formatted": f"{mean_val:.4f} ± {ci_95:.4f}",
             }
         if output_dir:
             cv_df.to_csv(output_dir / "cv_metrics.csv", index=False)
-            summary_df = pd.DataFrame([
-                {"metric": m, "mean": s["mean"], "std": s["std"],
-                 "ci_95": s["ci_95"], "ci_lower": s["ci_lower"],
-                 "ci_upper": s["ci_upper"], "formatted": s["formatted"]}
-                for m, s in summary_stats.items()
-            ])
+            summary_df = pd.DataFrame(
+                [
+                    {
+                        "metric": m,
+                        "mean": s["mean"],
+                        "std": s["std"],
+                        "ci_95": s["ci_95"],
+                        "ci_lower": s["ci_lower"],
+                        "ci_upper": s["ci_upper"],
+                        "formatted": s["formatted"],
+                    }
+                    for m, s in summary_stats.items()
+                ]
+            )
             summary_df.to_csv(output_dir / "cv_summary_stats.csv", index=False)
         print(f"\n  CV Results Summary (Mean ± 95% CI):")
         for m in ["mcc", "auprc", "auroc", "f1"]:
@@ -1823,7 +1968,8 @@ class TFDFEvaluator:
     def plot_cv_distribution(cv_df, output_dir, metrics=["mcc", "auprc"]):
         print("  Generating CV distribution plot...")
         fig, axes = plt.subplots(
-            1, len(metrics),
+            1,
+            len(metrics),
             figsize=(FIG_SINGLE_COL_WIDTH * len(metrics), FIG_SINGLE_COL_WIDTH * 0.8),
         )
         if len(metrics) == 1:
@@ -1834,15 +1980,25 @@ class TFDFEvaluator:
             ax = axes[i]
             parts = ax.violinplot(cv_df[metric], positions=[1], showmeans=True, showextrema=True)
             for pc in parts["bodies"]:
-                pc.set_facecolor(colors[i % len(colors)]); pc.set_alpha(0.6)
-            bp = ax.boxplot(cv_df[metric], positions=[1], widths=0.15,
-                            patch_artist=True, showfliers=True)
-            bp["boxes"][0].set_facecolor("white"); bp["boxes"][0].set_alpha(0.8)
+                pc.set_facecolor(colors[i % len(colors)])
+                pc.set_alpha(0.6)
+            bp = ax.boxplot(
+                cv_df[metric], positions=[1], widths=0.15, patch_artist=True, showfliers=True
+            )
+            bp["boxes"][0].set_facecolor("white")
+            bp["boxes"][0].set_alpha(0.8)
             jitter = np.random.uniform(-0.05, 0.05, len(cv_df))
-            ax.scatter(np.ones(len(cv_df)) + jitter, cv_df[metric], alpha=0.5, s=20,
-                       color=colors[i % len(colors)], edgecolor="black", linewidth=0.5)
+            ax.scatter(
+                np.ones(len(cv_df)) + jitter,
+                cv_df[metric],
+                alpha=0.5,
+                s=20,
+                color=colors[i % len(colors)],
+                edgecolor="black",
+                linewidth=0.5,
+            )
             mean_val = cv_df[metric].mean()
-            std_val  = cv_df[metric].std()
+            std_val = cv_df[metric].std()
             n = len(cv_df)
             ci_95 = stats.t.ppf(0.975, n - 1) * (std_val / np.sqrt(n))
             ax.axhline(mean_val, color="red", linestyle="--", linewidth=1, alpha=0.7)
@@ -1851,19 +2007,25 @@ class TFDFEvaluator:
                 f"{metric_names.get(metric, metric.upper())}\n{mean_val:.4f} ± {ci_95:.4f}",
                 fontweight="bold",
             )
-            ax.set_xticks([]); ax.grid(False)
+            ax.set_xticks([])
+            ax.grid(False)
         plt.suptitle("Cross-Validation Metric Distributions", fontweight="bold", y=1.02)
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_CV_Distribution.png",  dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(output_dir / "Fig_CV_Distribution.png", dpi=FIG_DPI, bbox_inches="tight")
         plt.savefig(output_dir / "Fig_CV_Distribution.tiff", dpi=FIG_DPI, bbox_inches="tight")
         plt.close()
 
     @staticmethod
-    def perform_mcnemar_test(y_true, y_pred_model1, y_pred_model2,
-                             model1_name="Enhanced Model", model2_name="Baseline",
-                             output_dir=None):
+    def perform_mcnemar_test(
+        y_true,
+        y_pred_model1,
+        y_pred_model2,
+        model1_name="Enhanced Model",
+        model2_name="Baseline",
+        output_dir=None,
+    ):
         print(f"\n  Performing McNemar's Test: {model1_name} vs {model2_name}")
-        y_true        = np.array(y_true)
+        y_true = np.array(y_true)
         y_pred_model1 = np.array(y_pred_model1)
         y_pred_model2 = np.array(y_pred_model2)
         correct_1 = y_pred_model1 == y_true
@@ -1878,33 +2040,43 @@ class TFDFEvaluator:
             interpretation = "No disagreements"
         else:
             statistic = (abs(b - c) - 1) ** 2 / (b + c)
-            p_value   = 1 - stats.chi2.cdf(statistic, df=1)
+            p_value = 1 - stats.chi2.cdf(statistic, df=1)
             if b + c < 25:
                 p_value = 2 * min(
                     stats.binom.cdf(min(b, c), b + c, 0.5),
                     1 - stats.binom.cdf(max(b, c) - 1, b + c, 0.5),
                 )
-            if   p_value < 0.001: sig_symbol, interpretation = "***", "Highly significant (p<0.001)"
-            elif p_value < 0.01:  sig_symbol, interpretation = "**",  "Very significant (p<0.01)"
-            elif p_value < 0.05:  sig_symbol, interpretation = "*",   "Significant (p<0.05)"
-            else:                 sig_symbol, interpretation = "ns",  "No significant difference"
-        acc1 = np.mean(correct_1); acc2 = np.mean(correct_2)
+            if p_value < 0.001:
+                sig_symbol, interpretation = "***", "Highly significant (p<0.001)"
+            elif p_value < 0.01:
+                sig_symbol, interpretation = "**", "Very significant (p<0.01)"
+            elif p_value < 0.05:
+                sig_symbol, interpretation = "*", "Significant (p<0.05)"
+            else:
+                sig_symbol, interpretation = "ns", "No significant difference"
+        acc1 = np.mean(correct_1)
+        acc2 = np.mean(correct_2)
         result = {
-            "model1": model1_name, "model2": model2_name,
-            "model1_accuracy": acc1, "model2_accuracy": acc2,
+            "model1": model1_name,
+            "model2": model2_name,
+            "model1_accuracy": acc1,
+            "model2_accuracy": acc2,
             "accuracy_difference": acc1 - acc2,
-            "both_correct": a, "model1_only_correct": b,
-            "model2_only_correct": c, "both_wrong": d,
-            "statistic": statistic, "p_value": p_value,
-            "significance": sig_symbol, "interpretation": interpretation,
+            "both_correct": a,
+            "model1_only_correct": b,
+            "model2_only_correct": c,
+            "both_wrong": d,
+            "statistic": statistic,
+            "p_value": p_value,
+            "significance": sig_symbol,
+            "interpretation": interpretation,
         }
         print(f"\n    McNemar Statistic: {statistic:.4f}")
         print(f"    P-value: {p_value:.6f}  ({sig_symbol})")
         print(f"    {interpretation}")
         print(f"    Accuracy improvement: {acc1 - acc2:+.4f}")
         if output_dir:
-            pd.DataFrame([result]).to_csv(
-                output_dir / "significance_test_mcnemar.csv", index=False)
+            pd.DataFrame([result]).to_csv(output_dir / "significance_test_mcnemar.csv", index=False)
         return result
 
     @staticmethod
@@ -1912,9 +2084,10 @@ class TFDFEvaluator:
         variant_df, y_true, y_pred, y_pred_proba, test_indices, output_dir
     ):
         print("  Generating misclassification report...")
-        y_true = np.array(y_true); y_pred = np.array(y_pred)
+        y_true = np.array(y_true)
+        y_pred = np.array(y_pred)
         y_pred_proba = np.array(y_pred_proba)
-        misclass_mask    = y_true != y_pred
+        misclass_mask = y_true != y_pred
         misclass_indices = np.where(misclass_mask)[0]
         original_indices = test_indices[misclass_indices]
         coord_cols = [c for c in ["chr", "pos", "ref", "alt"] if c in variant_df.columns]
@@ -1922,8 +2095,10 @@ class TFDFEvaluator:
         for i, orig_idx in enumerate(original_indices):
             li = misclass_indices[i]
             rec = {
-                "test_index": li, "original_index": orig_idx,
-                "y_true": int(y_true[li]), "y_pred": int(y_pred[li]),
+                "test_index": li,
+                "original_index": orig_idx,
+                "y_true": int(y_true[li]),
+                "y_pred": int(y_pred[li]),
                 "y_pred_proba": float(y_pred_proba[li]),
                 "error_type": "FP" if y_pred[li] == 1 else "FN",
                 "confidence": abs(y_pred_proba[li] - 0.5) * 2,
@@ -1940,7 +2115,9 @@ class TFDFEvaluator:
         return df
 
     @staticmethod
-    def aggregate_shap_by_category(shap_values, feature_names, n_standard, n_fcgr, n_tda, output_dir):
+    def aggregate_shap_by_category(
+        shap_values, feature_names, n_standard, n_fcgr, n_tda, output_dir
+    ):
         print("  Aggregating SHAP values by feature category...")
         mean_abs_shap = np.mean(np.abs(shap_values), axis=0)
         category_shap = {"Standard/Biological": [], "Fractal (FCGR)": [], "Topological (TDA)": []}
@@ -1953,130 +2130,208 @@ class TFDFEvaluator:
             else:
                 category = "Topological (TDA)"
             category_shap[category].append(mean_abs_shap[i])
-            feature_category_map.append({"feature_name": fname, "category": category,
-                                          "mean_abs_shap": mean_abs_shap[i]})
+            feature_category_map.append(
+                {"feature_name": fname, "category": category, "mean_abs_shap": mean_abs_shap[i]}
+            )
         aggregated_results = []
         for category, values in category_shap.items():
             if values:
-                aggregated_results.append({
-                    "category": category, "n_features": len(values),
-                    "mean_abs_shap": np.mean(values), "sum_abs_shap": np.sum(values),
-                    "std_abs_shap": np.std(values), "max_abs_shap": np.max(values),
-                    "relative_importance": np.sum(values) / np.sum(mean_abs_shap) * 100,
-                })
+                aggregated_results.append(
+                    {
+                        "category": category,
+                        "n_features": len(values),
+                        "mean_abs_shap": np.mean(values),
+                        "sum_abs_shap": np.sum(values),
+                        "std_abs_shap": np.std(values),
+                        "max_abs_shap": np.max(values),
+                        "relative_importance": np.sum(values) / np.sum(mean_abs_shap) * 100,
+                    }
+                )
         aggregated_df = pd.DataFrame(aggregated_results).sort_values(
-            "mean_abs_shap", ascending=False)
+            "mean_abs_shap", ascending=False
+        )
         feature_df = pd.DataFrame(feature_category_map)
         feature_df.to_csv(output_dir / "feature_importance_detailed.csv", index=False)
         aggregated_df.to_csv(output_dir / "feature_importance_aggregated.csv", index=False)
         print("\n    Category-Level Importance:")
         for _, row in aggregated_df.iterrows():
-            print(f"    {row['category']:25} - Mean |SHAP|: {row['mean_abs_shap']:.6f} "
-                  f"({row['relative_importance']:.1f}%)")
+            print(
+                f"    {row['category']:25} - Mean |SHAP|: {row['mean_abs_shap']:.6f} "
+                f"({row['relative_importance']:.1f}%)"
+            )
         return aggregated_df, feature_df
 
     @staticmethod
     def plot_feature_importance_stacked(aggregated_df, output_dir):
         print("  Generating feature importance stacked bar chart...")
         fig, (ax1, ax2) = plt.subplots(
-            1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 0.7))
-        colors = {"Standard/Biological": "#0077BB",
-                  "Fractal (FCGR)": "#EE7733",
-                  "Topological (TDA)": "#009988"}
+            1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 0.7)
+        )
+        colors = {
+            "Standard/Biological": "#0077BB",
+            "Fractal (FCGR)": "#EE7733",
+            "Topological (TDA)": "#009988",
+        }
         categories = aggregated_df["category"].tolist()
         bar_colors = [colors.get(c, "#888888") for c in categories]
-        bars = ax1.barh(categories, aggregated_df["mean_abs_shap"],
-                        color=bar_colors, edgecolor="black", linewidth=0.5)
+        bars = ax1.barh(
+            categories,
+            aggregated_df["mean_abs_shap"],
+            color=bar_colors,
+            edgecolor="black",
+            linewidth=0.5,
+        )
         ax1.set_xlabel("Mean |SHAP Value|")
         ax1.set_title("(A) Feature Category Importance", fontweight="bold", loc="left")
         ax1.grid(False)
         for bar, val in zip(bars, aggregated_df["mean_abs_shap"]):
-            ax1.text(val + 0.001, bar.get_y() + bar.get_height() / 2,
-                     f"{val:.4f}", va="center", fontsize=FIG_FONT_SIZE - 1)
+            ax1.text(
+                val + 0.001,
+                bar.get_y() + bar.get_height() / 2,
+                f"{val:.4f}",
+                va="center",
+                fontsize=FIG_FONT_SIZE - 1,
+            )
         wedges, texts, autotexts = ax2.pie(
-            aggregated_df["relative_importance"], labels=categories,
-            colors=bar_colors, autopct="%1.1f%%", startangle=90,
+            aggregated_df["relative_importance"],
+            labels=categories,
+            colors=bar_colors,
+            autopct="%1.1f%%",
+            startangle=90,
             explode=[0.02] * len(categories),
             wedgeprops=dict(linewidth=1, edgecolor="white"),
         )
         ax2.set_title("(B) Relative Contribution", fontweight="bold")
         for at in autotexts:
-            at.set_fontsize(FIG_FONT_SIZE); at.set_fontweight("bold")
+            at.set_fontsize(FIG_FONT_SIZE)
+            at.set_fontweight("bold")
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_Feature_Importance_Stacked.png",
-                    dpi=FIG_DPI, bbox_inches="tight")
-        plt.savefig(output_dir / "Fig_Feature_Importance_Stacked.tiff",
-                    dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(
+            output_dir / "Fig_Feature_Importance_Stacked.png", dpi=FIG_DPI, bbox_inches="tight"
+        )
+        plt.savefig(
+            output_dir / "Fig_Feature_Importance_Stacked.tiff", dpi=FIG_DPI, bbox_inches="tight"
+        )
         plt.close()
 
     @staticmethod
     def generate_learning_curve(
-        X, y, model_factory_fn, n_standard, n_fcgr, n_tda, output_dir,
+        X,
+        y,
+        model_factory_fn,
+        n_standard,
+        n_fcgr,
+        n_tda,
+        output_dir,
         train_sizes=[0.1, 0.3, 0.5, 0.7, 0.9],
     ):
         print("\n  Generating Learning Curve...")
         print(f"    Training sizes: {[f'{s*100:.0f}%' for s in train_sizes]}")
-        y_arr   = np.array(y) if hasattr(y, "values") else y
+        y_arr = np.array(y) if hasattr(y, "values") else y
         results = []
         for train_size in tqdm(train_sizes, desc="Learning Curve", ncols=80):
             if train_size < 1.0:
                 X_tr, X_te, y_tr, y_te = train_test_split(
-                    X, y_arr, train_size=train_size, stratify=y_arr,
+                    X,
+                    y_arr,
+                    train_size=train_size,
+                    stratify=y_arr,
                     random_state=Config.RANDOM_STATE,
                 )
             else:
                 X_tr, X_te, y_tr, y_te = train_test_split(
-                    X, y_arr, test_size=0.2, stratify=y_arr,
+                    X,
+                    y_arr,
+                    test_size=0.2,
+                    stratify=y_arr,
                     random_state=Config.RANDOM_STATE,
                 )
             model = model_factory_fn(n_standard, n_fcgr, n_tda)
             model.fit(X_tr, y_tr)
-            y_pred       = model.predict(X_te)
+            y_pred = model.predict(X_te)
             y_pred_proba = model.predict_proba(X_te)
-            results.append({
-                "train_size_pct": train_size * 100,
-                "n_train_samples": len(X_tr), "n_test_samples": len(X_te),
-                "mcc":      matthews_corrcoef(y_te, y_pred),
-                "auprc":    average_precision_score(y_te, y_pred_proba),
-                "auroc":    roc_auc_score(y_te, y_pred_proba),
-                "f1":       f1_score(y_te, y_pred, zero_division=0),
-                "accuracy": accuracy_score(y_te, y_pred),
-            })
+            results.append(
+                {
+                    "train_size_pct": train_size * 100,
+                    "n_train_samples": len(X_tr),
+                    "n_test_samples": len(X_te),
+                    "mcc": matthews_corrcoef(y_te, y_pred),
+                    "auprc": average_precision_score(y_te, y_pred_proba),
+                    "auroc": roc_auc_score(y_te, y_pred_proba),
+                    "f1": f1_score(y_te, y_pred, zero_division=0),
+                    "accuracy": accuracy_score(y_te, y_pred),
+                }
+            )
         results_df = pd.DataFrame(results)
         fig, axes = plt.subplots(1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 0.7))
         ax1 = axes[0]
-        ax1.plot(results_df["train_size_pct"], results_df["mcc"],  "o-",
-                 color="#0077BB", linewidth=1.5, markersize=6, label="MCC")
-        ax1.plot(results_df["train_size_pct"], results_df["f1"],   "s--",
-                 color="#EE7733", linewidth=1.5, markersize=6, label="F1-Score")
-        ax1.set_xlabel("Training Data Size (%)"); ax1.set_ylabel("Score")
+        ax1.plot(
+            results_df["train_size_pct"],
+            results_df["mcc"],
+            "o-",
+            color="#0077BB",
+            linewidth=1.5,
+            markersize=6,
+            label="MCC",
+        )
+        ax1.plot(
+            results_df["train_size_pct"],
+            results_df["f1"],
+            "s--",
+            color="#EE7733",
+            linewidth=1.5,
+            markersize=6,
+            label="F1-Score",
+        )
+        ax1.set_xlabel("Training Data Size (%)")
+        ax1.set_ylabel("Score")
         ax1.set_title("(A) Learning Curve — MCC & F1", fontweight="bold", loc="left")
-        ax1.legend(); ax1.grid(False)
-        ax1.set_xlim([0, 100]); ax1.set_ylim([0, 1.05])
+        ax1.legend()
+        ax1.grid(False)
+        ax1.set_xlim([0, 100])
+        ax1.set_ylim([0, 1.05])
         ax2 = axes[1]
-        ax2.plot(results_df["train_size_pct"], results_df["auprc"], "o-",
-                 color="#009988", linewidth=1.5, markersize=6, label="AUPRC")
-        ax2.plot(results_df["train_size_pct"], results_df["auroc"], "s--",
-                 color="#CC3311", linewidth=1.5, markersize=6, label="AUROC")
-        ax2.set_xlabel("Training Data Size (%)"); ax2.set_ylabel("Score")
+        ax2.plot(
+            results_df["train_size_pct"],
+            results_df["auprc"],
+            "o-",
+            color="#009988",
+            linewidth=1.5,
+            markersize=6,
+            label="AUPRC",
+        )
+        ax2.plot(
+            results_df["train_size_pct"],
+            results_df["auroc"],
+            "s--",
+            color="#CC3311",
+            linewidth=1.5,
+            markersize=6,
+            label="AUROC",
+        )
+        ax2.set_xlabel("Training Data Size (%)")
+        ax2.set_ylabel("Score")
         ax2.set_title("(B) Learning Curve — AUPRC & AUROC", fontweight="bold", loc="left")
-        ax2.legend(); ax2.grid(False)
-        ax2.set_xlim([0, 100]); ax2.set_ylim([0, 1.05])
+        ax2.legend()
+        ax2.grid(False)
+        ax2.set_xlim([0, 100])
+        ax2.set_ylim([0, 1.05])
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_Learning_Curve.png",  dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(output_dir / "Fig_Learning_Curve.png", dpi=FIG_DPI, bbox_inches="tight")
         plt.savefig(output_dir / "Fig_Learning_Curve.tiff", dpi=FIG_DPI, bbox_inches="tight")
         plt.close()
         results_df.to_csv(output_dir / "learning_curve_data.csv", index=False)
         print("\n    Learning Curve Results:")
         for _, row in results_df.iterrows():
-            print(f"    {row['train_size_pct']:5.0f}% ({row['n_train_samples']:,} samples): "
-                  f"MCC={row['mcc']:.4f}, AUPRC={row['auprc']:.4f}")
+            print(
+                f"    {row['train_size_pct']:5.0f}% ({row['n_train_samples']:,} samples): "
+                f"MCC={row['mcc']:.4f}, AUPRC={row['auprc']:.4f}"
+            )
         return results_df
 
 
-# ---------------------------------------------------------------------------
-# BaselineEnsemble  (unchanged)
-# ---------------------------------------------------------------------------
+# BaselineEnsemble (unchanged)
+
 
 class BaselineEnsemble:
     def __init__(self, n_biological_features=18, random_state=42):
@@ -2088,19 +2343,26 @@ class BaselineEnsemble:
     def _create_base_models(self):
         rs = self.random_state
         return {
-            "RF_1":  RandomForestClassifier(n_estimators=100, max_depth=10, random_state=rs,     n_jobs=-1),
-            "RF_2":  RandomForestClassifier(n_estimators=100, max_depth=15, random_state=rs + 1, n_jobs=-1),
-            "ET_1":  ExtraTreesClassifier(  n_estimators=100, max_depth=10, random_state=rs + 2, n_jobs=-1),
-            "ET_2":  ExtraTreesClassifier(  n_estimators=100, max_depth=15, random_state=rs + 3, n_jobs=-1),
-            "GB_1":  GradientBoostingClassifier(n_estimators=100, max_depth=5, random_state=rs + 4),
-            "GB_2":  GradientBoostingClassifier(n_estimators=100, max_depth=7, random_state=rs + 5),
+            "RF_1": RandomForestClassifier(
+                n_estimators=100, max_depth=10, random_state=rs, n_jobs=-1
+            ),
+            "RF_2": RandomForestClassifier(
+                n_estimators=100, max_depth=15, random_state=rs + 1, n_jobs=-1
+            ),
+            "ET_1": ExtraTreesClassifier(
+                n_estimators=100, max_depth=10, random_state=rs + 2, n_jobs=-1
+            ),
+            "ET_2": ExtraTreesClassifier(
+                n_estimators=100, max_depth=15, random_state=rs + 3, n_jobs=-1
+            ),
+            "GB_1": GradientBoostingClassifier(n_estimators=100, max_depth=5, random_state=rs + 4),
+            "GB_2": GradientBoostingClassifier(n_estimators=100, max_depth=7, random_state=rs + 5),
             "HGB_1": HistGradientBoostingClassifier(max_iter=100, max_depth=6, random_state=rs + 6),
             "HGB_2": HistGradientBoostingClassifier(max_iter=100, max_depth=8, random_state=rs + 7),
         }
 
-
     def fit(self, X, y):
-        X_bio = X[:, :self.n_biological_features]
+        X_bio = X[:, : self.n_biological_features]
         self.models = self._create_base_models()
         for name, model in tqdm(self.models.items(), desc="Training Baseline", ncols=80):
             model.fit(X_bio, y)
@@ -2108,7 +2370,7 @@ class BaselineEnsemble:
         return self
 
     def predict_proba(self, X):
-        X_bio  = X[:, :self.n_biological_features]
+        X_bio = X[:, : self.n_biological_features]
         probas = [model.predict_proba(X_bio)[:, 1] for model in self.models.values()]
         return np.mean(probas, axis=0)
 
@@ -2116,18 +2378,17 @@ class BaselineEnsemble:
         return (self.predict_proba(X) >= threshold).astype(int)
 
 
-# ---------------------------------------------------------------------------
-# Metrics helpers  (unchanged)
-# ---------------------------------------------------------------------------
+# Metrics helpers (unchanged)
+
 
 def compute_metrics(y_true, y_pred, y_pred_proba=None):
     metrics = {
-        "mcc":       matthews_corrcoef(y_true, y_pred),
-        "accuracy":  accuracy_score(y_true, y_pred),
+        "mcc": matthews_corrcoef(y_true, y_pred),
+        "accuracy": accuracy_score(y_true, y_pred),
         "precision": precision_score(y_true, y_pred, zero_division=0),
-        "recall":    recall_score(y_true, y_pred, zero_division=0),
-        "f1":        f1_score(y_true, y_pred, zero_division=0),
-        "kappa":     cohen_kappa_score(y_true, y_pred),
+        "recall": recall_score(y_true, y_pred, zero_division=0),
+        "f1": f1_score(y_true, y_pred, zero_division=0),
+        "kappa": cohen_kappa_score(y_true, y_pred),
     }
     if y_pred_proba is not None:
         metrics["auprc"] = average_precision_score(y_true, y_pred_proba)
@@ -2151,25 +2412,15 @@ def print_metrics_report(metrics, model_name="Model"):
     print(f"  Cohen's κ:  {metrics.get('kappa', 0):.6f}")
 
 
-# ---------------------------------------------------------------------------
-# run_final_model()  — v4.0 (all supervisor changes active)
-# ---------------------------------------------------------------------------
+# run_final_model —
+
 
 def run_final_model():
-    """Run TF-DFE v4.0 on the full dataset — all 7 fixes + Changes 1, 2, 3."""
+    """Run the full TF-DFE framework end-to-end on the dataset."""
     start_time = time.time()
 
-    print("\nTF-DFE v4.0: Final Framework Run")
+    print("\nTF-DFE: Final Framework Run")
     print("Best Model: Enhanced KNORA-E with OOF Stacking")
-    print("\nKey changes vs v3.0:")
-    print("  FIX 1–7 (retained): all original fixes apply")
-    print("  CHANGE 1: +MLP (BioTDA), +kNN (SML space), +ElasticNet LR; "
-          "pairwise Q-statistic diversity matrix")
-    print("  CHANGE 2: TDA over FCGR/sequence representation; features "
-          f"expanded to ~20 (was 6)")
-    print("  CHANGE 3: Consensus-margin sample weighting + selective "
-          f"prediction (abstain θ={Config.SELECTIVE_ABSTAIN_THRESHOLD})")
-    print(f"  BUG FIX: SHAP fallback now uses model object, not string name")
     print(f"\nOutput Directory: {Config.OUTPUT_DIR}")
 
     print("\nStep 1: Load Data & EDA")
@@ -2192,53 +2443,53 @@ def run_final_model():
     plot_class_distribution(variant_df, Config.OUTPUT_DIR)
 
     print("\nStep 2: Feature Engineering")
-    preprocessor = TFDFEPreprocessor(
-        use_fcgr=True, use_tda=True, genome_path=Config.GENOME_PATH
-    )
+    preprocessor = TFDFEPreprocessor(use_fcgr=True, use_tda=True, genome_path=Config.GENOME_PATH)
     X, y = preprocessor.fit_transform(variant_df)
 
     n_standard = len(preprocessor.feature_names)
-    n_fcgr     = len(preprocessor.fcgr_feature_names)
-    n_tda      = len(preprocessor.tda_feature_names)
+    n_fcgr = len(preprocessor.fcgr_feature_names)
+    n_tda = len(preprocessor.tda_feature_names)
 
     print(f"\nFeature engineering complete — Total features: {X.shape[1]}")
 
-    print("\nStep 3: Train Best Model (Enhanced KNORA v4.0)")
+    print("\nStep 3: Train Best Model")
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=Config.TEST_SIZE, stratify=y,
+        X,
+        y,
+        test_size=Config.TEST_SIZE,
+        stratify=y,
         random_state=Config.RANDOM_STATE,
     )
     print(f"\nData Split:")
     print(f"  Train: {len(X_train):,} samples")
     print(f"  Test:  {len(X_test):,} samples")
 
-    # ------------------------------------------------------------------
-    # CHANGE 3: Extract CONSENSUS_SCORE for sample weighting
-    # ------------------------------------------------------------------
+    # Extract CONSENSUS_SCORE for sample weighting
     consensus_scores_train = None
     if "CONSENSUS_SCORE" in variant_df.columns:
         y_arr_full = np.array(y) if hasattr(y, "values") else y
         _, _, _, _, train_idx_raw, _ = train_test_split(
-            X, y_arr_full, np.arange(len(y_arr_full)),
-            test_size=Config.TEST_SIZE, stratify=y,
+            X,
+            y_arr_full,
+            np.arange(len(y_arr_full)),
+            test_size=Config.TEST_SIZE,
+            stratify=y,
             random_state=Config.RANDOM_STATE,
         )
         # Extract training-set CONSENSUS_SCORE (before inner val split)
         # The factory will handle mis-alignment if lengths differ.
         cs_all = variant_df["CONSENSUS_SCORE"].values
         consensus_scores_train = cs_all[train_idx_raw]
-        print(f"  [CHANGE 3] CONSENSUS_SCORE available for "
-              f"{len(consensus_scores_train):,} training variants.")
+        print(
+            f"  CONSENSUS_SCORE available for "
+            f"{len(consensus_scores_train):,} training variants."
+        )
     else:
-        print("  [CHANGE 3] CONSENSUS_SCORE not in dataset; "
-              "sample weighting disabled.")
+        print("  CONSENSUS_SCORE not in dataset; " "sample weighting disabled.")
 
-    model = EnhancedTFDFEEnsemble(
-        n_standard=n_standard, n_fcgr=n_fcgr, n_tda=n_tda
-    )
+    model = EnhancedTFDFEEnsemble(n_standard=n_standard, n_fcgr=n_fcgr, n_tda=n_tda)
     train_start = time.time()
-    model.fit(X_train, y_train,
-              consensus_scores_train=consensus_scores_train)
+    model.fit(X_train, y_train, consensus_scores_train=consensus_scores_train)
     train_time = time.time() - train_start
     print(f"\nTraining complete ({train_time/60:.2f} minutes)")
 
@@ -2251,12 +2502,10 @@ def run_final_model():
     metrics = compute_metrics(y_test, y_pred, y_pred_proba)
     print_metrics_report(metrics, model_name="Enhanced KNORA v4.0 (TF-DFE)")
 
-    # ------------------------------------------------------------------
-    # CHANGE 3: Selective prediction metrics
-    # ------------------------------------------------------------------
-    print("\nStep 3A: Selective Prediction Metrics (CHANGE 3)")
+    # Selective prediction metrics
+    print("\nStep 3A: Selective Prediction Metrics")
     y_selective, purity_scores, coverage = model.selective_predict(X_test)
-    confident_mask = (y_selective >= 0)
+    confident_mask = y_selective >= 0
     if confident_mask.sum() > 0:
         y_te_arr = np.array(y_test) if hasattr(y_test, "values") else y_test
         sel_mcc = matthews_corrcoef(y_te_arr[confident_mask], y_selective[confident_mask])
@@ -2264,13 +2513,18 @@ def run_final_model():
         print(f"  Coverage:             {coverage:.3%}")
         print(f"  Selective MCC:        {sel_mcc:.6f}  (vs full {metrics['mcc']:.6f})")
         print(f"  Selective Accuracy:   {sel_acc:.6f}  (vs full {metrics['accuracy']:.6f})")
-        selective_df = pd.DataFrame({
-            "coverage": [coverage], "n_predicted": [int(confident_mask.sum())],
-            "n_abstained": [int((~confident_mask).sum())],
-            "selective_mcc": [sel_mcc], "selective_accuracy": [sel_acc],
-            "full_mcc": [metrics["mcc"]], "full_accuracy": [metrics["accuracy"]],
-            "abstain_threshold": [Config.SELECTIVE_ABSTAIN_THRESHOLD],
-        })
+        selective_df = pd.DataFrame(
+            {
+                "coverage": [coverage],
+                "n_predicted": [int(confident_mask.sum())],
+                "n_abstained": [int((~confident_mask).sum())],
+                "selective_mcc": [sel_mcc],
+                "selective_accuracy": [sel_acc],
+                "full_mcc": [metrics["mcc"]],
+                "full_accuracy": [metrics["accuracy"]],
+                "abstain_threshold": [Config.SELECTIVE_ABSTAIN_THRESHOLD],
+            }
+        )
         selective_df.to_csv(Config.OUTPUT_DIR / "selective_prediction_metrics.csv", index=False)
         print("  Saved: selective_prediction_metrics.csv")
 
@@ -2279,25 +2533,20 @@ def run_final_model():
     plot_confusion_matrix(y_test, y_pred, "TF-DFE", Config.OUTPUT_DIR)
     plot_tsne(X_test, y_test, "TF-DFE v4.0 Feature Space Separation", Config.OUTPUT_DIR)
 
-    # ------------------------------------------------------------------
-    # SHAP analysis — BUG FIX: use model OBJECT not string name
-    # ------------------------------------------------------------------
+    # SHAP analysis —: use model OBJECT not string name
     shap_model = None
     shap_indices = None
     shap_feature_names = None
     if SHAP_AVAILABLE and hasattr(model, "diverse_factory") and model.diverse_factory is not None:
         for name, m in model.diverse_factory.models.items():
-            # BUG FIX: Unwrap CalibratedClassifierCV to get the underlying
-            # estimator for SHAP compatibility.  Never pass the string name.
+            # Unwrap CalibratedClassifierCV to get the underlying
+            # estimator for SHAP compatibility. Never pass the string name.
             base_m = m.base_estimator if isinstance(m, CalibratedClassifierCV) else m
-            if hasattr(base_m, "estimators_") or any(
-                k in name for k in ["XGB", "LGB", "CatBoost"]
-            ):
-                shap_model = base_m   # ← model OBJECT (BUG FIX)
+            if hasattr(base_m, "estimators_") or any(k in name for k in ["XGB", "LGB", "CatBoost"]):
+                shap_model = base_m  # ← model OBJECT (BUG FIX)
                 shap_indices = model.diverse_factory.feature_indices[name]
-                shap_feature_names = [preprocessor.all_feature_names[i]
-                                      for i in shap_indices]
-                X_shap = X_test[:min(500, len(X_test)), shap_indices]
+                shap_feature_names = [preprocessor.all_feature_names[i] for i in shap_indices]
+                X_shap = X_test[: min(500, len(X_test)), shap_indices]
                 break
         if shap_model:
             perform_shap_analysis(
@@ -2311,8 +2560,11 @@ def run_final_model():
     print("\nStep 4A: Calibration Analysis")
     y_test_arr = np.array(y_test) if hasattr(y_test, "values") else y_test
     ece, brier, calibration_bins = TFDFEvaluator.plot_calibration_curve(
-        y_test_arr, y_pred_proba, Config.OUTPUT_DIR,
-        model_name="Enhanced KNORA v4.0 (TF-DFE)", n_bins=10,
+        y_test_arr,
+        y_pred_proba,
+        Config.OUTPUT_DIR,
+        model_name="Enhanced KNORA v4.0 (TF-DFE)",
+        n_bins=10,
     )
     metrics["ece"] = ece
 
@@ -2322,7 +2574,7 @@ def run_final_model():
         n_biological_features=n_standard, random_state=Config.RANDOM_STATE
     )
     baseline_model.fit(X_train, y_train)
-    y_pred_baseline       = baseline_model.predict(X_test)
+    y_pred_baseline = baseline_model.predict(X_test)
     y_pred_proba_baseline = baseline_model.predict_proba(X_test)
     baseline_metrics = compute_metrics(y_test_arr, y_pred_baseline, y_pred_proba_baseline)
     print(f"\n  Baseline Model Metrics:")
@@ -2331,25 +2583,29 @@ def run_final_model():
     print(f"    F1:     {baseline_metrics['f1']:.6f}")
 
     mcnemar_result = TFDFEvaluator.perform_mcnemar_test(
-        y_test_arr, y_pred, y_pred_baseline,
-        model1_name="Enhanced KNORA v4.0", model2_name="Baseline Ensemble",
+        y_test_arr,
+        y_pred,
+        y_pred_baseline,
+        model1_name="Enhanced KNORA v4.0",
+        model2_name="Baseline Ensemble",
         output_dir=Config.OUTPUT_DIR,
     )
 
     print("\nStep 4C: Error Analysis")
     y_array = np.array(y) if hasattr(y, "values") else y
     _, _, _, _, train_indices, test_indices = train_test_split(
-        X, y_array, np.arange(len(y_array)),
-        test_size=Config.TEST_SIZE, stratify=y,
+        X,
+        y_array,
+        np.arange(len(y_array)),
+        test_size=Config.TEST_SIZE,
+        stratify=y,
         random_state=Config.RANDOM_STATE,
     )
     misclass_df = TFDFEvaluator.generate_misclassification_report(
         variant_df, y_test_arr, y_pred, y_pred_proba, test_indices, Config.OUTPUT_DIR
     )
 
-    # ------------------------------------------------------------------
-    # Step 4D: Aggregated Feature Importance — BUG FIX applied
-    # ------------------------------------------------------------------
+    # Step 4D: Aggregated Feature Importance — applied
     print("\nStep 4D: Aggregated Feature Importance by Category")
     if SHAP_AVAILABLE and shap_model is not None:
         try:
@@ -2357,28 +2613,30 @@ def run_final_model():
             sample_size = min(1000, len(X_test))
             X_sample_full = X_test[:sample_size]
 
-            # BUG FIX: prefer models with full feature view for category aggregation
-            agg_model   = None
+            # prefer models with full feature view for category aggregation
+            agg_model = None
             agg_indices = None
             for cand in ["Full_GradientBoosting", "Full_HistGradient"]:
                 if cand in model.diverse_factory.models:
                     raw = model.diverse_factory.models[cand]
-                    # BUG FIX: always extract the underlying estimator object
-                    agg_model   = raw.base_estimator if isinstance(raw, CalibratedClassifierCV) else raw
+                    # always extract the underlying estimator object
+                    agg_model = (
+                        raw.base_estimator if isinstance(raw, CalibratedClassifierCV) else raw
+                    )
                     agg_indices = model.diverse_factory.feature_indices[cand]
                     break
             if agg_model is None:
-                agg_model   = shap_model
+                agg_model = shap_model
                 agg_indices = shap_indices
 
-            X_sample_subset   = X_sample_full[:, agg_indices]
+            X_sample_subset = X_sample_full[:, agg_indices]
             agg_feature_names = [preprocessor.all_feature_names[i] for i in agg_indices]
 
             if hasattr(agg_model, "estimators_"):
                 explainer = shap.TreeExplainer(agg_model)
             else:
                 background = shap.sample(X_sample_subset, 50)
-                explainer  = shap.KernelExplainer(agg_model.predict_proba, background)
+                explainer = shap.KernelExplainer(agg_model.predict_proba, background)
 
             agg_shap_values = explainer.shap_values(X_sample_subset)
             if isinstance(agg_shap_values, list) and len(agg_shap_values) == 2:
@@ -2387,7 +2645,11 @@ def run_final_model():
                 agg_shap_values = agg_shap_values[:, :, 1]
 
             aggregated_df, feature_df = TFDFEvaluator.aggregate_shap_by_category(
-                agg_shap_values, agg_feature_names, n_standard, n_fcgr, n_tda,
+                agg_shap_values,
+                agg_feature_names,
+                n_standard,
+                n_fcgr,
+                n_tda,
                 Config.OUTPUT_DIR,
             )
             TFDFEvaluator.plot_feature_importance_stacked(aggregated_df, Config.OUTPUT_DIR)
@@ -2397,19 +2659,28 @@ def run_final_model():
         print("  Skipped (SHAP not available or no compatible model)")
 
     print("\nStep 4E: Learning Curve Analysis")
+
     def model_factory_fn(n_std, n_fcg, n_td):
         return EnhancedTFDFEEnsemble(n_standard=n_std, n_fcgr=n_fcg, n_tda=n_td)
 
     if len(X) > 50000:
         print(f"  Dataset size ({len(X):,}) is large. Using subset for learning curve...")
         lc_sample_size = min(50000, len(X))
-        lc_indices     = np.random.choice(len(X), lc_sample_size, replace=False)
-        X_lc = X[lc_indices]; y_lc = y_array[lc_indices]
+        lc_indices = np.random.choice(len(X), lc_sample_size, replace=False)
+        X_lc = X[lc_indices]
+        y_lc = y_array[lc_indices]
     else:
-        X_lc = X; y_lc = y_array
+        X_lc = X
+        y_lc = y_array
 
     learning_curve_df = TFDFEvaluator.generate_learning_curve(
-        X_lc, y_lc, model_factory_fn, n_standard, n_fcgr, n_tda, Config.OUTPUT_DIR,
+        X_lc,
+        y_lc,
+        model_factory_fn,
+        n_standard,
+        n_fcgr,
+        n_tda,
+        Config.OUTPUT_DIR,
         train_sizes=[0.1, 0.3, 0.5, 0.7, 0.9],
     )
 
@@ -2417,15 +2688,22 @@ def run_final_model():
     if len(X) > 100000:
         print(f"  Dataset size ({len(X):,}) is large. Using subset for CV analysis...")
         cv_sample_size = min(50000, len(X))
-        cv_indices     = np.random.choice(len(X), cv_sample_size, replace=False)
-        X_cv = X[cv_indices]; y_cv = y_array[cv_indices]
+        cv_indices = np.random.choice(len(X), cv_sample_size, replace=False)
+        X_cv = X[cv_indices]
+        y_cv = y_array[cv_indices]
     else:
-        X_cv = X; y_cv = y_array
+        X_cv = X
+        y_cv = y_array
 
     cv_df, cv_summary = TFDFEvaluator.perform_repeated_cv(
-        X_cv, y_cv, model_factory_fn,
-        n_splits=5, n_repeats=2,
-        n_standard=n_standard, n_fcgr=n_fcgr, n_tda=n_tda,
+        X_cv,
+        y_cv,
+        model_factory_fn,
+        n_splits=5,
+        n_repeats=2,
+        n_standard=n_standard,
+        n_fcgr=n_fcgr,
+        n_tda=n_tda,
         output_dir=Config.OUTPUT_DIR,
     )
     TFDFEvaluator.plot_cv_distribution(cv_df, Config.OUTPUT_DIR, metrics=["mcc", "auprc"])
@@ -2434,11 +2712,13 @@ def run_final_model():
     metrics_df = pd.DataFrame([metrics])
     metrics_df.to_csv(Config.OUTPUT_DIR / "final_metrics.csv", index=False)
 
-    predictions_df = pd.DataFrame({
-        "y_true":       y_test.values if hasattr(y_test, "values") else y_test,
-        "y_pred":       y_pred,
-        "y_pred_proba": y_pred_proba,
-    })
+    predictions_df = pd.DataFrame(
+        {
+            "y_true": y_test.values if hasattr(y_test, "values") else y_test,
+            "y_pred": y_pred,
+            "y_pred_proba": y_pred_proba,
+        }
+    )
     predictions_df.to_csv(Config.OUTPUT_DIR / "final_predictions.csv", index=False)
 
     with open(Config.OUTPUT_DIR / "final_report.txt", "w", encoding="utf-8") as rf:
@@ -2448,8 +2728,10 @@ def run_final_model():
         rf.write("  FIX 1–7 (retained from v3)\n")
         rf.write("  CHANGE 1: +MLP (BioTDA), +kNN_SML, +ElasticNet LR; Q-statistic diversity\n")
         rf.write("  CHANGE 2: TDA over FCGR/sequence space; ~20 topological features (was 6)\n")
-        rf.write(f"  CHANGE 3: Consensus-margin weighting + selective prediction "
-                 f"(θ={Config.SELECTIVE_ABSTAIN_THRESHOLD})\n")
+        rf.write(
+            f"  CHANGE 3: Consensus-margin weighting + selective prediction "
+            f"(θ={Config.SELECTIVE_ABSTAIN_THRESHOLD})\n"
+        )
         rf.write("  BUG FIX: SHAP fallback uses model object, not string name\n\n")
         rf.write("Dataset Information\n")
         rf.write(f"  Total variants: {len(variant_df):,}\n")
@@ -2473,8 +2755,9 @@ def run_final_model():
         rf.write(f"  Significance: {mcnemar_result['significance']}\n")
         rf.write(f"  {mcnemar_result['interpretation']}\n\n")
         rf.write("Classification Report\n")
-        rf.write(classification_report(
-            y_test, y_pred, target_names=["Benign", "Pathogenic"], digits=4))
+        rf.write(
+            classification_report(y_test, y_pred, target_names=["Benign", "Pathogenic"], digits=4)
+        )
 
     total_time = time.time() - start_time
     print(f"\nFINAL ANALYSIS RUN COMPLETE")
@@ -2488,8 +2771,9 @@ def run_final_model():
     print(f"  MCC:   {cv_summary['mcc']['formatted']}")
     print(f"  AUPRC: {cv_summary['auprc']['formatted']}")
     print(f"\nStatistical Significance:")
-    print(f"  McNemar p-value: {mcnemar_result['p_value']:.6f} "
-          f"({mcnemar_result['significance']})")
+    print(
+        f"  McNemar p-value: {mcnemar_result['p_value']:.6f} " f"({mcnemar_result['significance']})"
+    )
     print(f"  {mcnemar_result['interpretation']}")
     print(f"\nOutput Directory: {Config.OUTPUT_DIR}")
     print(f"\nTotal Runtime: {total_time/60:.2f} minutes")
