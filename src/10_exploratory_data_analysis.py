@@ -1,8 +1,11 @@
+"""Exploratory data analysis: figures and summary statistics for the balanced dataset."""
+
 import pandas as pd
 from config import STAGE07_OUT, EDA_OUT
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
@@ -36,13 +39,9 @@ print("=" * 80)
 # Load the dataset
 print("\n[1/10] Loading Dataset...")
 df = pd.read_csv(STAGE07_OUT / "Final_Dataset_Balanced.csv")
-print(
-    f"✓ Dataset loaded successfully: {df.shape[0]:,} variants × {df.shape[1]} features"
-)
+print(f"✓ Dataset loaded successfully: {df.shape[0]:,} variants × {df.shape[1]} features")
 
-# ============================================================================
 # SECTION 1: DATASET OVERVIEW AND DESCRIPTIVE STATISTICS
-# ============================================================================
 print("\n" + "=" * 80)
 print("SECTION 1: DATASET OVERVIEW")
 print("=" * 80)
@@ -100,9 +99,7 @@ with open(f"{EDA_OUT}/01_dataset_summary.txt", "w", encoding="utf-8") as f:
 
 print(f"✓ Dataset summary saved to {output_dir}/01_dataset_summary.txt")
 
-# ============================================================================
 # SECTION 2: TARGET VARIABLE ANALYSIS
-# ============================================================================
 print("\n" + "=" * 80)
 print("SECTION 2: TARGET VARIABLE DISTRIBUTION")
 print("=" * 80)
@@ -115,12 +112,8 @@ with open(f"{EDA_OUT}/02_target_distribution.txt", "w", encoding="utf-8") as f:
     f.write("=" * 80 + "\n\n")
     f.write("Class Distribution:\n")
     f.write("-" * 40 + "\n")
-    f.write(
-        f"Pathogenic variants (1): {target_counts.get(1, 0):,} ({target_pct.get(1, 0):.2f}%)\n"
-    )
-    f.write(
-        f"Benign variants (0): {target_counts.get(0, 0):,} ({target_pct.get(0, 0):.2f}%)\n"
-    )
+    f.write(f"Pathogenic variants (1): {target_counts.get(1, 0):,} ({target_pct.get(1, 0):.2f}%)\n")
+    f.write(f"Benign variants (0): {target_counts.get(0, 0):,} ({target_pct.get(0, 0):.2f}%)\n")
     f.write(
         f"\nClass ratio (Benign:Pathogenic): {target_counts.get(0, 0)/target_counts.get(1, 1):.2f}:1\n"
     )
@@ -142,9 +135,7 @@ axes[0].bar(
 )
 axes[0].set_ylabel("Number of Variants", fontsize=11, fontweight="bold")
 axes[0].set_xlabel("Variant Class", fontsize=11, fontweight="bold")
-axes[0].set_title(
-    "A) Distribution of Variant Classes", fontsize=12, fontweight="bold", pad=15
-)
+axes[0].set_title("A) Distribution of Variant Classes", fontsize=12, fontweight="bold", pad=15)
 max_val = max(target_counts.get(0, 0), target_counts.get(1, 0))
 axes[0].set_ylim(0, max_val * 1.2)
 axes[0].ticklabel_format(style="plain", axis="y")
@@ -173,22 +164,16 @@ axes[1].pie(
     textprops={"fontsize": 11, "fontweight": "bold"},
     wedgeprops={"edgecolor": "black", "linewidth": 1.5},
 )
-axes[1].set_title(
-    "B) Proportion of Variant Classes", fontsize=12, fontweight="bold", pad=15
-)
+axes[1].set_title("B) Proportion of Variant Classes", fontsize=12, fontweight="bold", pad=15)
 
 plt.tight_layout()
-plt.savefig(
-    f"{EDA_OUT}/Figure1_Target_Distribution.png", dpi=300, bbox_inches="tight"
-)
+plt.savefig(f"{EDA_OUT}/Figure1_Target_Distribution.png", dpi=300, bbox_inches="tight")
 plt.savefig(f"{EDA_OUT}/Figure1_Target_Distribution.pdf", bbox_inches="tight")
 plt.close()
 
 print(f"✓ Figure 1 saved: Target distribution")
 
-# ============================================================================
 # SECTION 3: CHROMOSOMAL DISTRIBUTION
-# ============================================================================
 print("\n" + "=" * 80)
 print("SECTION 3: CHROMOSOMAL DISTRIBUTION ANALYSIS")
 print("=" * 80)
@@ -272,17 +257,13 @@ axes[1].legend(frameon=True, fancybox=True, shadow=True, fontsize=10)
 axes[1].grid(False)
 
 plt.tight_layout()
-plt.savefig(
-    f"{EDA_OUT}/Figure2_Chromosomal_Distribution.png", dpi=300, bbox_inches="tight"
-)
+plt.savefig(f"{EDA_OUT}/Figure2_Chromosomal_Distribution.png", dpi=300, bbox_inches="tight")
 plt.savefig(f"{EDA_OUT}/Figure2_Chromosomal_Distribution.pdf", bbox_inches="tight")
 plt.close()
 
 print(f"✓ Figure 2 saved: Chromosomal distribution")
 
-# ============================================================================
 # SECTION 4: NUCLEOTIDE SUBSTITUTION PATTERNS
-# ============================================================================
 print("\n" + "=" * 80)
 print("SECTION 4: NUCLEOTIDE SUBSTITUTION ANALYSIS")
 print("=" * 80)
@@ -337,9 +318,7 @@ axes[0].barh(
 axes[0].set_yticks(range(len(top_subst)))
 axes[0].set_yticklabels(top_subst.index, fontsize=9)
 axes[0].set_xlabel("Number of Variants", fontsize=11, fontweight="bold")
-axes[0].set_title(
-    "A) Top 12 Nucleotide Substitutions", fontsize=12, fontweight="bold", pad=15
-)
+axes[0].set_title("A) Top 12 Nucleotide Substitutions", fontsize=12, fontweight="bold", pad=15)
 axes[0].grid(False)
 axes[0].invert_yaxis()
 
@@ -353,22 +332,16 @@ axes[1].bar(
     linewidth=1.5,
 )
 axes[1].set_ylabel("Number of Variants", fontsize=11, fontweight="bold")
-axes[1].set_title(
-    "B) Transition vs Transversion", fontsize=12, fontweight="bold", pad=15
-)
+axes[1].set_title("B) Transition vs Transversion", fontsize=12, fontweight="bold", pad=15)
 max_val2 = max(mutation_counts.get("Transition", 0), mutation_counts.get("Transversion", 0))
 axes[1].set_ylim(0, max_val2 * 1.15)
 axes[1].grid(False)
 for i, k in enumerate(["Transition", "Transversion"]):
     v = mutation_counts.get(k, 0)
-    axes[1].text(
-        i, v + 1000, f"{v:,}", ha="center", va="bottom", fontweight="bold", fontsize=10
-    )
+    axes[1].text(i, v + 1000, f"{v:,}", ha="center", va="bottom", fontweight="bold", fontsize=10)
 
 # Panel C: Ti/Tv by pathogenicity
-mutation_by_class_pct = (
-    mutation_by_class.div(mutation_by_class.sum(axis=1), axis=0) * 100
-)
+mutation_by_class_pct = mutation_by_class.div(mutation_by_class.sum(axis=1), axis=0) * 100
 x_pos = np.arange(2)
 width = 0.35
 axes[2].bar(
@@ -392,26 +365,20 @@ axes[2].bar(
     linewidth=1,
 )
 axes[2].set_ylabel("Percentage (%)", fontsize=11, fontweight="bold")
-axes[2].set_title(
-    "C) Mutation Type by Pathogenicity", fontsize=12, fontweight="bold", pad=15
-)
+axes[2].set_title("C) Mutation Type by Pathogenicity", fontsize=12, fontweight="bold", pad=15)
 axes[2].set_xticks(x_pos)
 axes[2].set_xticklabels(["Transition", "Transversion"])
 axes[2].legend(frameon=True, fancybox=True, shadow=True)
 axes[2].grid(False)
 
 plt.tight_layout()
-plt.savefig(
-    f"{EDA_OUT}/Figure3_Substitution_Patterns.png", dpi=300, bbox_inches="tight"
-)
+plt.savefig(f"{EDA_OUT}/Figure3_Substitution_Patterns.png", dpi=300, bbox_inches="tight")
 plt.savefig(f"{EDA_OUT}/Figure3_Substitution_Patterns.pdf", bbox_inches="tight")
 plt.close()
 
 print(f"✓ Figure 3 saved: Substitution patterns")
 
-# ============================================================================
 # SECTION 5: PATHOGENICITY SCORES DISTRIBUTION
-# ============================================================================
 print("\n" + "=" * 80)
 print("SECTION 5: PATHOGENICITY PREDICTION SCORES")
 print("=" * 80)
@@ -453,9 +420,7 @@ for score in pathogenicity_scores:
     )
 
 score_stats_df = pd.DataFrame(score_stats)
-score_stats_df.to_csv(
-    f"{EDA_OUT}/05_pathogenicity_scores_statistics.csv", index=False
-)
+score_stats_df.to_csv(f"{EDA_OUT}/05_pathogenicity_scores_statistics.csv", index=False)
 print(f"✓ Score statistics saved")
 
 # Figure 4: Score distributions
@@ -496,9 +461,7 @@ for idx, score in enumerate(pathogenicity_scores):
     axes[idx].set_xticks([0, 1])
     axes[idx].set_xticklabels(["Benign", "Pathogenic"])
     axes[idx].set_ylabel("Score Value", fontsize=10, fontweight="bold")
-    axes[idx].set_title(
-        f"{chr(65+idx)}) {score}", fontsize=11, fontweight="bold", pad=10
-    )
+    axes[idx].set_title(f"{chr(65+idx)}) {score}", fontsize=11, fontweight="bold", pad=10)
     axes[idx].grid(False)
 
     # Add p-value annotation
@@ -523,16 +486,12 @@ plt.savefig(
     dpi=300,
     bbox_inches="tight",
 )
-plt.savefig(
-    f"{EDA_OUT}/Figure4_Pathogenicity_Scores_Distribution.pdf", bbox_inches="tight"
-)
+plt.savefig(f"{EDA_OUT}/Figure4_Pathogenicity_Scores_Distribution.pdf", bbox_inches="tight")
 plt.close()
 
 print(f"✓ Figure 4 saved: Pathogenicity scores distribution")
 
-# ============================================================================
 # SECTION 6: CONSERVATION SCORES
-# ============================================================================
 print("\n" + "=" * 80)
 print("SECTION 6: EVOLUTIONARY CONSERVATION ANALYSIS")
 print("=" * 80)
@@ -588,17 +547,13 @@ for idx, score in enumerate(conservation_scores):
     )
 
 plt.tight_layout()
-plt.savefig(
-    f"{EDA_OUT}/Figure5_Conservation_Scores.png", dpi=300, bbox_inches="tight"
-)
+plt.savefig(f"{EDA_OUT}/Figure5_Conservation_Scores.png", dpi=300, bbox_inches="tight")
 plt.savefig(f"{EDA_OUT}/Figure5_Conservation_Scores.pdf", bbox_inches="tight")
 plt.close()
 
 print(f"✓ Figure 5 saved: Conservation scores")
 
-# ============================================================================
 # SECTION 7: CLINICAL ANNOTATIONS
-# ============================================================================
 print("\n" + "=" * 80)
 print("SECTION 7: CLINICAL ANNOTATION ANALYSIS")
 print("=" * 80)
@@ -638,9 +593,7 @@ for feature in clinical_features:
     )
 
 clinical_stats_df = pd.DataFrame(clinical_stats)
-clinical_stats_df.to_csv(
-    f"{EDA_OUT}/06_clinical_annotations_statistics.csv", index=False
-)
+clinical_stats_df.to_csv(f"{EDA_OUT}/06_clinical_annotations_statistics.csv", index=False)
 print(f"✓ Clinical annotation statistics saved")
 
 # Figure 6: Clinical annotations
@@ -650,9 +603,7 @@ axes = axes.flatten()
 for idx, feature in enumerate(["IS_CANCER_GENE", "IS_ONCOGENE", "IS_TSG", "TIER"]):
     if feature == "TIER":
         # TIER distribution
-        tier_dist = (
-            pd.crosstab(df["TIER"], df["LABEL_PATHOGENIC"], normalize="columns") * 100
-        )
+        tier_dist = pd.crosstab(df["TIER"], df["LABEL_PATHOGENIC"], normalize="columns") * 100
         tier_dist.T.plot(
             kind="bar",
             ax=axes[idx],
@@ -674,9 +625,7 @@ for idx, feature in enumerate(["IS_CANCER_GENE", "IS_ONCOGENE", "IS_TSG", "TIER"
         axes[idx].grid(False)
     else:
         # Binary features
-        contingency = (
-            pd.crosstab(df["LABEL_PATHOGENIC"], df[feature], normalize="index") * 100
-        )
+        contingency = pd.crosstab(df["LABEL_PATHOGENIC"], df[feature], normalize="index") * 100
         x_pos = np.arange(2)
         width = 0.35
 
@@ -703,18 +652,14 @@ for idx, feature in enumerate(["IS_CANCER_GENE", "IS_ONCOGENE", "IS_TSG", "TIER"
 
         axes[idx].set_ylabel("Percentage (%)", fontsize=11, fontweight="bold")
         axes[idx].set_xlabel("Variant Class", fontsize=11, fontweight="bold")
-        axes[idx].set_title(
-            f"{chr(65+idx)}) {feature}", fontsize=12, fontweight="bold", pad=15
-        )
+        axes[idx].set_title(f"{chr(65+idx)}) {feature}", fontsize=12, fontweight="bold", pad=15)
         axes[idx].set_xticks(x_pos)
         axes[idx].set_xticklabels(["Benign", "Pathogenic"])
         axes[idx].legend(frameon=True, fancybox=True, shadow=True)
         axes[idx].grid(False)
 
         # Add p-value
-        pval = clinical_stats_df[clinical_stats_df["Feature"] == feature][
-            "P_value"
-        ].values[0]
+        pval = clinical_stats_df[clinical_stats_df["Feature"] == feature]["P_value"].values[0]
         pval_text = f"p < 0.001" if pval < 0.001 else f"p = {pval:.3f}"
         axes[idx].text(
             0.95,
@@ -729,17 +674,13 @@ for idx, feature in enumerate(["IS_CANCER_GENE", "IS_ONCOGENE", "IS_TSG", "TIER"
         )
 
 plt.tight_layout()
-plt.savefig(
-    f"{EDA_OUT}/Figure6_Clinical_Annotations.png", dpi=300, bbox_inches="tight"
-)
+plt.savefig(f"{EDA_OUT}/Figure6_Clinical_Annotations.png", dpi=300, bbox_inches="tight")
 plt.savefig(f"{EDA_OUT}/Figure6_Clinical_Annotations.pdf", bbox_inches="tight")
 plt.close()
 
 print(f"✓ Figure 6 saved: Clinical annotations")
 
-# ============================================================================
 # SECTION 8: STRUCTURAL FEATURES
-# ============================================================================
 print("\n" + "=" * 80)
 print("SECTION 8: PROTEIN STRUCTURAL FEATURES")
 print("=" * 80)
@@ -790,9 +731,7 @@ for idx, feature in enumerate(structural_continuous):
 
     axes[idx].set_xlabel("Score Value", fontsize=11, fontweight="bold")
     axes[idx].set_ylabel("Density", fontsize=11, fontweight="bold")
-    axes[idx].set_title(
-        f"{chr(65+idx)}) {feature}", fontsize=12, fontweight="bold", pad=15
-    )
+    axes[idx].set_title(f"{chr(65+idx)}) {feature}", fontsize=12, fontweight="bold", pad=15)
     axes[idx].legend(frameon=True, fancybox=True, shadow=True)
     axes[idx].grid(False)
 
@@ -817,9 +756,7 @@ plt.savefig(
     dpi=300,
     bbox_inches="tight",
 )
-plt.savefig(
-    f"{EDA_OUT}/Figure7_Structural_Features_Continuous.pdf", bbox_inches="tight"
-)
+plt.savefig(f"{EDA_OUT}/Figure7_Structural_Features_Continuous.pdf", bbox_inches="tight")
 plt.close()
 
 print(f"✓ Figure 7 saved: Structural features (continuous)")
@@ -829,9 +766,7 @@ fig, axes = plt.subplots(2, 2, figsize=(14, 10))
 axes = axes.flatten()
 
 for idx, feature in enumerate(structural_binary):
-    contingency = (
-        pd.crosstab(df["LABEL_PATHOGENIC"], df[feature], normalize="index") * 100
-    )
+    contingency = pd.crosstab(df["LABEL_PATHOGENIC"], df[feature], normalize="index") * 100
     x_pos = np.arange(2)
     width = 0.35
 
@@ -858,9 +793,7 @@ for idx, feature in enumerate(structural_binary):
 
     axes[idx].set_ylabel("Percentage (%)", fontsize=11, fontweight="bold")
     axes[idx].set_xlabel("Variant Class", fontsize=11, fontweight="bold")
-    axes[idx].set_title(
-        f"{chr(65+idx)}) {feature}", fontsize=12, fontweight="bold", pad=15
-    )
+    axes[idx].set_title(f"{chr(65+idx)}) {feature}", fontsize=12, fontweight="bold", pad=15)
     axes[idx].set_xticks(x_pos)
     axes[idx].set_xticklabels(["Benign", "Pathogenic"])
     axes[idx].legend(frameon=True, fancybox=True, shadow=True)
@@ -883,27 +816,20 @@ for idx, feature in enumerate(structural_binary):
     )
 
 plt.tight_layout()
-plt.savefig(
-    f"{EDA_OUT}/Figure8_Structural_Features_Binary.png", dpi=300, bbox_inches="tight"
-)
+plt.savefig(f"{EDA_OUT}/Figure8_Structural_Features_Binary.png", dpi=300, bbox_inches="tight")
 plt.savefig(f"{EDA_OUT}/Figure8_Structural_Features_Binary.pdf", bbox_inches="tight")
 plt.close()
 
 print(f"✓ Figure 8 saved: Structural features (binary)")
 
-# ============================================================================
 # SECTION 9: CORRELATION ANALYSIS
-# ============================================================================
 print("\n" + "=" * 80)
 print("SECTION 9: FEATURE CORRELATION ANALYSIS")
 print("=" * 80)
 
 # Select numerical features for correlation
 numerical_features = (
-    pathogenicity_scores
-    + conservation_scores
-    + structural_continuous
-    + ["LABEL_PATHOGENIC"]
+    pathogenicity_scores + conservation_scores + structural_continuous + ["LABEL_PATHOGENIC"]
 )
 correlation_matrix = df[numerical_features].corr()
 
@@ -935,17 +861,13 @@ ax.set_title("Feature Correlation Matrix", fontsize=18, fontweight="bold", pad=2
 plt.xticks(rotation=45, ha="right", fontsize=14)
 plt.yticks(rotation=0, fontsize=14)
 plt.tight_layout()
-plt.savefig(
-    f"{EDA_OUT}/Figure9_Correlation_Heatmap.png", dpi=300, bbox_inches="tight"
-)
+plt.savefig(f"{EDA_OUT}/Figure9_Correlation_Heatmap.png", dpi=300, bbox_inches="tight")
 plt.savefig(f"{EDA_OUT}/Figure9_Correlation_Heatmap.pdf", bbox_inches="tight")
 plt.close()
 
 print(f"✓ Figure 9 saved: Correlation heatmap")
 
-# ============================================================================
 # SECTION 10: COMPREHENSIVE SUMMARY STATISTICS
-# ============================================================================
 print("\n" + "=" * 80)
 print("SECTION 10: COMPREHENSIVE SUMMARY STATISTICS")
 print("=" * 80)
@@ -975,15 +897,9 @@ with open(f"{EDA_OUT}/00_EXECUTIVE_SUMMARY.txt", "w", encoding="utf-8") as f:
     f.write("-" * 80 + "\n")
     f.write(f"Total Variants: {len(df):,}\n")
     f.write(f"Features: {df.shape[1]}\n")
-    f.write(
-        f"Pathogenic Variants: {target_counts.get(1, 0):,} ({target_pct.get(1, 0):.2f}%)\n"
-    )
-    f.write(
-        f"Benign Variants: {target_counts.get(0, 0):,} ({target_pct.get(0, 0):.2f}%)\n"
-    )
-    f.write(
-        f"Class Balance Ratio: {target_counts.get(0, 0)/target_counts.get(1, 1):.2f}:1\n\n"
-    )
+    f.write(f"Pathogenic Variants: {target_counts.get(1, 0):,} ({target_pct.get(1, 0):.2f}%)\n")
+    f.write(f"Benign Variants: {target_counts.get(0, 0):,} ({target_pct.get(0, 0):.2f}%)\n")
+    f.write(f"Class Balance Ratio: {target_counts.get(0, 0)/target_counts.get(1, 1):.2f}:1\n\n")
 
     f.write("GENOMIC CHARACTERISTICS\n")
     f.write("-" * 80 + "\n")
@@ -1001,30 +917,20 @@ with open(f"{EDA_OUT}/00_EXECUTIVE_SUMMARY.txt", "w", encoding="utf-8") as f:
     f.write(
         f"Variants in Oncogenes: {df['IS_ONCOGENE'].sum():,} ({df['IS_ONCOGENE'].sum()/len(df)*100:.2f}%)\n"
     )
-    f.write(
-        f"Variants in TSGs: {df['IS_TSG'].sum():,} ({df['IS_TSG'].sum()/len(df)*100:.2f}%)\n"
-    )
+    f.write(f"Variants in TSGs: {df['IS_TSG'].sum():,} ({df['IS_TSG'].sum()/len(df)*100:.2f}%)\n")
     f.write(
         f"Tier 1 Variants: {(df['TIER']==1).sum():,} ({(df['TIER']==1).sum()/len(df)*100:.2f}%)\n\n"
     )
 
     f.write("KEY FINDINGS\n")
     f.write("-" * 80 + "\n")
-    f.write(
-        "1. All pathogenicity prediction scores show significant differences between\n"
-    )
+    f.write("1. All pathogenicity prediction scores show significant differences between\n")
     f.write("   benign and pathogenic variants (p < 0.001)\n\n")
-    f.write(
-        "2. Conservation scores (GERP++, phyloP) demonstrate strong discriminative power\n"
-    )
+    f.write("2. Conservation scores (GERP++, phyloP) demonstrate strong discriminative power\n")
     f.write("   with pathogenic variants showing higher conservation\n\n")
-    f.write(
-        "3. Clinical annotations show significant enrichment in pathogenic variants,\n"
-    )
+    f.write("3. Clinical annotations show significant enrichment in pathogenic variants,\n")
     f.write("   particularly for cancer gene annotations\n\n")
-    f.write(
-        "4. Structural features reveal distinct patterns with pathogenic variants\n"
-    )
+    f.write("4. Structural features reveal distinct patterns with pathogenic variants\n")
     f.write("   showing preferential localization in functional protein regions\n\n")
 
     f.write("OUTPUT FILES GENERATED\n")

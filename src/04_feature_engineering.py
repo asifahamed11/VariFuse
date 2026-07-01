@@ -1,3 +1,5 @@
+"""Stage 04 - structural and functional feature engineering (AlphaFold, sequence, FCGR)."""
+
 import pandas as pd
 from config import DATA_DIR, STAGE03_OUT, STAGE04_OUT
 import numpy as np
@@ -97,9 +99,7 @@ class OptimizedUniProtParser:
 
     def __init__(self, uniprot_file: str, cache_dir: str = None):
         self.uniprot_file = Path(uniprot_file)
-        self.cache_dir = (
-            Path(cache_dir) if cache_dir else self.uniprot_file.parent / ".cache"
-        )
+        self.cache_dir = Path(cache_dir) if cache_dir else self.uniprot_file.parent / ".cache"
         self.cache_dir.mkdir(exist_ok=True)
 
         # Pre-compiled regex patterns for speed
@@ -208,17 +208,11 @@ class OptimizedUniProtParser:
             description = parts[3] if len(parts) > 3 else ""
 
             if feature_type == "DOMAIN":
-                features.domains.append(
-                    {"start": start, "end": end, "name": description[:50]}
-                )
+                features.domains.append({"start": start, "end": end, "name": description[:50]})
             elif feature_type == "ACT_SITE":
-                features.active_sites.append(
-                    {"position": start, "description": description}
-                )
+                features.active_sites.append({"position": start, "description": description})
             elif feature_type == "BINDING":
-                features.binding_sites.append(
-                    {"position": start, "description": description}
-                )
+                features.binding_sites.append({"position": start, "description": description})
             elif feature_type == "TRANSMEM":
                 features.transmembrane.append({"start": start, "end": end})
             elif feature_type == "SIGNAL":
@@ -271,10 +265,7 @@ class AlphaFoldStructureIndex:
                 # Priority: PDB > CIF, F1 > F2 > ...
                 priority = (is_pdb, fragment == "F1", fragment)
 
-                if (
-                    uniprot_id not in file_priority
-                    or priority > file_priority[uniprot_id][0]
-                ):
+                if uniprot_id not in file_priority or priority > file_priority[uniprot_id][0]:
                     file_priority[uniprot_id] = (priority, pdb_file)
 
         self.index = {uid: path for uid, (_, path) in file_priority.items()}
@@ -305,12 +296,13 @@ class AlphaFoldStructureIndex:
 
 # Thread-local storage for PDB parser (thread-safe, no subprocess spawning)
 import threading
+
 _thread_local = threading.local()
 
 
 def _get_parser():
     """Get or create a thread-local PDB parser"""
-    if not hasattr(_thread_local, 'parser'):
+    if not hasattr(_thread_local, "parser"):
         _thread_local.parser = PDBParser(QUIET=True) if BIOPYTHON_AVAILABLE else None
     return _thread_local.parser
 
@@ -336,10 +328,7 @@ def _process_structure_batch(
     # Use thread-local parser (for ThreadPoolExecutor) or global parser (for ProcessPoolExecutor)
     parser = _get_parser()
     if not BIOPYTHON_AVAILABLE or parser is None:
-        return [
-            (idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1})
-            for idx, _ in residue_batch
-        ]
+        return [(idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1}) for idx, _ in residue_batch]
 
     try:
         # Parse structure once for all residues
@@ -405,23 +394,18 @@ def _process_structure_batch(
                         row_idx,
                         {
                             "sasa": round(sasa, 2) if sasa > 0 else -1,
-                            "relative_sasa": (
-                                round(relative_sasa, 3) if relative_sasa > 0 else -1
-                            ),
+                            "relative_sasa": (round(relative_sasa, 3) if relative_sasa > 0 else -1),
                             "plddt": round(plddt, 2) if plddt > 0 else -1,
                         },
                     )
                 )
             else:
-                results.append(
-                    (row_idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1})
-                )
+                results.append((row_idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1}))
 
     except Exception:
         # Return defaults for all residues on error
         results = [
-            (idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1})
-            for idx, _ in residue_batch
+            (idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1}) for idx, _ in residue_batch
         ]
 
     return results
@@ -527,7 +511,7 @@ def add_structural_features_parallel(
     n_workers: int = None,
 ) -> pd.DataFrame:
     """Add AlphaFold structural features using ThreadPoolExecutor.
-    
+
     Uses threads instead of processes to avoid Windows memory issues
     where each spawned process re-imports pandas/numpy and exhausts
     virtual memory (paging file too small error).
@@ -584,24 +568,17 @@ def add_structural_features_parallel(
         structure_batches[uniprot_id][1].append((idx, int(pos)))
 
     total_variants = sum(len(b[1]) for b in structure_batches.values())
-    print(
-        f"  Processing {len(structure_batches):,} structures for {total_variants:,} variants"
-    )
+    print(f"  Processing {len(structure_batches):,} structures for {total_variants:,} variants")
 
     # Prepare work items
-    work_items = [
-        (uid, path, residues) for uid, (path, residues) in structure_batches.items()
-    ]
+    work_items = [(uid, path, residues) for uid, (path, residues) in structure_batches.items()]
 
     # Process with ThreadPoolExecutor (no subprocess spawning = no memory explosion)
     all_results = []
     failed_count = 0
 
     with ThreadPoolExecutor(max_workers=n_workers) as executor:
-        futures = {
-            executor.submit(_process_structure_batch, item): item[0]
-            for item in work_items
-        }
+        futures = {executor.submit(_process_structure_batch, item): item[0] for item in work_items}
 
         with tqdm(total=len(futures), desc="  Processing structures") as pbar:
             for future in as_completed(futures):
@@ -620,9 +597,7 @@ def add_structural_features_parallel(
         plddt_values[row_idx] = features["plddt"]
 
     successful = np.sum(sasa_values > -1)
-    print(
-        f"\n  Successfully annotated {successful:,} / {n:,} variants with structural features"
-    )
+    print(f"\n  Successfully annotated {successful:,} / {n:,} variants with structural features")
     if failed_count > 0:
         print(f"  {failed_count} structures failed during processing")
 
@@ -664,18 +639,21 @@ def build_smart_gene_mapping_optimized(
         if candidates[0][1]:
             genes_with_structure += 1
 
-    print(
-        f"  Mapped {len(optimized_features):,} genes ({genes_with_structure:,} with structures)"
-    )
+    print(f"  Mapped {len(optimized_features):,} genes ({genes_with_structure:,} with structures)")
 
     return optimized_features
 
 
 def enrich_dataset_with_structure_function_optimized(
-    input_csv: str = str(STAGE03_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv"),
+    input_csv: str = str(
+        STAGE03_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv"
+    ),
     uniprot_file: str = str(DATA_DIR / "uniprotkb_proteome_UP000005640_2026_01_07.txt"),
     alphafold_dir: str = str(DATA_DIR / "UP000005640_9606_HUMAN_v6"),
-    output_csv: str = str(STAGE04_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication_Structural_Functional.csv"),
+    output_csv: str = str(
+        STAGE04_OUT
+        / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication_Structural_Functional.csv"
+    ),
     n_workers: int = None,
     max_rows: int = None,
     force_reparse: bool = False,
@@ -684,9 +662,7 @@ def enrich_dataset_with_structure_function_optimized(
     print("=" * 70)
     print("STRUCTURAL & FUNCTIONAL ENRICHMENT PIPELINE - OPTIMIZED")
     print(f"CPU Workers: {n_workers or CPU_COUNT}")
-    print(
-        f"GPU Acceleration: {'cuDF available' if CUDF_AVAILABLE else 'Not available'}"
-    )
+    print(f"GPU Acceleration: {'cuDF available' if CUDF_AVAILABLE else 'Not available'}")
     print("=" * 70)
 
     # Load dataset
@@ -719,9 +695,7 @@ def enrich_dataset_with_structure_function_optimized(
     alphafold_index = AlphaFoldStructureIndex(alphafold_dir)
 
     # Smart mapping
-    optimized_features = build_smart_gene_mapping_optimized(
-        uniprot_features, alphafold_index
-    )
+    optimized_features = build_smart_gene_mapping_optimized(uniprot_features, alphafold_index)
 
     # Annotate with UniProt features (vectorized)
     print("\nSTEP 3: UniProt Annotation")
@@ -784,7 +758,9 @@ if __name__ == "__main__":
     arg_parser.add_argument(
         "--input",
         "-i",
-        default=str(STAGE03_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv"),
+        default=str(
+            STAGE03_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv"
+        ),
         help="Input CSV file path",
     )
     arg_parser.add_argument(
@@ -802,7 +778,10 @@ if __name__ == "__main__":
     arg_parser.add_argument(
         "--output",
         "-o",
-        default=str(STAGE04_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication_Structural_Functional.csv"),
+        default=str(
+            STAGE04_OUT
+            / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication_Structural_Functional.csv"
+        ),
         help="Output CSV file path",
     )
     arg_parser.add_argument(

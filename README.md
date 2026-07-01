@@ -9,6 +9,23 @@ This repository contains the preprocessing, feature engineering, and modeling sc
 - `data/` : Directory intended for raw datasets (e.g., dbNSFP, hg19.fa). Note that datasets are excluded from Git due to their size.
 - `outputs/` : Directory for all generated CSVs, models, and figures.
 
+## Pipeline stages
+
+The scripts in `src/` run in order; each reads the previous stage's output and writes to its own `outputs/` subfolder.
+
+| Script | Stage |
+| --- | --- |
+| `01_dbnsfp_processor.py` | Parse and filter dbNSFP into the base variant table |
+| `02_remove_missing_values.py` | Drop rows with missing values (outside retained columns) |
+| `03_remove_duplicates.py` | Remove duplicate variants |
+| `04_feature_engineering.py` | Structural / functional feature engineering (AlphaFold, sequence, FCGR) |
+| `05_remove_leakage.py` | Drop label-leaking annotation columns |
+| `06_clean_and_finalize.py` | Final cleaning and column preparation |
+| `07_dataset_balancing.py` | Balance the pathogenic / benign classes |
+| `08_tda_fuzzy_ensemble.py` | TDA + fuzzy KNORA-E ensemble: train and evaluate |
+| `09_reviewer_experiments.py` | Supplementary audits, ablations, and diversity analysis |
+| `10_exploratory_data_analysis.py` | Exploratory figures and summary statistics |
+
 ## Data Setup
 
 Due to GitHub file size limits, the 76GB of raw data is not tracked in this repository.

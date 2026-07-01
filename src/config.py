@@ -22,9 +22,19 @@ STAGE06_OUT = OUTPUT_DIR / "06_clean"
 STAGE07_OUT = OUTPUT_DIR / "07_balancing"
 STAGE08_OUT = OUTPUT_DIR / "08_tda_fuzzy"
 STAGE09_OUT = OUTPUT_DIR / "09_experiments"
-EDA_OUT     = OUTPUT_DIR / "eda_figures"
+EDA_OUT = OUTPUT_DIR / "eda_figures"
 
 # Ensure all output directories exist when config is imported
-for d in [STAGE01_OUT, STAGE02_OUT, STAGE03_OUT, STAGE04_OUT, STAGE05_OUT,
-          STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT, EDA_OUT]:
+for d in [
+    STAGE01_OUT,
+    STAGE02_OUT,
+    STAGE03_OUT,
+    STAGE04_OUT,
+    STAGE05_OUT,
+    STAGE06_OUT,
+    STAGE07_OUT,
+    STAGE08_OUT,
+    STAGE09_OUT,
+    EDA_OUT,
+]:
     d.mkdir(parents=True, exist_ok=True)
