@@ -17,7 +17,7 @@ def balance_dataset():
         variant_df = pd.read_csv(INPUT_FILE, low_memory=False)
 
         print("\nOriginal class distribution:")
-        print("-" * 40)
+
         counts = variant_df["LABEL_PATHOGENIC"].value_counts()
         total = len(variant_df)
 
@@ -27,8 +27,6 @@ def balance_dataset():
         print(f"   Total samples: {total:,}")
         print(f"   Benign (0): {n_benign:,} ({n_benign/total*100:.2f}%)")
         print(f"   Pathogenic (1): {n_pathogenic:,} ({n_pathogenic/total*100:.2f}%)")
-        print("-" * 40)
-
         print("\nBalancing dataset via downsampling...")
 
         pathogenic_variants = variant_df[variant_df["LABEL_PATHOGENIC"] == 1]
@@ -41,12 +39,11 @@ def balance_dataset():
         balanced_df = balanced_df.sample(frac=1, random_state=42).reset_index(drop=True)
 
         print("\nBalanced class distribution:")
-        print("-" * 40)
+
         new_counts = balanced_df["LABEL_PATHOGENIC"].value_counts()
         print(f"   Total samples: {len(balanced_df):,}")
         print(f"   Benign (0): {new_counts.get(0, 0):,}")
         print(f"   Pathogenic (1): {new_counts.get(1, 0):,}")
-        print("-" * 40)
 
         print(f"\nSaving to: {OUTPUT_FILE}")
         balanced_df.to_csv(OUTPUT_FILE, index=False)

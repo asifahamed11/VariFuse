@@ -21,7 +21,7 @@ from tqdm import tqdm
 from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
-from sklearn.neural_network import MLPClassifier  # NEW (Change 1)
+from sklearn.neural_network import MLPClassifier
 from joblib import Parallel, delayed
 import multiprocessing
 from sklearn.model_selection import (
@@ -89,7 +89,12 @@ except ImportError:
 
 try:
     from gtda.homology import VietorisRipsPersistence
-    from gtda.diagrams import PersistenceEntropy, Amplitude, BettiCurve, PersistenceLandscape
+    from gtda.diagrams import (
+        PersistenceEntropy,
+        Amplitude,
+        BettiCurve,
+        PersistenceLandscape,
+    )
 
     TDA_AVAILABLE = True
 except ImportError:
@@ -381,7 +386,8 @@ class TopologicalFeatureExtractor:
             n_jobs = max(1, multiprocessing.cpu_count() + 1 + n_jobs)
         print(f"Extracting TDA features (over FCGR space) using {n_jobs} CPU cores...")
         tda_features_list = Parallel(n_jobs=n_jobs, backend="loky", verbose=10)(
-            delayed(self._process_single_sample)(X, nbrs, i, n_neighbors) for i in range(n_samples)
+            delayed(self._process_single_sample)(X, nbrs, i, n_neighbors)
+            for i in range(n_samples)
         )
         tda_df = pd.DataFrame(tda_features_list)
         return tda_df.values
@@ -456,20 +462,28 @@ class TFDFEPreprocessor:
                 if self.genome is not None and chrom in self.genome:
                     seq = str(self.genome[chrom][start:end]).upper()
                     if len(seq) < (2 * Config.SEQUENCE_WINDOW - 10):
-                        needed_length = 2 * Config.SEQUENCE_WINDOW + len(row.get("ref", "A"))
+                        needed_length = 2 * Config.SEQUENCE_WINDOW + len(
+                            row.get("ref", "A")
+                        )
                         seq = seq.ljust(needed_length, "N")
                     sequences.append(seq)
                 else:
                     seq_length = 2 * Config.SEQUENCE_WINDOW + len(row.get("ref", "A"))
-                    fallback_seq = "".join(np.random.choice(["A", "C", "G", "T"], seq_length))
+                    fallback_seq = "".join(
+                        np.random.choice(["A", "C", "G", "T"], seq_length)
+                    )
                     sequences.append(fallback_seq)
                     failed_extractions += 1
             except Exception:
                 seq_length = 2 * Config.SEQUENCE_WINDOW + len(row.get("ref", "A"))
-                fallback_seq = "".join(np.random.choice(["A", "C", "G", "T"], seq_length))
+                fallback_seq = "".join(
+                    np.random.choice(["A", "C", "G", "T"], seq_length)
+                )
                 sequences.append(fallback_seq)
                 failed_extractions += 1
-        print(f"Successfully extracted: {len(sequences) - failed_extractions}/{len(sequences)}")
+        print(
+            f"Successfully extracted: {len(sequences) - failed_extractions}/{len(sequences)}"
+        )
         return sequences
 
     def fit_transform(self, variant_df, target_col="LABEL_PATHOGENIC"):
@@ -506,12 +520,16 @@ class TFDFEPreprocessor:
             X_fcgr_raw = self.fcgr_encoder.encode_variants(sequences)
             print(f"FCGR raw features: {X_fcgr_raw.shape[1]}")
 
-            n_comp = min(self.fcgr_pca_n_components, X_fcgr_raw.shape[1], X_fcgr_raw.shape[0] - 1)
+            n_comp = min(
+                self.fcgr_pca_n_components, X_fcgr_raw.shape[1], X_fcgr_raw.shape[0] - 1
+            )
             print(f"Compressing FCGR {X_fcgr_raw.shape[1]}D -> {n_comp}D via PCA...")
             self.fcgr_pca = PCA(n_components=n_comp, random_state=Config.RANDOM_STATE)
             X_fcgr = self.fcgr_pca.fit_transform(X_fcgr_raw)
             evr = float(np.sum(self.fcgr_pca.explained_variance_ratio_)) * 100
-            print(f"FCGR PCA features: {X_fcgr.shape[1]}  (explained variance: {evr:.1f}%)")
+            print(
+                f"FCGR PCA features: {X_fcgr.shape[1]}  (explained variance: {evr:.1f}%)"
+            )
             self.fcgr_feature_names = [f"fcgr_pca_{i}" for i in range(X_fcgr.shape[1])]
             # Store raw FCGR for TDA
             self._X_fcgr_for_tda = X_fcgr
@@ -524,7 +542,9 @@ class TFDFEPreprocessor:
         if self.use_tda and TDA_AVAILABLE:
             print("\nGenerating TDA topological features (over FCGR space)...")
             # Use PCA-compressed FCGR as input when available; fallback to standard
-            X_for_tda = self._X_fcgr_for_tda if self._X_fcgr_for_tda is not None else X_standard
+            X_for_tda = (
+                self._X_fcgr_for_tda if self._X_fcgr_for_tda is not None else X_standard
+            )
             X_tda = self.tda_extractor.extract_global_tda(X_for_tda)
             n_tda_features = X_tda.shape[1]
             self.tda_feature_names = [f"tda_{i}" for i in range(n_tda_features)]
@@ -557,22 +577,36 @@ class TFDFEPreprocessor:
         )
 
         num_cols = [
-            c for c in self.feature_names if c in X_tabular.columns and X_tabular[c].dtype != object
+            c
+            for c in self.feature_names
+            if c in X_tabular.columns and X_tabular[c].dtype != object
         ]
         cat_cols = [
-            c for c in self.feature_names if c in X_tabular.columns and X_tabular[c].dtype == object
+            c
+            for c in self.feature_names
+            if c in X_tabular.columns and X_tabular[c].dtype == object
         ]
 
-        X_num = X_tabular[num_cols].copy() if num_cols else pd.DataFrame(index=X_tabular.index)
+        X_num = (
+            X_tabular[num_cols].copy()
+            if num_cols
+            else pd.DataFrame(index=X_tabular.index)
+        )
         X_num = pd.DataFrame(
             self.imputer_num.transform(X_num), columns=num_cols, index=X_tabular.index
         )
-        X_cat = X_tabular[cat_cols].copy() if cat_cols else pd.DataFrame(index=X_tabular.index)
+        X_cat = (
+            X_tabular[cat_cols].copy()
+            if cat_cols
+            else pd.DataFrame(index=X_tabular.index)
+        )
         for col in cat_cols:
             enc = self.label_encoders[col]
             known = set(enc.classes_)
             X_cat[col] = (
-                X_cat[col].astype(str).apply(lambda v: v if v in known else enc.classes_[0])
+                X_cat[col]
+                .astype(str)
+                .apply(lambda v: v if v in known else enc.classes_[0])
             )
             X_cat[col] = enc.transform(X_cat[col])
 
@@ -583,7 +617,9 @@ class TFDFEPreprocessor:
             sequences = self._extract_sequence_context(variant_df)
             X_fcgr_raw = self.fcgr_encoder.encode_variants(sequences)
             X_fcgr = (
-                self.fcgr_pca.transform(X_fcgr_raw) if self.fcgr_pca is not None else X_fcgr_raw
+                self.fcgr_pca.transform(X_fcgr_raw)
+                if self.fcgr_pca is not None
+                else X_fcgr_raw
             )
         else:
             X_fcgr = np.array([]).reshape(X_standard.shape[0], 0)
@@ -662,7 +698,9 @@ class MultiViewFeatureManager:
 # Pairwise Q-statistic diversity analyser
 
 
-def compute_pairwise_diversity(trained_models, feature_indices, X_val, y_val, output_dir):
+def compute_pairwise_diversity(
+    trained_models, feature_indices, X_val, y_val, output_dir
+):
     """Compute the pairwise Q-statistic and disagreement matrices.
 
     Measures inter-learner error correlation on the validation set; a lower
@@ -707,7 +745,9 @@ def compute_pairwise_diversity(trained_models, feature_indices, X_val, y_val, ou
     dis_df.to_csv(output_dir / "pairwise_disagreement.csv")
 
     # Plot heatmap
-    fig, axes = plt.subplots(1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 1.2))
+    fig, axes = plt.subplots(
+        1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 1.2)
+    )
     sns.heatmap(
         q_df,
         ax=axes[0],
@@ -719,7 +759,9 @@ def compute_pairwise_diversity(trained_models, feature_indices, X_val, y_val, ou
         linewidths=0.2,
         annot_kws={"size": 4},
     )
-    axes[0].set_title("(A) Q-Statistic\n(−1=diverse, +1=correlated)", fontweight="bold", loc="left")
+    axes[0].set_title(
+        "(A) Q-Statistic\n(−1=diverse, +1=correlated)", fontweight="bold", loc="left"
+    )
     sns.heatmap(
         dis_df,
         ax=axes[1],
@@ -732,11 +774,17 @@ def compute_pairwise_diversity(trained_models, feature_indices, X_val, y_val, ou
         annot_kws={"size": 4},
     )
     axes[1].set_title(
-        "(B) Pairwise Disagreement Rate\n(higher=more diverse)", fontweight="bold", loc="left"
+        "(B) Pairwise Disagreement Rate\n(higher=more diverse)",
+        fontweight="bold",
+        loc="left",
     )
     plt.tight_layout()
-    plt.savefig(output_dir / "Fig_Diversity_Heatmap.png", dpi=FIG_DPI, bbox_inches="tight")
-    plt.savefig(output_dir / "Fig_Diversity_Heatmap.tiff", dpi=FIG_DPI, bbox_inches="tight")
+    plt.savefig(
+        output_dir / "Fig_Diversity_Heatmap.png", dpi=FIG_DPI, bbox_inches="tight"
+    )
+    plt.savefig(
+        output_dir / "Fig_Diversity_Heatmap.tiff", dpi=FIG_DPI, bbox_inches="tight"
+    )
     plt.close()
 
     mean_q = np.mean(q_matrix[np.triu_indices(n, k=1)])
@@ -858,7 +906,9 @@ class DiverseFeatureSubspaceFactory:
             random_state=random_state + 2,
             n_jobs=-1,
         )
-        models["TDABio_ExtraTrees"] = CalibratedClassifierCV(_et_base, method="isotonic", cv=3)
+        models["TDABio_ExtraTrees"] = CalibratedClassifierCV(
+            _et_base, method="isotonic", cv=3
+        )
         feature_indices["TDABio_ExtraTrees"] = tda_bio_idx
 
         if XGBOOST_AVAILABLE:
@@ -883,7 +933,9 @@ class DiverseFeatureSubspaceFactory:
             max_features="sqrt",
             random_state=random_state + 4,
         )
-        models["Full_GradientBoosting"] = CalibratedClassifierCV(_gb_base, method="isotonic", cv=3)
+        models["Full_GradientBoosting"] = CalibratedClassifierCV(
+            _gb_base, method="isotonic", cv=3
+        )
         feature_indices["Full_GradientBoosting"] = full_idx
 
         models["Full_HistGradient"] = HistGradientBoostingClassifier(
@@ -922,7 +974,9 @@ class DiverseFeatureSubspaceFactory:
             validation_fraction=0.1,
             random_state=random_state + 7,
         )
-        models["MLP_BioTDA"] = CalibratedClassifierCV(_mlp_base, method="isotonic", cv=3)
+        models["MLP_BioTDA"] = CalibratedClassifierCV(
+            _mlp_base, method="isotonic", cv=3
+        )
         feature_indices["MLP_BioTDA"] = tda_bio_idx
 
         # 3. k-NN in supervised metric space — registered here with a sentinel
@@ -937,10 +991,15 @@ class DiverseFeatureSubspaceFactory:
 
         self.models = models
         self.feature_indices = feature_indices
-        print(f"\nCreated {len(models)} diverse base models  " f"(+MLP, +kNN_SML, +ElasticNet)")
+        print(
+            f"\nCreated {len(models)} diverse base models  "
+            f"(+MLP, +kNN_SML, +ElasticNet)"
+        )
         return models, feature_indices
 
-    def train_ensemble(self, X_train, y_train, X_val=None, y_val=None, consensus_scores=None):
+    def train_ensemble(
+        self, X_train, y_train, X_val=None, y_val=None, consensus_scores=None
+    ):
         """Train all base models; returns fitted models, val set, and OOF probas.
 
         Out-of-fold predicted probabilities are produced via StratifiedKFold.
@@ -973,7 +1032,10 @@ class DiverseFeatureSubspaceFactory:
             cs = np.array(consensus_scores)
             # Align consensus to training rows if needed
             if len(cs) != len(y_train):
-                print("  WARNING: consensus_scores length mismatch; " "ignoring sample weights.")
+                print(
+                    "  WARNING: consensus_scores length mismatch; "
+                    "ignoring sample weights."
+                )
                 sample_weights = None
             else:
                 margin = np.abs(cs - 0.5)
@@ -996,7 +1058,9 @@ class DiverseFeatureSubspaceFactory:
         n_classifiers = len(self.models)
         n_train = len(y_train)
         oof_probas = np.zeros((n_train, n_classifiers))
-        skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=Config.RANDOM_STATE)
+        skf = StratifiedKFold(
+            n_splits=5, shuffle=True, random_state=Config.RANDOM_STATE
+        )
 
         # Pre-fit SML on validation set so kNN_SML can use it.
         # SML only needs X_val/y_val; it doesn't see test labels.
@@ -1028,7 +1092,11 @@ class DiverseFeatureSubspaceFactory:
                     fold_model = copy.deepcopy(model)
                     Xf = X_train_view[fold_train_idx]
                     yf = y_train[fold_train_idx]
-                    sw_fold = sample_weights[fold_train_idx] if sample_weights is not None else None
+                    sw_fold = (
+                        sample_weights[fold_train_idx]
+                        if sample_weights is not None
+                        else None
+                    )
                     try:
                         if sw_fold is not None and hasattr(fold_model, "fit"):
                             fold_model.fit(Xf, yf, sample_weight=sw_fold)
@@ -1214,7 +1282,9 @@ class EnhancedKNORAEnsemble:
             name for name, acc in val_accuracies.items() if acc >= prune_threshold
         ]
         pruned_names = [
-            name for name in self.base_classifiers if name not in self.active_classifier_names
+            name
+            for name in self.base_classifiers
+            if name not in self.active_classifier_names
         ]
         if pruned_names:
             print(f"\n  Pruned {len(pruned_names)} weak learner(s): {pruned_names}")
@@ -1238,7 +1308,8 @@ class EnhancedKNORAEnsemble:
         # Store the actual model object, not just its name
         self.best_base_model = active_classifiers[self.best_base_name]
         print(
-            f"\n  Best base learner: {self.best_base_name} " f"(Val MCC={self.best_base_mcc:.4f})"
+            f"\n  Best base learner: {self.best_base_name} "
+            f"(Val MCC={self.best_base_mcc:.4f})"
         )
 
         if self.use_metric_learning:
@@ -1248,7 +1319,9 @@ class EnhancedKNORAEnsemble:
             self.X_val_metric = self.metric_learner.transform(X_val)
 
             print(f"\n[Step 3/4] Building k-NN index (k={self.k})...")
-            self.nn_model = NearestNeighbors(n_neighbors=self.k, metric="euclidean", n_jobs=-1)
+            self.nn_model = NearestNeighbors(
+                n_neighbors=self.k, metric="euclidean", n_jobs=-1
+            )
             self.nn_model.fit(self.X_val_metric)
 
         print(f"\n[Step 4/4] Computing oracle matrix ({n_samples} x {n_active})")
@@ -1287,7 +1360,9 @@ class EnhancedKNORAEnsemble:
                     meta_train_X[:, idx] = clf.predict(X_val).astype(float)
             meta_train_y = self.y_val
 
-        self.meta_model = LogisticRegression(C=1.0, max_iter=2000, random_state=Config.RANDOM_STATE)
+        self.meta_model = LogisticRegression(
+            C=1.0, max_iter=2000, random_state=Config.RANDOM_STATE
+        )
         self.meta_model.fit(meta_train_X, meta_train_y)
 
         # Build validation meta-features for threshold search
@@ -1307,7 +1382,9 @@ class EnhancedKNORAEnsemble:
         # constrained threshold search
         best_mcc = -1.0
         best_thr = 0.5
-        thresholds = np.linspace(Config.THRESHOLD_SEARCH_LOW, Config.THRESHOLD_SEARCH_HIGH, 41)
+        thresholds = np.linspace(
+            Config.THRESHOLD_SEARCH_LOW, Config.THRESHOLD_SEARCH_HIGH, 41
+        )
         for thr in thresholds:
             preds = (val_meta_proba >= thr).astype(int)
             mcc = matthews_corrcoef(self.y_val, preds)
@@ -1344,7 +1421,9 @@ class EnhancedKNORAEnsemble:
         n_samples = X.shape[0]
         n_active = len(self._active_clf_list)
 
-        print(f"\nKNORA-E Inference ({n_samples} samples, {n_active} active classifiers)...")
+        print(
+            f"\nKNORA-E Inference ({n_samples} samples, {n_active} active classifiers)..."
+        )
 
         active_preds = np.zeros((n_samples, n_active))
         for idx, (name, clf) in enumerate(self._active_clf_list):
@@ -1384,7 +1463,9 @@ class EnhancedKNORAEnsemble:
         knora_predictions = np.zeros(n_samples)
         sigma = np.mean(distances) + 1e-10
         distance_weights = np.exp(-(distances**2) / (2 * sigma**2))
-        distance_weights = distance_weights / (distance_weights.sum(axis=1, keepdims=True) + 1e-10)
+        distance_weights = distance_weights / (
+            distance_weights.sum(axis=1, keepdims=True) + 1e-10
+        )
 
         for i in range(n_samples):
             neighbor_indices = indices[i]
@@ -1393,10 +1474,14 @@ class EnhancedKNORAEnsemble:
                 sample_weights = np.ones_like(sample_weights) / len(sample_weights)
 
             neighbor_oracles = self.oracle_matrix[neighbor_indices]
-            competence_scores = np.average(neighbor_oracles, axis=0, weights=sample_weights)
+            competence_scores = np.average(
+                neighbor_oracles, axis=0, weights=sample_weights
+            )
             sample_preds = active_preds[i]
 
-            relative_threshold = max(self.min_competence, np.percentile(competence_scores, 40))
+            relative_threshold = max(
+                self.min_competence, np.percentile(competence_scores, 40)
+            )
             selected_mask = competence_scores >= relative_threshold
 
             if not np.any(selected_mask):
@@ -1413,7 +1498,8 @@ class EnhancedKNORAEnsemble:
             knora_predictions[i] = np.sum(weights * sel_preds)
 
         final_predictions = (
-            self.stacking_weight * meta_proba + (1.0 - self.stacking_weight) * knora_predictions
+            self.stacking_weight * meta_proba
+            + (1.0 - self.stacking_weight) * knora_predictions
         )
         return final_predictions
 
@@ -1463,12 +1549,15 @@ class EnhancedKNORAEnsemble:
             pred_label = y_hard[i]
             purity_scores[i] = np.mean(neighbour_labels == pred_label)
 
-        y_selective = np.where(purity_scores >= abstain_threshold, y_hard, -1).astype(int)
+        y_selective = np.where(purity_scores >= abstain_threshold, y_hard, -1).astype(
+            int
+        )
 
         coverage = float(np.mean(y_selective >= 0))
         n_abstain = int(np.sum(y_selective == -1))
         print(
-            f"\n  [Selective Prediction] " f"Coverage: {coverage:.3%}  Abstentions: {n_abstain:,}"
+            f"\n  [Selective Prediction] "
+            f"Coverage: {coverage:.3%}  Abstentions: {n_abstain:,}"
         )
 
         return y_selective, purity_scores, coverage
@@ -1488,7 +1577,9 @@ class EnhancedTFDFEEnsemble:
         self.enhanced_knora = None
         self.is_fitted = False
 
-    def fit(self, X_train, y_train, X_val=None, y_val=None, consensus_scores_train=None):
+    def fit(
+        self, X_train, y_train, X_val=None, y_val=None, consensus_scores_train=None
+    ):
         """Fit the full ensemble.
 
         consensus_scores_train : array-like, shape (n_train,), optional
@@ -1605,17 +1696,29 @@ def plot_class_distribution(variant_df, output_dir):
             fontsize=FIG_FONT_SIZE,
         )
     plt.tight_layout()
-    plt.savefig(output_dir / "Fig1_class_distribution.png", dpi=FIG_DPI, bbox_inches="tight")
-    plt.savefig(output_dir / "Fig1_class_distribution.tiff", dpi=FIG_DPI, bbox_inches="tight")
+    plt.savefig(
+        output_dir / "Fig1_class_distribution.png", dpi=FIG_DPI, bbox_inches="tight"
+    )
+    plt.savefig(
+        output_dir / "Fig1_class_distribution.tiff", dpi=FIG_DPI, bbox_inches="tight"
+    )
     plt.close()
 
 
 def plot_roc_pr_curves(y_true, y_pred_proba, model_name, output_dir):
     print("  Generating ROC and PR curves...")
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_DOUBLE_COL_WIDTH / 2.5))
+    fig, (ax1, ax2) = plt.subplots(
+        1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_DOUBLE_COL_WIDTH / 2.5)
+    )
     fpr, tpr, _ = roc_curve(y_true, y_pred_proba)
     auroc = roc_auc_score(y_true, y_pred_proba)
-    ax1.plot(fpr, tpr, linewidth=1.5, color="#0077BB", label=f"{model_name} (AUC = {auroc:.3f})")
+    ax1.plot(
+        fpr,
+        tpr,
+        linewidth=1.5,
+        color="#0077BB",
+        label=f"{model_name} (AUC = {auroc:.3f})",
+    )
     ax1.plot([0, 1], [0, 1], "k--", linewidth=0.8, alpha=0.7, label="Random")
     ax1.set_xlabel("False Positive Rate")
     ax1.set_ylabel("True Positive Rate")
@@ -1627,7 +1730,11 @@ def plot_roc_pr_curves(y_true, y_pred_proba, model_name, output_dir):
     precision, recall, _ = precision_recall_curve(y_true, y_pred_proba)
     auprc = average_precision_score(y_true, y_pred_proba)
     ax2.plot(
-        recall, precision, linewidth=1.5, color="#0077BB", label=f"{model_name} (AP = {auprc:.3f})"
+        recall,
+        precision,
+        linewidth=1.5,
+        color="#0077BB",
+        label=f"{model_name} (AP = {auprc:.3f})",
     )
     baseline = np.mean(y_true)
     ax2.axhline(
@@ -1647,7 +1754,9 @@ def plot_roc_pr_curves(y_true, y_pred_proba, model_name, output_dir):
     ax2.grid(False)
     plt.tight_layout()
     plt.savefig(output_dir / "Fig1_ROC_PR_curves.png", dpi=FIG_DPI, bbox_inches="tight")
-    plt.savefig(output_dir / "Fig1_ROC_PR_curves.tiff", dpi=FIG_DPI, bbox_inches="tight")
+    plt.savefig(
+        output_dir / "Fig1_ROC_PR_curves.tiff", dpi=FIG_DPI, bbox_inches="tight"
+    )
     plt.close()
 
 
@@ -1687,8 +1796,12 @@ def plot_confusion_matrix(y_true, y_pred, model_name, output_dir):
             )
     plt.tight_layout()
     safe_name = model_name.replace(" ", "_").replace("(", "").replace(")", "")
-    plt.savefig(output_dir / f"Fig_CM_{safe_name}.png", dpi=FIG_DPI, bbox_inches="tight")
-    plt.savefig(output_dir / f"Fig_CM_{safe_name}.tiff", dpi=FIG_DPI, bbox_inches="tight")
+    plt.savefig(
+        output_dir / f"Fig_CM_{safe_name}.png", dpi=FIG_DPI, bbox_inches="tight"
+    )
+    plt.savefig(
+        output_dir / f"Fig_CM_{safe_name}.tiff", dpi=FIG_DPI, bbox_inches="tight"
+    )
     plt.close()
 
 
@@ -1698,12 +1811,16 @@ def plot_tsne(X, y, title, output_dir):
     idx = np.random.choice(len(X), size=min(2000, len(X)), replace=False)
     X_sub = X[idx]
     y_sub = y.iloc[idx] if hasattr(y, "iloc") else y[idx]
-    tsne = TSNE(n_components=2, random_state=Config.RANDOM_STATE, perplexity=30, n_iter=1000)
+    tsne = TSNE(
+        n_components=2, random_state=Config.RANDOM_STATE, perplexity=30, n_iter=1000
+    )
     X_embedded = tsne.fit_transform(X_sub)
     fig, ax = plt.subplots(figsize=(FIG_SINGLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 0.9))
     colors = {0: "#0077BB", 1: "#CC3311"}
     for label, name in [(0, "Benign"), (1, "Pathogenic")]:
-        mask = (y_sub == label) if hasattr(y_sub, "values") else (np.array(y_sub) == label)
+        mask = (
+            (y_sub == label) if hasattr(y_sub, "values") else (np.array(y_sub) == label)
+        )
         ax.scatter(
             X_embedded[mask, 0],
             X_embedded[mask, 1],
@@ -1716,14 +1833,18 @@ def plot_tsne(X, y, title, output_dir):
     ax.set_xlabel("t-SNE Dimension 1")
     ax.set_ylabel("t-SNE Dimension 2")
     ax.set_title(title, fontweight="bold")
-    ax.legend(title="Class", loc="best", frameon=True, fancybox=False, edgecolor="black")
+    ax.legend(
+        title="Class", loc="best", frameon=True, fancybox=False, edgecolor="black"
+    )
     plt.tight_layout()
     plt.savefig(output_dir / "Fig_tSNE_TFDFE.png", dpi=FIG_DPI, bbox_inches="tight")
     plt.savefig(output_dir / "Fig_tSNE_TFDFE.tiff", dpi=FIG_DPI, bbox_inches="tight")
     plt.close()
 
 
-def perform_shap_analysis(model, X_sample, feature_names, output_dir, model_name="TF-DFE"):
+def perform_shap_analysis(
+    model, X_sample, feature_names, output_dir, model_name="TF-DFE"
+):
     if not SHAP_AVAILABLE:
         print("  SHAP analysis skipped (library not installed)")
         return None
@@ -1740,8 +1861,12 @@ def perform_shap_analysis(model, X_sample, feature_names, output_dir, model_name
             shap_values = shap_values[1]
         elif isinstance(shap_values, np.ndarray) and len(shap_values.shape) == 3:
             shap_values = shap_values[:, :, 1]
-        short_names = [name[:25] + "..." if len(name) > 28 else name for name in feature_names]
-        fig, ax = plt.subplots(figsize=(FIG_SINGLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 1.2))
+        short_names = [
+            name[:25] + "..." if len(name) > 28 else name for name in feature_names
+        ]
+        fig, ax = plt.subplots(
+            figsize=(FIG_SINGLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 1.2)
+        )
         shap.summary_plot(
             shap_values,
             X_sample,
@@ -1754,18 +1879,28 @@ def perform_shap_analysis(model, X_sample, feature_names, output_dir, model_name
         plt.title(f"Feature Importance ({model_name})", fontweight="bold", loc="left")
         plt.xlabel("Mean |SHAP Value|")
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_SHAP_summary.png", dpi=FIG_DPI, bbox_inches="tight")
-        plt.savefig(output_dir / "Fig_SHAP_summary.tiff", dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(
+            output_dir / "Fig_SHAP_summary.png", dpi=FIG_DPI, bbox_inches="tight"
+        )
+        plt.savefig(
+            output_dir / "Fig_SHAP_summary.tiff", dpi=FIG_DPI, bbox_inches="tight"
+        )
         plt.close()
-        fig, ax = plt.subplots(figsize=(FIG_DOUBLE_COL_WIDTH * 0.7, FIG_SINGLE_COL_WIDTH * 1.2))
+        fig, ax = plt.subplots(
+            figsize=(FIG_DOUBLE_COL_WIDTH * 0.7, FIG_SINGLE_COL_WIDTH * 1.2)
+        )
         shap.summary_plot(
             shap_values, X_sample, feature_names=short_names, show=False, max_display=20
         )
         plt.title("SHAP Value Distribution", fontweight="bold", loc="left")
         plt.xlabel("SHAP Value (Impact on Pathogenicity)")
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_SHAP_beeswarm.png", dpi=FIG_DPI, bbox_inches="tight")
-        plt.savefig(output_dir / "Fig_SHAP_beeswarm.tiff", dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(
+            output_dir / "Fig_SHAP_beeswarm.png", dpi=FIG_DPI, bbox_inches="tight"
+        )
+        plt.savefig(
+            output_dir / "Fig_SHAP_beeswarm.tiff", dpi=FIG_DPI, bbox_inches="tight"
+        )
         plt.close()
         print("  SHAP analysis complete")
         return shap_values
@@ -1816,7 +1951,9 @@ class TFDFEvaluator:
         return ece, pd.DataFrame(bin_data)
 
     @staticmethod
-    def plot_calibration_curve(y_true, y_pred_proba, output_dir, model_name="TF-DFE", n_bins=10):
+    def plot_calibration_curve(
+        y_true, y_pred_proba, output_dir, model_name="TF-DFE", n_bins=10
+    ):
         print("  Generating calibration curve...")
         prob_true, prob_pred = calibration_curve(
             y_true, y_pred_proba, n_bins=n_bins, strategy="uniform"
@@ -1872,8 +2009,12 @@ class TFDFEvaluator:
         ax2.set_ylabel("Count")
         ax2.set_xlim([-0.02, 1.02])
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_Calibration_Curve.png", dpi=FIG_DPI, bbox_inches="tight")
-        plt.savefig(output_dir / "Fig_Calibration_Curve.tiff", dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(
+            output_dir / "Fig_Calibration_Curve.png", dpi=FIG_DPI, bbox_inches="tight"
+        )
+        plt.savefig(
+            output_dir / "Fig_Calibration_Curve.tiff", dpi=FIG_DPI, bbox_inches="tight"
+        )
         plt.close()
         bin_data.to_csv(output_dir / "calibration_bins.csv", index=False)
         print(f"    ECE: {ece:.6f}")
@@ -1928,7 +2069,16 @@ class TFDFEvaluator:
             cv_results.append(fold_metrics)
         cv_df = pd.DataFrame(cv_results)
         summary_stats = {}
-        for metric in ["mcc", "auprc", "auroc", "f1", "precision", "recall", "accuracy", "brier"]:
+        for metric in [
+            "mcc",
+            "auprc",
+            "auroc",
+            "f1",
+            "precision",
+            "recall",
+            "accuracy",
+            "brier",
+        ]:
             values = cv_df[metric].values
             mean_val = np.mean(values)
             std_val = np.std(values, ddof=1)
@@ -1975,15 +2125,26 @@ class TFDFEvaluator:
         if len(metrics) == 1:
             axes = [axes]
         colors = ["#0077BB", "#EE7733", "#009988", "#CC3311"]
-        metric_names = {"mcc": "MCC", "auprc": "AUPRC", "auroc": "AUROC", "f1": "F1-Score"}
+        metric_names = {
+            "mcc": "MCC",
+            "auprc": "AUPRC",
+            "auroc": "AUROC",
+            "f1": "F1-Score",
+        }
         for i, metric in enumerate(metrics):
             ax = axes[i]
-            parts = ax.violinplot(cv_df[metric], positions=[1], showmeans=True, showextrema=True)
+            parts = ax.violinplot(
+                cv_df[metric], positions=[1], showmeans=True, showextrema=True
+            )
             for pc in parts["bodies"]:
                 pc.set_facecolor(colors[i % len(colors)])
                 pc.set_alpha(0.6)
             bp = ax.boxplot(
-                cv_df[metric], positions=[1], widths=0.15, patch_artist=True, showfliers=True
+                cv_df[metric],
+                positions=[1],
+                widths=0.15,
+                patch_artist=True,
+                showfliers=True,
             )
             bp["boxes"][0].set_facecolor("white")
             bp["boxes"][0].set_alpha(0.8)
@@ -2011,8 +2172,12 @@ class TFDFEvaluator:
             ax.grid(False)
         plt.suptitle("Cross-Validation Metric Distributions", fontweight="bold", y=1.02)
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_CV_Distribution.png", dpi=FIG_DPI, bbox_inches="tight")
-        plt.savefig(output_dir / "Fig_CV_Distribution.tiff", dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(
+            output_dir / "Fig_CV_Distribution.png", dpi=FIG_DPI, bbox_inches="tight"
+        )
+        plt.savefig(
+            output_dir / "Fig_CV_Distribution.tiff", dpi=FIG_DPI, bbox_inches="tight"
+        )
         plt.close()
 
     @staticmethod
@@ -2076,7 +2241,9 @@ class TFDFEvaluator:
         print(f"    {interpretation}")
         print(f"    Accuracy improvement: {acc1 - acc2:+.4f}")
         if output_dir:
-            pd.DataFrame([result]).to_csv(output_dir / "significance_test_mcnemar.csv", index=False)
+            pd.DataFrame([result]).to_csv(
+                output_dir / "significance_test_mcnemar.csv", index=False
+            )
         return result
 
     @staticmethod
@@ -2090,7 +2257,9 @@ class TFDFEvaluator:
         misclass_mask = y_true != y_pred
         misclass_indices = np.where(misclass_mask)[0]
         original_indices = test_indices[misclass_indices]
-        coord_cols = [c for c in ["chr", "pos", "ref", "alt"] if c in variant_df.columns]
+        coord_cols = [
+            c for c in ["chr", "pos", "ref", "alt"] if c in variant_df.columns
+        ]
         records = []
         for i, orig_idx in enumerate(original_indices):
             li = misclass_indices[i]
@@ -2120,7 +2289,11 @@ class TFDFEvaluator:
     ):
         print("  Aggregating SHAP values by feature category...")
         mean_abs_shap = np.mean(np.abs(shap_values), axis=0)
-        category_shap = {"Standard/Biological": [], "Fractal (FCGR)": [], "Topological (TDA)": []}
+        category_shap = {
+            "Standard/Biological": [],
+            "Fractal (FCGR)": [],
+            "Topological (TDA)": [],
+        }
         feature_category_map = []
         for i, fname in enumerate(feature_names):
             if i < n_standard:
@@ -2131,7 +2304,11 @@ class TFDFEvaluator:
                 category = "Topological (TDA)"
             category_shap[category].append(mean_abs_shap[i])
             feature_category_map.append(
-                {"feature_name": fname, "category": category, "mean_abs_shap": mean_abs_shap[i]}
+                {
+                    "feature_name": fname,
+                    "category": category,
+                    "mean_abs_shap": mean_abs_shap[i],
+                }
             )
         aggregated_results = []
         for category, values in category_shap.items():
@@ -2144,7 +2321,9 @@ class TFDFEvaluator:
                         "sum_abs_shap": np.sum(values),
                         "std_abs_shap": np.std(values),
                         "max_abs_shap": np.max(values),
-                        "relative_importance": np.sum(values) / np.sum(mean_abs_shap) * 100,
+                        "relative_importance": np.sum(values)
+                        / np.sum(mean_abs_shap)
+                        * 100,
                     }
                 )
         aggregated_df = pd.DataFrame(aggregated_results).sort_values(
@@ -2152,7 +2331,9 @@ class TFDFEvaluator:
         )
         feature_df = pd.DataFrame(feature_category_map)
         feature_df.to_csv(output_dir / "feature_importance_detailed.csv", index=False)
-        aggregated_df.to_csv(output_dir / "feature_importance_aggregated.csv", index=False)
+        aggregated_df.to_csv(
+            output_dir / "feature_importance_aggregated.csv", index=False
+        )
         print("\n    Category-Level Importance:")
         for _, row in aggregated_df.iterrows():
             print(
@@ -2207,10 +2388,14 @@ class TFDFEvaluator:
             at.set_fontweight("bold")
         plt.tight_layout()
         plt.savefig(
-            output_dir / "Fig_Feature_Importance_Stacked.png", dpi=FIG_DPI, bbox_inches="tight"
+            output_dir / "Fig_Feature_Importance_Stacked.png",
+            dpi=FIG_DPI,
+            bbox_inches="tight",
         )
         plt.savefig(
-            output_dir / "Fig_Feature_Importance_Stacked.tiff", dpi=FIG_DPI, bbox_inches="tight"
+            output_dir / "Fig_Feature_Importance_Stacked.tiff",
+            dpi=FIG_DPI,
+            bbox_inches="tight",
         )
         plt.close()
 
@@ -2263,7 +2448,9 @@ class TFDFEvaluator:
                 }
             )
         results_df = pd.DataFrame(results)
-        fig, axes = plt.subplots(1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 0.7))
+        fig, axes = plt.subplots(
+            1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 0.7)
+        )
         ax1 = axes[0]
         ax1.plot(
             results_df["train_size_pct"],
@@ -2311,14 +2498,20 @@ class TFDFEvaluator:
         )
         ax2.set_xlabel("Training Data Size (%)")
         ax2.set_ylabel("Score")
-        ax2.set_title("(B) Learning Curve — AUPRC & AUROC", fontweight="bold", loc="left")
+        ax2.set_title(
+            "(B) Learning Curve — AUPRC & AUROC", fontweight="bold", loc="left"
+        )
         ax2.legend()
         ax2.grid(False)
         ax2.set_xlim([0, 100])
         ax2.set_ylim([0, 1.05])
         plt.tight_layout()
-        plt.savefig(output_dir / "Fig_Learning_Curve.png", dpi=FIG_DPI, bbox_inches="tight")
-        plt.savefig(output_dir / "Fig_Learning_Curve.tiff", dpi=FIG_DPI, bbox_inches="tight")
+        plt.savefig(
+            output_dir / "Fig_Learning_Curve.png", dpi=FIG_DPI, bbox_inches="tight"
+        )
+        plt.savefig(
+            output_dir / "Fig_Learning_Curve.tiff", dpi=FIG_DPI, bbox_inches="tight"
+        )
         plt.close()
         results_df.to_csv(output_dir / "learning_curve_data.csv", index=False)
         print("\n    Learning Curve Results:")
@@ -2355,16 +2548,26 @@ class BaselineEnsemble:
             "ET_2": ExtraTreesClassifier(
                 n_estimators=100, max_depth=15, random_state=rs + 3, n_jobs=-1
             ),
-            "GB_1": GradientBoostingClassifier(n_estimators=100, max_depth=5, random_state=rs + 4),
-            "GB_2": GradientBoostingClassifier(n_estimators=100, max_depth=7, random_state=rs + 5),
-            "HGB_1": HistGradientBoostingClassifier(max_iter=100, max_depth=6, random_state=rs + 6),
-            "HGB_2": HistGradientBoostingClassifier(max_iter=100, max_depth=8, random_state=rs + 7),
+            "GB_1": GradientBoostingClassifier(
+                n_estimators=100, max_depth=5, random_state=rs + 4
+            ),
+            "GB_2": GradientBoostingClassifier(
+                n_estimators=100, max_depth=7, random_state=rs + 5
+            ),
+            "HGB_1": HistGradientBoostingClassifier(
+                max_iter=100, max_depth=6, random_state=rs + 6
+            ),
+            "HGB_2": HistGradientBoostingClassifier(
+                max_iter=100, max_depth=8, random_state=rs + 7
+            ),
         }
 
     def fit(self, X, y):
         X_bio = X[:, : self.n_biological_features]
         self.models = self._create_base_models()
-        for name, model in tqdm(self.models.items(), desc="Training Baseline", ncols=80):
+        for name, model in tqdm(
+            self.models.items(), desc="Training Baseline", ncols=80
+        ):
             model.fit(X_bio, y)
         self.is_fitted = True
         return self
@@ -2443,7 +2646,9 @@ def run_final_model():
     plot_class_distribution(variant_df, Config.OUTPUT_DIR)
 
     print("\nStep 2: Feature Engineering")
-    preprocessor = TFDFEPreprocessor(use_fcgr=True, use_tda=True, genome_path=Config.GENOME_PATH)
+    preprocessor = TFDFEPreprocessor(
+        use_fcgr=True, use_tda=True, genome_path=Config.GENOME_PATH
+    )
     X, y = preprocessor.fit_transform(variant_df)
 
     n_standard = len(preprocessor.feature_names)
@@ -2508,11 +2713,15 @@ def run_final_model():
     confident_mask = y_selective >= 0
     if confident_mask.sum() > 0:
         y_te_arr = np.array(y_test) if hasattr(y_test, "values") else y_test
-        sel_mcc = matthews_corrcoef(y_te_arr[confident_mask], y_selective[confident_mask])
+        sel_mcc = matthews_corrcoef(
+            y_te_arr[confident_mask], y_selective[confident_mask]
+        )
         sel_acc = accuracy_score(y_te_arr[confident_mask], y_selective[confident_mask])
         print(f"  Coverage:             {coverage:.3%}")
         print(f"  Selective MCC:        {sel_mcc:.6f}  (vs full {metrics['mcc']:.6f})")
-        print(f"  Selective Accuracy:   {sel_acc:.6f}  (vs full {metrics['accuracy']:.6f})")
+        print(
+            f"  Selective Accuracy:   {sel_acc:.6f}  (vs full {metrics['accuracy']:.6f})"
+        )
         selective_df = pd.DataFrame(
             {
                 "coverage": [coverage],
@@ -2525,7 +2734,9 @@ def run_final_model():
                 "abstain_threshold": [Config.SELECTIVE_ABSTAIN_THRESHOLD],
             }
         )
-        selective_df.to_csv(Config.OUTPUT_DIR / "selective_prediction_metrics.csv", index=False)
+        selective_df.to_csv(
+            Config.OUTPUT_DIR / "selective_prediction_metrics.csv", index=False
+        )
         print("  Saved: selective_prediction_metrics.csv")
 
     print("\nStep 4: Generate Analysis Figures")
@@ -2537,15 +2748,23 @@ def run_final_model():
     shap_model = None
     shap_indices = None
     shap_feature_names = None
-    if SHAP_AVAILABLE and hasattr(model, "diverse_factory") and model.diverse_factory is not None:
+    if (
+        SHAP_AVAILABLE
+        and hasattr(model, "diverse_factory")
+        and model.diverse_factory is not None
+    ):
         for name, m in model.diverse_factory.models.items():
             # Unwrap CalibratedClassifierCV to get the underlying
             # estimator for SHAP compatibility. Never pass the string name.
             base_m = m.base_estimator if isinstance(m, CalibratedClassifierCV) else m
-            if hasattr(base_m, "estimators_") or any(k in name for k in ["XGB", "LGB", "CatBoost"]):
+            if hasattr(base_m, "estimators_") or any(
+                k in name for k in ["XGB", "LGB", "CatBoost"]
+            ):
                 shap_model = base_m  # ← model OBJECT (BUG FIX)
                 shap_indices = model.diverse_factory.feature_indices[name]
-                shap_feature_names = [preprocessor.all_feature_names[i] for i in shap_indices]
+                shap_feature_names = [
+                    preprocessor.all_feature_names[i] for i in shap_indices
+                ]
                 X_shap = X_test[: min(500, len(X_test)), shap_indices]
                 break
         if shap_model:
@@ -2576,7 +2795,9 @@ def run_final_model():
     baseline_model.fit(X_train, y_train)
     y_pred_baseline = baseline_model.predict(X_test)
     y_pred_proba_baseline = baseline_model.predict_proba(X_test)
-    baseline_metrics = compute_metrics(y_test_arr, y_pred_baseline, y_pred_proba_baseline)
+    baseline_metrics = compute_metrics(
+        y_test_arr, y_pred_baseline, y_pred_proba_baseline
+    )
     print(f"\n  Baseline Model Metrics:")
     print(f"    MCC:    {baseline_metrics['mcc']:.6f}")
     print(f"    AUPRC:  {baseline_metrics['auprc']:.6f}")
@@ -2621,7 +2842,9 @@ def run_final_model():
                     raw = model.diverse_factory.models[cand]
                     # always extract the underlying estimator object
                     agg_model = (
-                        raw.base_estimator if isinstance(raw, CalibratedClassifierCV) else raw
+                        raw.base_estimator
+                        if isinstance(raw, CalibratedClassifierCV)
+                        else raw
                     )
                     agg_indices = model.diverse_factory.feature_indices[cand]
                     break
@@ -2652,7 +2875,9 @@ def run_final_model():
                 n_tda,
                 Config.OUTPUT_DIR,
             )
-            TFDFEvaluator.plot_feature_importance_stacked(aggregated_df, Config.OUTPUT_DIR)
+            TFDFEvaluator.plot_feature_importance_stacked(
+                aggregated_df, Config.OUTPUT_DIR
+            )
         except Exception as e:
             print(f"  Aggregated SHAP analysis failed: {e}")
     else:
@@ -2664,7 +2889,9 @@ def run_final_model():
         return EnhancedTFDFEEnsemble(n_standard=n_std, n_fcgr=n_fcg, n_tda=n_td)
 
     if len(X) > 50000:
-        print(f"  Dataset size ({len(X):,}) is large. Using subset for learning curve...")
+        print(
+            f"  Dataset size ({len(X):,}) is large. Using subset for learning curve..."
+        )
         lc_sample_size = min(50000, len(X))
         lc_indices = np.random.choice(len(X), lc_sample_size, replace=False)
         X_lc = X[lc_indices]
@@ -2706,7 +2933,9 @@ def run_final_model():
         n_tda=n_tda,
         output_dir=Config.OUTPUT_DIR,
     )
-    TFDFEvaluator.plot_cv_distribution(cv_df, Config.OUTPUT_DIR, metrics=["mcc", "auprc"])
+    TFDFEvaluator.plot_cv_distribution(
+        cv_df, Config.OUTPUT_DIR, metrics=["mcc", "auprc"]
+    )
 
     print("\nStep 5: Save Reports")
     metrics_df = pd.DataFrame([metrics])
@@ -2726,8 +2955,12 @@ def run_final_model():
         rf.write("All 7 Fixes + Supervisor Changes 1, 2, 3 Applied\n\n")
         rf.write("Change Summary:\n")
         rf.write("  FIX 1–7 (retained from v3)\n")
-        rf.write("  CHANGE 1: +MLP (BioTDA), +kNN_SML, +ElasticNet LR; Q-statistic diversity\n")
-        rf.write("  CHANGE 2: TDA over FCGR/sequence space; ~20 topological features (was 6)\n")
+        rf.write(
+            "  CHANGE 1: +MLP (BioTDA), +kNN_SML, +ElasticNet LR; Q-statistic diversity\n"
+        )
+        rf.write(
+            "  CHANGE 2: TDA over FCGR/sequence space; ~20 topological features (was 6)\n"
+        )
         rf.write(
             f"  CHANGE 3: Consensus-margin weighting + selective prediction "
             f"(θ={Config.SELECTIVE_ABSTAIN_THRESHOLD})\n"
@@ -2756,7 +2989,9 @@ def run_final_model():
         rf.write(f"  {mcnemar_result['interpretation']}\n\n")
         rf.write("Classification Report\n")
         rf.write(
-            classification_report(y_test, y_pred, target_names=["Benign", "Pathogenic"], digits=4)
+            classification_report(
+                y_test, y_pred, target_names=["Benign", "Pathogenic"], digits=4
+            )
         )
 
     total_time = time.time() - start_time
@@ -2772,7 +3007,8 @@ def run_final_model():
     print(f"  AUPRC: {cv_summary['auprc']['formatted']}")
     print(f"\nStatistical Significance:")
     print(
-        f"  McNemar p-value: {mcnemar_result['p_value']:.6f} " f"({mcnemar_result['significance']})"
+        f"  McNemar p-value: {mcnemar_result['p_value']:.6f} "
+        f"({mcnemar_result['significance']})"
     )
     print(f"  {mcnemar_result['interpretation']}")
     print(f"\nOutput Directory: {Config.OUTPUT_DIR}")

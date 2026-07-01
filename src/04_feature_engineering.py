@@ -99,7 +99,9 @@ class OptimizedUniProtParser:
 
     def __init__(self, uniprot_file: str, cache_dir: str = None):
         self.uniprot_file = Path(uniprot_file)
-        self.cache_dir = Path(cache_dir) if cache_dir else self.uniprot_file.parent / ".cache"
+        self.cache_dir = (
+            Path(cache_dir) if cache_dir else self.uniprot_file.parent / ".cache"
+        )
         self.cache_dir.mkdir(exist_ok=True)
 
         # Pre-compiled regex patterns for speed
@@ -208,11 +210,17 @@ class OptimizedUniProtParser:
             description = parts[3] if len(parts) > 3 else ""
 
             if feature_type == "DOMAIN":
-                features.domains.append({"start": start, "end": end, "name": description[:50]})
+                features.domains.append(
+                    {"start": start, "end": end, "name": description[:50]}
+                )
             elif feature_type == "ACT_SITE":
-                features.active_sites.append({"position": start, "description": description})
+                features.active_sites.append(
+                    {"position": start, "description": description}
+                )
             elif feature_type == "BINDING":
-                features.binding_sites.append({"position": start, "description": description})
+                features.binding_sites.append(
+                    {"position": start, "description": description}
+                )
             elif feature_type == "TRANSMEM":
                 features.transmembrane.append({"start": start, "end": end})
             elif feature_type == "SIGNAL":
@@ -265,10 +273,13 @@ class AlphaFoldStructureIndex:
                 # Priority: PDB > CIF, F1 > F2 > ...
                 priority = (is_pdb, fragment == "F1", fragment)
 
-                if uniprot_id not in file_priority or priority > file_priority[uniprot_id][0]:
+                if (
+                    uniprot_id not in file_priority
+                    or priority > file_priority[uniprot_id][0]
+                ):
                     file_priority[uniprot_id] = (priority, pdb_file)
 
-        self.index = {uid: path for uid, (_, path) in file_priority.items()}
+        self.index = {uid: path.name for uid, (_, path) in file_priority.items()}
 
         # Cache the index
         try:
@@ -287,7 +298,13 @@ class AlphaFoldStructureIndex:
 
     def get_file(self, uniprot_id: str) -> Optional[Path]:
         """O(1) lookup for PDB file"""
-        return self.index.get(uniprot_id)
+        filename = self.index.get(uniprot_id)
+        if filename:
+            # Handle backward compatibility if the cache has absolute/relative paths
+            if isinstance(filename, Path):
+                filename = filename.name
+            return self.alphafold_dir / filename
+        return None
 
     def get_available_ids(self) -> set:
         """Return set of all available UniProt IDs"""
@@ -328,7 +345,10 @@ def _process_structure_batch(
     # Use thread-local parser (for ThreadPoolExecutor) or global parser (for ProcessPoolExecutor)
     parser = _get_parser()
     if not BIOPYTHON_AVAILABLE or parser is None:
-        return [(idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1}) for idx, _ in residue_batch]
+        return [
+            (idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1})
+            for idx, _ in residue_batch
+        ]
 
     try:
         # Parse structure once for all residues
@@ -394,18 +414,23 @@ def _process_structure_batch(
                         row_idx,
                         {
                             "sasa": round(sasa, 2) if sasa > 0 else -1,
-                            "relative_sasa": (round(relative_sasa, 3) if relative_sasa > 0 else -1),
+                            "relative_sasa": (
+                                round(relative_sasa, 3) if relative_sasa > 0 else -1
+                            ),
                             "plddt": round(plddt, 2) if plddt > 0 else -1,
                         },
                     )
                 )
             else:
-                results.append((row_idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1}))
+                results.append(
+                    (row_idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1})
+                )
 
     except Exception:
         # Return defaults for all residues on error
         results = [
-            (idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1}) for idx, _ in residue_batch
+            (idx, {"sasa": -1, "relative_sasa": -1, "plddt": -1})
+            for idx, _ in residue_batch
         ]
 
     return results
@@ -568,17 +593,24 @@ def add_structural_features_parallel(
         structure_batches[uniprot_id][1].append((idx, int(pos)))
 
     total_variants = sum(len(b[1]) for b in structure_batches.values())
-    print(f"  Processing {len(structure_batches):,} structures for {total_variants:,} variants")
+    print(
+        f"  Processing {len(structure_batches):,} structures for {total_variants:,} variants"
+    )
 
     # Prepare work items
-    work_items = [(uid, path, residues) for uid, (path, residues) in structure_batches.items()]
+    work_items = [
+        (uid, path, residues) for uid, (path, residues) in structure_batches.items()
+    ]
 
     # Process with ThreadPoolExecutor (no subprocess spawning = no memory explosion)
     all_results = []
     failed_count = 0
 
     with ThreadPoolExecutor(max_workers=n_workers) as executor:
-        futures = {executor.submit(_process_structure_batch, item): item[0] for item in work_items}
+        futures = {
+            executor.submit(_process_structure_batch, item): item[0]
+            for item in work_items
+        }
 
         with tqdm(total=len(futures), desc="  Processing structures") as pbar:
             for future in as_completed(futures):
@@ -597,7 +629,9 @@ def add_structural_features_parallel(
         plddt_values[row_idx] = features["plddt"]
 
     successful = np.sum(sasa_values > -1)
-    print(f"\n  Successfully annotated {successful:,} / {n:,} variants with structural features")
+    print(
+        f"\n  Successfully annotated {successful:,} / {n:,} variants with structural features"
+    )
     if failed_count > 0:
         print(f"  {failed_count} structures failed during processing")
 
@@ -639,7 +673,9 @@ def build_smart_gene_mapping_optimized(
         if candidates[0][1]:
             genes_with_structure += 1
 
-    print(f"  Mapped {len(optimized_features):,} genes ({genes_with_structure:,} with structures)")
+    print(
+        f"  Mapped {len(optimized_features):,} genes ({genes_with_structure:,} with structures)"
+    )
 
     return optimized_features
 
@@ -659,11 +695,11 @@ def enrich_dataset_with_structure_function_optimized(
     force_reparse: bool = False,
 ):
 
-    print("=" * 70)
     print("STRUCTURAL & FUNCTIONAL ENRICHMENT PIPELINE - OPTIMIZED")
     print(f"CPU Workers: {n_workers or CPU_COUNT}")
-    print(f"GPU Acceleration: {'cuDF available' if CUDF_AVAILABLE else 'Not available'}")
-    print("=" * 70)
+    print(
+        f"GPU Acceleration: {'cuDF available' if CUDF_AVAILABLE else 'Not available'}"
+    )
 
     # Load dataset
     print("\nLoading base dataset...")
@@ -695,7 +731,9 @@ def enrich_dataset_with_structure_function_optimized(
     alphafold_index = AlphaFoldStructureIndex(alphafold_dir)
 
     # Smart mapping
-    optimized_features = build_smart_gene_mapping_optimized(uniprot_features, alphafold_index)
+    optimized_features = build_smart_gene_mapping_optimized(
+        uniprot_features, alphafold_index
+    )
 
     # Annotate with UniProt features (vectorized)
     print("\nSTEP 3: UniProt Annotation")
@@ -713,9 +751,8 @@ def enrich_dataset_with_structure_function_optimized(
     print(f"  Saved to: {output_csv}")
 
     # Summary statistics
-    print("\n" + "=" * 70)
-    print("ENRICHMENT SUMMARY")
-    print("=" * 70)
+    print("\nENRICHMENT SUMMARY")
+
     print(f"Total variants: {len(dataset):,}")
 
     if "IS_IN_DOMAIN" in dataset.columns:
@@ -759,7 +796,8 @@ if __name__ == "__main__":
         "--input",
         "-i",
         default=str(
-            STAGE03_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv"
+            STAGE03_OUT
+            / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv"
         ),
         help="Input CSV file path",
     )
@@ -811,5 +849,3 @@ if __name__ == "__main__":
         max_rows=args.max_rows,
         force_reparse=args.force_reparse,
     )
-
-    print("\nComplete dataset ready for machine learning!")

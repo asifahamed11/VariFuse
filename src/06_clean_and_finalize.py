@@ -10,9 +10,7 @@ OUTPUT_FILE = STAGE06_OUT / "somatic_variant_Cleaned.csv"
 
 
 def clean_dataset():
-    print("=" * 60)
     print("FINAL DATASET CLEANING & PREPARATION")
-    print("=" * 60)
 
     try:
         Path(OUTPUT_FILE).parent.mkdir(parents=True, exist_ok=True)
@@ -32,7 +30,11 @@ def clean_dataset():
         # Step 2: Drop columns having only 'U' value
         u_cols_dropped = []
         for col in df.columns:
-            if df[col].dtype == "object" and df[col].nunique() == 1 and df[col].unique()[0] == "U":
+            if (
+                df[col].dtype == "object"
+                and df[col].nunique() == 1
+                and df[col].unique()[0] == "U"
+            ):
                 u_cols_dropped.append(col)
 
         if u_cols_dropped:
@@ -46,7 +48,9 @@ def clean_dataset():
             initial_count = len(df)
             df = df[df["SASA"] != -1]
             removed_count = initial_count - len(df)
-            print(f"Step 3: Removed {removed_count:,} rows with missing structural data (-1).")
+            print(
+                f"Step 3: Removed {removed_count:,} rows with missing structural data (-1)."
+            )
         else:
             print("Warning: 'SASA' column not found, could not filter -1 rows.")
 
@@ -56,8 +60,6 @@ def clean_dataset():
         print(f"Saving to: {OUTPUT_FILE}")
 
         df.to_csv(OUTPUT_FILE, index=False)
-        print(" Done! File is clean and ready for Machine Learning.")
-        print("=" * 60)
 
     except FileNotFoundError:
         print(f"Error: File '{INPUT_FILE}' not found!")
