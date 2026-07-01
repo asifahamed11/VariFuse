@@ -1,5 +1,5 @@
 import pandas as pd
-from config import DATA_DIR, STAGE01_OUT, STAGE02_OUT, STAGE03_OUT, STAGE04_OUT, STAGE05_OUT, STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT, EDA_OUT
+from config import DATA_DIR, STAGE03_OUT, STAGE04_OUT
 import numpy as np
 from pathlib import Path
 import gzip
@@ -672,10 +672,10 @@ def build_smart_gene_mapping_optimized(
 
 
 def enrich_dataset_with_structure_function_optimized(
-    input_csv: str = r"code 3 outputs/somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv",
-    uniprot_file: str = r"Datasets/uniprotkb_proteome_UP000005640_2026_01_07.txt",
-    alphafold_dir: str = r"Datasets/UP000005640_9606_HUMAN_v6",
-    output_csv: str = r"code 4 outputs/somatic_variant_dbNSFP_Removes_missing_values_Deduplication_Structural_Functional.csv",
+    input_csv: str = str(STAGE03_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv"),
+    uniprot_file: str = str(DATA_DIR / "uniprotkb_proteome_UP000005640_2026_01_07.txt"),
+    alphafold_dir: str = str(DATA_DIR / "UP000005640_9606_HUMAN_v6"),
+    output_csv: str = str(STAGE04_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication_Structural_Functional.csv"),
     n_workers: int = None,
     max_rows: int = None,
     force_reparse: bool = False,
@@ -784,25 +784,25 @@ if __name__ == "__main__":
     arg_parser.add_argument(
         "--input",
         "-i",
-        default=r"code 3 outputs/somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv",
+        default=str(STAGE03_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv"),
         help="Input CSV file path",
     )
     arg_parser.add_argument(
         "--uniprot",
         "-u",
-        default=r"Datasets/uniprotkb_proteome_UP000005640_2026_01_07.txt",
+        default=str(DATA_DIR / "uniprotkb_proteome_UP000005640_2026_01_07.txt"),
         help="UniProt flat file path",
     )
     arg_parser.add_argument(
         "--alphafold",
         "-a",
-        default=r"Datasets/UP000005640_9606_HUMAN_v6",
+        default=str(DATA_DIR / "UP000005640_9606_HUMAN_v6"),
         help="AlphaFold structures directory",
     )
     arg_parser.add_argument(
         "--output",
         "-o",
-        default=r"code 4 outputs/somatic_variant_dbNSFP_Removes_missing_values_Deduplication_Structural_Functional.csv",
+        default=str(STAGE04_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication_Structural_Functional.csv"),
         help="Output CSV file path",
     )
     arg_parser.add_argument(

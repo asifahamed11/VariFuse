@@ -1,5 +1,5 @@
 import pandas as pd
-from config import DATA_DIR, STAGE01_OUT, STAGE02_OUT, STAGE03_OUT, STAGE04_OUT, STAGE05_OUT, STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT, EDA_OUT
+from config import DATA_DIR, STAGE07_OUT, STAGE08_OUT
 import numpy as np
 import matplotlib
 
@@ -150,13 +150,13 @@ class Config:
     AMBIGUOUS_SAMPLE_WEIGHT = 0.30
 
     DATA_PATH   = STAGE07_OUT / "Final_Dataset_Balanced.csv"
-    GENOME_PATH = r"Datasets/hg19.fa"
+    GENOME_PATH = DATA_DIR / "hg19.fa"
     OUTPUT_DIR  = Path(STAGE08_OUT)
 
     LEAKAGE_COLS = ["chr", "pos", "ref", "alt", "CONSENSUS_SCORE", "TIER"]
 
 
-Config.OUTPUT_DIR.mkdir(exist_ok=True)
+Config.OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 np.random.seed(Config.RANDOM_STATE)
 
 FIG_SINGLE_COL_WIDTH = 85 / 25.4

@@ -1,10 +1,10 @@
 import pandas as pd
-from config import DATA_DIR, STAGE01_OUT, STAGE02_OUT, STAGE03_OUT, STAGE04_OUT, STAGE05_OUT, STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT, EDA_OUT
+from config import STAGE04_OUT, STAGE05_OUT
 import gc
 from pathlib import Path
 
-INPUT_FILE = r'code 4 outputs/somatic_variant_dbNSFP_Removes_missing_values_Deduplication_Structural_Functional.csv'
-OUTPUT_FILE = r'code 5 outputs/somatic_variant_Leakage_Removed.csv'
+INPUT_FILE = STAGE04_OUT / 'somatic_variant_dbNSFP_Removes_missing_values_Deduplication_Structural_Functional.csv'
+OUTPUT_FILE = STAGE05_OUT / 'somatic_variant_Leakage_Removed.csv'
 
 LEAKAGE_COLS = [
     'COSMIC_FREQUENCY', 

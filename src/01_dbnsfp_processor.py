@@ -1,5 +1,5 @@
 import pandas as pd
-from config import DATA_DIR, STAGE01_OUT, STAGE02_OUT, STAGE03_OUT, STAGE04_OUT, STAGE05_OUT, STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT, EDA_OUT
+from config import DATA_DIR, STAGE01_OUT
 import numpy as np
 import json
 import warnings
@@ -10,8 +10,8 @@ from collections import Counter
 warnings.filterwarnings("ignore")
 
 CHUNK_SIZE = 5000
-OUTPUT_FILE = "somatic_variant_dbNSFP.csv"
-METADATA_FILE = "somatic_variant_dbNSFP.json"
+OUTPUT_FILE = STAGE01_OUT / "somatic_variant_dbNSFP.csv"
+METADATA_FILE = STAGE01_OUT / "somatic_variant_dbNSFP.json"
 
 GNOMAD_AF_THRESHOLD = 0.0001
 MIN_COSMIC_RESCUE = 50
@@ -112,7 +112,7 @@ def explode_semicolon_columns(variant_df, cols_to_explode):
 
 
 print("Loading CIViC rescue variants")
-civic_tsv = pd.read_csv("Datasets/01-Jan-2026-VariantSummaries.tsv", sep="\t", low_memory=False)
+civic_tsv = pd.read_csv(DATA_DIR / "01-Jan-2026-VariantSummaries.tsv", sep="\t", low_memory=False)
 rescue_list_civic = civic_tsv[
     ["gene", "chromosome", "start", "reference_bases", "variant_bases"]
 ].copy()
@@ -132,7 +132,7 @@ del civic_tsv, rescue_list_civic
 gc.collect()
 
 print("Loading Cancer Gene Census and COSMIC data")
-cgc = pd.read_csv("Datasets/Cosmic_CancerGeneCensus_v102_GRCh37.tsv", sep="\t")
+cgc = pd.read_csv(DATA_DIR / "Cosmic_CancerGeneCensus_v102_GRCh37.tsv", sep="\t")
 cancer_genes = set(cgc["GENE_SYMBOL"].unique())
 oncogenes = set(
     cgc[cgc["ROLE_IN_CANCER"].str.contains("oncogene", na=False, case=False)][
@@ -152,7 +152,7 @@ gc.collect()
 print("Aggregating COSMIC Mutant Census")
 cmc_chunks = []
 for cosmic_chunk in pd.read_csv(
-    "Datasets/cmc_export.tsv",
+    DATA_DIR / "cmc_export.tsv",
     sep="\t",
     usecols=[
         "GENE_NAME",
@@ -190,7 +190,7 @@ print(f"Aggregated COSMIC data - {len(cosmic_rescue):,} rescue variants identifi
 del cmc_chunks, cosmic_rescue
 gc.collect()
 
-oncokb = pd.read_csv("Datasets/oncokb_biomarker_drug_associations.tsv", sep="\t")
+oncokb = pd.read_csv(DATA_DIR / "oncokb_biomarker_drug_associations.tsv", sep="\t")
 oncokb_genes = set(oncokb["Gene"].unique())
 del oncokb
 gc.collect()
@@ -199,7 +199,7 @@ print("\nStarting streaming dbNSFP processing")
 if os.path.exists(OUTPUT_FILE):
     os.remove(OUTPUT_FILE)
 
-file_path = r"Datasets/dbNSFP5.3a_grch37.gz"
+file_path = DATA_DIR / "dbNSFP5.3a_grch37.gz"
 chunk_iterator = pd.read_csv(
     file_path,
     sep="\t",

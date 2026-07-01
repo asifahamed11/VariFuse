@@ -39,7 +39,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from config import DATA_DIR, STAGE01_OUT, STAGE02_OUT, STAGE03_OUT, STAGE04_OUT, STAGE05_OUT, STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT, EDA_OUT
+from config import DATA_DIR, STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT
 import matplotlib
 
 matplotlib.use("Agg")
@@ -102,17 +102,19 @@ class RevisionConfig:
     RANDOM_STATE = 42
     TEST_SIZE    = 0.2
 
-    BALANCED_DATA_PATH   = rSTAGE07_OUT / "Final_Dataset_Balanced.csv"
-    IMBALANCED_DATA_PATH = r"code 6 outputs/somatic_variant_Cleaned.csv"
+    BALANCED_DATA_PATH   = STAGE07_OUT / "Final_Dataset_Balanced.csv"
+    IMBALANCED_DATA_PATH = STAGE06_OUT / "somatic_variant_Cleaned.csv"
 
     # -----------------------------------------------------------------------
     # CHANGE 1/2/3 compatibility: point at the v4 fixed script so that
     # build_full_feature_matrix() picks up the v4 preprocessor.
-    # If you renamed the file differently, update this path.
+    # Resolved relative to this file, not cwd, so it works regardless of
+    # where the script is launched from. If you rename 08_tda_fuzzy_ensemble.py,
+    # update the filename below.
     # -----------------------------------------------------------------------
-    STEP8_SCRIPT_PATH = r"8. Topo-Fractal Dynamic Fuzzy Ensemble Framework.py"
+    STEP8_SCRIPT_PATH = Path(__file__).resolve().parent / "08_tda_fuzzy_ensemble.py"
 
-    GENOME_PATH  = r"Datasets/hg19.fa"
+    GENOME_PATH  = DATA_DIR / "hg19.fa"
     TARGET_COL   = "LABEL_PATHOGENIC"
     LEAKAGE_COLS = ["chr", "pos", "ref", "alt", "CONSENSUS_SCORE", "TIER"]
 
@@ -151,7 +153,7 @@ class RevisionConfig:
     DOUBLE_COL = 170 / 25.4
 
 
-RevisionConfig.OUTPUT_DIR.mkdir(exist_ok=True)
+RevisionConfig.OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 np.random.seed(RevisionConfig.RANDOM_STATE)
 
 plt.rcParams.update(
@@ -536,12 +538,12 @@ def run_diversity_analysis(output_dir):
         print(
             "\n  [CHANGE 1 / Diversity Analysis] "
             "pairwise_q_statistic.csv / pairwise_disagreement.csv not found "
-            "in 'code 8 outputs/'. Run Code 8 v4 first to generate them.\n"
+            f"in '{code8_out}/'. Run 08_tda_fuzzy_ensemble.py first to generate them.\n"
             "  Skipping diversity analysis."
         )
         pd.DataFrame([{
             "status": "skipped",
-            "reason": "code 8 outputs not found",
+            "reason": "08 outputs not found",
         }]).to_csv(output_dir / "diversity_summary.csv", index=False)
         return None
 

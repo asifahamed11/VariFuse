@@ -1,10 +1,10 @@
 #3. Removes duplicate variants
 import pandas as pd
-from config import DATA_DIR, STAGE01_OUT, STAGE02_OUT, STAGE03_OUT, STAGE04_OUT, STAGE05_OUT, STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT, EDA_OUT
+from config import STAGE02_OUT, STAGE03_OUT
 import gc
 
-INPUT_FILE = 'code 2 outputs/somatic_variant_dbNSFP_Removes_missing_values.csv'
-OUTPUT_FILE = 'code 3 outputs/somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv'
+INPUT_FILE = STAGE02_OUT / 'somatic_variant_dbNSFP_Removes_missing_values.csv'
+OUTPUT_FILE = STAGE03_OUT / 'somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv'
 
 
 def remove_duplicates(chunksize=100000):

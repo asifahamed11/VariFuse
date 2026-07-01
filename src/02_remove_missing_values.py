@@ -1,10 +1,10 @@
 #2. Removes all rows with any missing values
 import pandas as pd
-from config import DATA_DIR, STAGE01_OUT, STAGE02_OUT, STAGE03_OUT, STAGE04_OUT, STAGE05_OUT, STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT, EDA_OUT
+from config import STAGE01_OUT, STAGE02_OUT
 import gc
 
 INPUT_FILE = STAGE01_OUT / 'somatic_variant_dbNSFP.csv' 
-OUTPUT_FILE = 'somatic_variant_dbNSFP_Removes_missing_values.csv'
+OUTPUT_FILE = STAGE02_OUT / 'somatic_variant_dbNSFP_Removes_missing_values.csv'
 
 COLUMNS_TO_RETAIN_WITH_MISSING = [
     'COSMIC_FREQUENCY', 

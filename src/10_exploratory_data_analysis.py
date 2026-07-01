@@ -1,5 +1,5 @@
 import pandas as pd
-from config import DATA_DIR, STAGE01_OUT, STAGE02_OUT, STAGE03_OUT, STAGE04_OUT, STAGE05_OUT, STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT, EDA_OUT
+from config import STAGE07_OUT, EDA_OUT
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')

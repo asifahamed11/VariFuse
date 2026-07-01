@@ -12,8 +12,17 @@ This repository contains the preprocessing, feature engineering, and modeling sc
 ## Data Setup
 
 Due to GitHub file size limits, the 76GB of raw data is not tracked in this repository.
-Before running the scripts, please download the required datasets (e.g., dbNSFP database, hg19.fa, etc.) and place them in the `data/` folder, or update the `DATA_DIR` path in `src/config.py` to point to your existing dataset location.
+
+1. Download the datasets: **[TODO: paste your Google Drive link here]**
+2. Place them in the `data/` folder (see `data/README.md` for the expected layout), **or**
+3. Point at an existing local copy without touching any code: `export TFDFE_DATA_DIR=/path/to/your/Datasets` before running the scripts.
+
+## Installing dependencies
+
+`pip install -r requirements.txt`
+
+Note: `biopython`, `giotto-tda`, and `pyfaidx` are core to the method (structural + topological features in scripts 04 and 08), not optional extras — install them even though the code itself guards each import with try/except for graceful fallback.
 
 ## Running the Pipeline
 
-Run the scripts in numerical order from the `src/` directory. All outputs will automatically be saved into organized subfolders within the `outputs/` directory.
+Run the scripts in numerical order from the `src/` directory. All outputs are saved automatically into organized subfolders within `outputs/` (created on first run).

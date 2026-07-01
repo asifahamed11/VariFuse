@@ -1,10 +1,10 @@
 import pandas as pd
-from config import DATA_DIR, STAGE01_OUT, STAGE02_OUT, STAGE03_OUT, STAGE04_OUT, STAGE05_OUT, STAGE06_OUT, STAGE07_OUT, STAGE08_OUT, STAGE09_OUT, EDA_OUT
+from config import STAGE06_OUT, STAGE07_OUT
 import numpy as np
 from pathlib import Path
 
-INPUT_FILE = 'code 6 outputs/somatic_variant_Cleaned.csv'
-OUTPUT_FILE = 'code 7 outputs/Final_Dataset_Balanced.csv'
+INPUT_FILE = STAGE06_OUT / 'somatic_variant_Cleaned.csv'
+OUTPUT_FILE = STAGE07_OUT / 'Final_Dataset_Balanced.csv'
 
 def balance_dataset():
     print(f"Loading dataset: {INPUT_FILE}")

@@ -4,13 +4,10 @@ import os
 # Project root is the parent directory of the src folder
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-# Since datasets are currently kept in the original folder, we point there
-# When uploading to GitHub, this should be changed to PROJECT_ROOT / "data"
-# For local execution, it points to the old Datasets folder
-DATA_DIR = Path(r"C:\Users\Admin\Desktop\Code\Datasets")
-# Or fallback to local data/ folder if the above doesn't exist
-if not DATA_DIR.exists():
-    DATA_DIR = PROJECT_ROOT / "data"
+# Raw datasets (dbNSFP, hg19.fa, AlphaFold structures, etc).
+# Default: <repo>/data  (see data/README.md for the Google Drive download link).
+# Override without editing this file: set env var TFDFE_DATA_DIR to your local path.
+DATA_DIR = Path(os.environ.get("TFDFE_DATA_DIR", PROJECT_ROOT / "data"))
 
 # Centralized Outputs Directory
 OUTPUT_DIR = PROJECT_ROOT / "outputs"

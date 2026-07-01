@@ -1,10 +1,31 @@
 # Datasets
 
-This folder is intended to hold the raw data files required to run the pipeline, such as the dbNSFP database, hg19.fa reference genome, etc.
+This folder holds the raw data files required to run the pipeline (~76GB total).
 
-**Note:** The actual dataset files are excluded from this Git repository via `.gitignore` because they are extremely large (76GB+).
+**Note:** excluded from Git via `.gitignore` — too large to track.
 
-To reproduce this project:
-1. Download the datasets from [Insert Google Drive or source link here]
-2. Place the datasets directly into this `data/` folder.
-3. Ensure that `config.py` has `DATA_DIR` pointing to this folder.
+## Expected layout
+
+```
+data/
+├── 01-Jan-2026-VariantSummaries.tsv
+├── Cosmic_CancerGeneCensus_v102_GRCh37.tsv
+├── cmc_export.tsv
+├── oncokb_biomarker_drug_associations.tsv
+├── dbNSFP5.3a_grch37.gz
+├── uniprotkb_proteome_UP000005640_2026_01_07.txt
+├── UP000005640_9606_HUMAN_v6/    # AlphaFold structures (.cif / .pdb per protein)
+├── hg19.fa
+└── hg19.fa.fai
+```
+(`.cache/` appears here too after the first run of script 04 — auto-generated, safe to delete.)
+
+## Setup
+
+1. Download the datasets: **[TODO: paste your Google Drive link here]**
+2. Place them directly into this `data/` folder, matching the layout above, **or**
+3. Keep them wherever they already live and set `TFDFE_DATA_DIR` instead of moving 76GB:
+   ```
+   export TFDFE_DATA_DIR=/path/to/your/Datasets
+   ```
+   `src/config.py` reads this env var automatically — no code edits needed.
