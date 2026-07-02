@@ -450,7 +450,7 @@ def plot_combined_roc_pr(curve_data, output_dir, filename="Fig_All_Models_ROC_PR
     ax1.set_xlabel("False Positive Rate")
     ax1.set_ylabel("True Positive Rate")
     ax1.set_title("(A) ROC Curves", fontweight="bold", loc="left")
-    ax1.legend(loc="lower right", fontsize=6, frameon=True, edgecolor="black")
+    ax1.legend(loc="best", fontsize=6, frameon=True, edgecolor="black")
     ax1.grid(False)
     for i, (name, (y_true, proba)) in enumerate(curve_data.items()):
         precision, recall, _ = precision_recall_curve(y_true, proba)
@@ -637,6 +637,7 @@ def run_diversity_analysis(output_dir):
         f"{'PASS' if q_target_pass else 'FAIL'}: target < 0.50",
         fontweight="bold",
         loc="left",
+        fontsize=9,
     )
     plt.setp(
         axes[0].get_xticklabels(),
@@ -663,6 +664,7 @@ def run_diversity_analysis(output_dir):
         f"{'PASS' if dis_target_pass else 'FAIL'}: target > 0.05",
         fontweight="bold",
         loc="left",
+        fontsize=9,
     )
     plt.setp(
         axes[1].get_xticklabels(),

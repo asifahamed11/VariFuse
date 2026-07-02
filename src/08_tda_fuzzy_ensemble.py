@@ -760,7 +760,7 @@ def compute_pairwise_diversity(
         annot_kws={"size": 4},
     )
     axes[0].set_title(
-        "(A) Q-Statistic\n(−1=diverse, +1=correlated)", fontweight="bold", loc="left"
+        "(A) Q-Statistic\n(−1=diverse, +1=correlated)", fontweight="bold", loc="left", fontsize=9
     )
     plt.setp(
         axes[0].get_xticklabels(),
@@ -785,6 +785,7 @@ def compute_pairwise_diversity(
         "(B) Pairwise Disagreement Rate\n(higher=more diverse)",
         fontweight="bold",
         loc="left",
+        fontsize=9
     )
     plt.setp(
         axes[1].get_xticklabels(),
@@ -1739,7 +1740,7 @@ def plot_roc_pr_curves(y_true, y_pred_proba, model_name, output_dir):
     ax1.set_xlabel("False Positive Rate")
     ax1.set_ylabel("True Positive Rate")
     ax1.set_title("(A) ROC Curve", fontweight="bold", loc="left")
-    ax1.legend(loc="lower right", frameon=True, fancybox=False, edgecolor="black")
+    ax1.legend(loc="best", frameon=True, fancybox=False, edgecolor="black")
     ax1.set_xlim([-0.01, 1.01])
     ax1.set_ylim([-0.01, 1.01])
     ax1.grid(False)
@@ -1764,7 +1765,7 @@ def plot_roc_pr_curves(y_true, y_pred_proba, model_name, output_dir):
     ax2.set_xlabel("Recall")
     ax2.set_ylabel("Precision")
     ax2.set_title("(B) Precision-Recall Curve", fontweight="bold", loc="left")
-    ax2.legend(loc="upper right", frameon=True, fancybox=False, edgecolor="black")
+    ax2.legend(loc="lower left", frameon=True, fancybox=False, edgecolor="black")
     ax2.set_xlim([-0.01, 1.01])
     ax2.set_ylim([-0.01, 1.01])
     ax2.grid(False)
@@ -1850,7 +1851,7 @@ def plot_tsne(X, y, title, output_dir):
     ax.set_ylabel("t-SNE Dimension 2")
     ax.set_title(title, fontweight="bold")
     ax.legend(
-        title="Class", loc="best", frameon=True, fancybox=False, edgecolor="black"
+        title="Class", bbox_to_anchor=(1.05, 1), loc="upper left", frameon=True, fancybox=False, edgecolor="black"
     )
     plt.tight_layout()
     plt.savefig(output_dir / "Fig_tSNE_TFDFE.png", dpi=FIG_DPI, bbox_inches="tight")
@@ -1996,7 +1997,7 @@ class TFDFEvaluator:
         ax1.set_xlim([-0.02, 1.02])
         ax1.set_ylim([-0.02, 1.02])
         ax1.set_title("Calibration Plot", fontweight="bold", loc="left")
-        ax1.legend(loc="upper left", frameon=True, fancybox=False, edgecolor="black")
+        ax1.legend(loc="best", frameon=True, fancybox=False, edgecolor="black")
         ax1.grid(False)
         textstr = f"ECE = {ece:.4f}\nBrier = {brier:.4f}"
         props = dict(boxstyle="round", facecolor="white", edgecolor="gray", alpha=0.9)
@@ -2721,7 +2722,7 @@ def run_final_model():
     y_pred = model.predict(X_test, threshold=opt_threshold)
 
     metrics = compute_metrics(y_test, y_pred, y_pred_proba)
-    print_metrics_report(metrics, model_name="Enhanced KNORA v4.0 (TF-DFE)")
+    print_metrics_report(metrics, model_name="TF-DFE")
 
     # Selective prediction metrics
     print("\nStep 3A: Selective Prediction Metrics")
@@ -2756,9 +2757,9 @@ def run_final_model():
         print("  Saved: selective_prediction_metrics.csv")
 
     print("\nStep 4: Generate Analysis Figures")
-    plot_roc_pr_curves(y_test, y_pred_proba, "Enhanced KNORA v4.0", Config.OUTPUT_DIR)
+    plot_roc_pr_curves(y_test, y_pred_proba, "TF-DFE", Config.OUTPUT_DIR)
     plot_confusion_matrix(y_test, y_pred, "TF-DFE", Config.OUTPUT_DIR)
-    plot_tsne(X_test, y_test, "TF-DFE v4.0 Feature Space Separation", Config.OUTPUT_DIR)
+    plot_tsne(X_test, y_test, "TF-DFE Feature Space Separation", Config.OUTPUT_DIR)
 
     # SHAP analysis —: use model OBJECT not string name
     shap_model = None
@@ -2797,8 +2798,8 @@ def run_final_model():
     ece, brier, calibration_bins = TFDFEvaluator.plot_calibration_curve(
         y_test_arr,
         y_pred_proba,
-        Config.OUTPUT_DIR,
-        model_name="Enhanced KNORA v4.0 (TF-DFE)",
+        output_dir=Config.OUTPUT_DIR,
+        model_name="TF-DFE",
         n_bins=10,
     )
     metrics["ece"] = ece
@@ -2823,7 +2824,7 @@ def run_final_model():
         y_test_arr,
         y_pred,
         y_pred_baseline,
-        model1_name="Enhanced KNORA v4.0",
+        model1_name="TF-DFE",
         model2_name="Baseline Ensemble",
         output_dir=Config.OUTPUT_DIR,
     )
@@ -2967,7 +2968,7 @@ def run_final_model():
     predictions_df.to_csv(Config.OUTPUT_DIR / "final_predictions.csv", index=False)
 
     with open(Config.OUTPUT_DIR / "final_report.txt", "w", encoding="utf-8") as rf:
-        rf.write("TF-DFE v4.0 Final Analysis Report\n")
+        rf.write("TF-DFE Final Analysis Report\n")
         rf.write("All 7 Fixes + Supervisor Changes 1, 2, 3 Applied\n\n")
         rf.write("Change Summary:\n")
         rf.write("  FIX 1–7 (retained from v3)\n")

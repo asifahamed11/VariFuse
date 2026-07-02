@@ -754,18 +754,18 @@ for idx, feature in enumerate(structural_continuous):
     axes[idx].set_title(
         f"{chr(65+idx)}) {feature}", fontsize=12, fontweight="bold", pad=15
     )
-    axes[idx].legend(frameon=True, fancybox=True, shadow=True)
+    axes[idx].legend(loc="best", frameon=True, fancybox=True, shadow=True)
     axes[idx].grid(False)
 
     # Statistical test
     stat, pval = mannwhitneyu(benign_vals, pathogenic_vals)
     pval_text = f"p < 0.001" if pval < 0.001 else f"p = {pval:.3f}"
     axes[idx].text(
-        0.95,
+        0.5,
         0.95,
         pval_text,
         transform=axes[idx].transAxes,
-        ha="right",
+        ha="center",
         va="top",
         fontsize=9,
         fontweight="bold",
@@ -824,7 +824,7 @@ for idx, feature in enumerate(structural_binary):
     )
     axes[idx].set_xticks(x_pos)
     axes[idx].set_xticklabels(["Benign", "Pathogenic"])
-    axes[idx].legend(frameon=True, fancybox=True, shadow=True)
+    axes[idx].legend(loc="best", frameon=True, fancybox=True, shadow=True)
     axes[idx].grid(False)
 
     # Chi-square test
@@ -832,11 +832,11 @@ for idx, feature in enumerate(structural_binary):
     chi2, pval, dof, expected = chi2_contingency(contingency_counts)
     pval_text = f"p < 0.001" if pval < 0.001 else f"p = {pval:.3f}"
     axes[idx].text(
-        0.95,
+        0.5,
         0.95,
         pval_text,
         transform=axes[idx].transAxes,
-        ha="right",
+        ha="center",
         va="top",
         fontsize=9,
         fontweight="bold",
