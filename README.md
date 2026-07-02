@@ -1,6 +1,20 @@
 # Pathogenicity Prediction Framework
 
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![License: MIT](https://img.shields.io/github/license/asifahamed11/TF-DFE)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21128095.svg)](https://doi.org/10.5281/zenodo.21128095)
+![MCC](https://img.shields.io/badge/MCC-0.8809-brightgreen)
+![AUROC](https://img.shields.io/badge/AUROC-0.9724-brightgreen)
+
 This repository contains the preprocessing, feature engineering, and modeling scripts for the pathogenicity prediction project.
+
+## Results
+
+MCC: **0.8809** · AUROC: **0.9724** · 207K variants (dbNSFP v5.3a)
+
+![ROC and PR curves](results/Fig1_ROC_PR_curves.png)
+![Confusion matrix](results/Fig_CM_TF-DFE.png)
+![SHAP summary](results/Fig_SHAP_summary.png)
 
 ## Repository Structure
 
