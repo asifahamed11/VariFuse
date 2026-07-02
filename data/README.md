@@ -18,11 +18,12 @@ data/
 ├── hg19.fa
 └── hg19.fa.fai
 ```
+
 (`.cache/` appears here too after the first run of script 04 — auto-generated, safe to delete.)
 
 ## Setup
 
-1. Download the datasets: **[TODO: paste your Google Drive link here]**
+1. Download the datasets: **[Google Drive Link](https://drive.google.com/drive/folders/1sWNL6u6Fj5UEpQuplooFZFaDzfc0eUwS?usp=sharing)**
 2. Place them directly into this `data/` folder, matching the layout above, **or**
 3. Keep them wherever they already live and set `TFDFE_DATA_DIR` instead of moving 76GB:
    ```
