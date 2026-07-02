@@ -13,24 +13,24 @@ This repository contains the preprocessing, feature engineering, and modeling sc
 
 The scripts in `src/` run in order; each reads the previous stage's output and writes to its own `outputs/` subfolder.
 
-| Script | Stage |
-| --- | --- |
-| `01_dbnsfp_processor.py` | Parse and filter dbNSFP into the base variant table |
-| `02_remove_missing_values.py` | Drop rows with missing values (outside retained columns) |
-| `03_remove_duplicates.py` | Remove duplicate variants |
-| `04_feature_engineering.py` | Structural / functional feature engineering (AlphaFold, sequence, FCGR) |
-| `05_remove_leakage.py` | Drop label-leaking annotation columns |
-| `06_clean_and_finalize.py` | Final cleaning and column preparation |
-| `07_dataset_balancing.py` | Balance the pathogenic / benign classes |
-| `08_tda_fuzzy_ensemble.py` | TDA + fuzzy KNORA-E ensemble: train and evaluate |
-| `09_reviewer_experiments.py` | Supplementary audits, ablations, and diversity analysis |
-| `10_exploratory_data_analysis.py` | Exploratory figures and summary statistics |
+| Script                            | Stage                                                                   |
+| --------------------------------- | ----------------------------------------------------------------------- |
+| `01_dbnsfp_processor.py`          | Parse and filter dbNSFP into the base variant table                     |
+| `02_remove_missing_values.py`     | Drop rows with missing values (outside retained columns)                |
+| `03_remove_duplicates.py`         | Remove duplicate variants                                               |
+| `04_feature_engineering.py`       | Structural / functional feature engineering (AlphaFold, sequence, FCGR) |
+| `05_remove_leakage.py`            | Drop label-leaking annotation columns                                   |
+| `06_clean_and_finalize.py`        | Final cleaning and column preparation                                   |
+| `07_dataset_balancing.py`         | Balance the pathogenic / benign classes                                 |
+| `08_tda_fuzzy_ensemble.py`        | TDA + fuzzy KNORA-E ensemble: train and evaluate                        |
+| `09_reviewer_experiments.py`      | Supplementary audits, ablations, and diversity analysis                 |
+| `10_exploratory_data_analysis.py` | Exploratory figures and summary statistics                              |
 
 ## Data Setup
 
 Due to GitHub file size limits, the 76GB of raw data is not tracked in this repository.
 
-1. Download the datasets: **[TODO: paste your Google Drive link here]**
+1. Download the datasets: **[Google Drive Link](https://drive.google.com/drive/folders/1sWNL6u6Fj5UEpQuplooFZFaDzfc0eUwS?usp=sharing)**
 2. Place them in the `data/` folder (see `data/README.md` for the expected layout), **or**
 3. Point at an existing local copy without touching any code: `export TFDFE_DATA_DIR=/path/to/your/Datasets` before running the scripts.
 
