@@ -12,7 +12,7 @@ This repository contains the preprocessing, feature engineering, and modeling sc
 
 MCC: **0.8809** · AUROC: **0.9724** · 207K variants (dbNSFP v5.3a)
 
-| <img src="results/Fig1_ROC_PR_curves.png" width="450"> | <img src="results/Fig_CM_TF-DFE.png" width="250"> | <img src="results/Fig_SHAP_summary.png" width="250"> |
+| <img src="results/Fig1_ROC_PR_curves.png" width="500"> | <img src="results/Fig_CM_TF-DFE.png" width="280"> | <img src="results/Fig_SHAP_summary.png" width="280"> |
 | :---: | :---: | :---: |
 | **ROC & PR Curves** | **Confusion Matrix** | **SHAP Feature Importance** |
 
