@@ -8,10 +8,30 @@ url: "https://github.com/asifahamed11/TF-DFE"
 repository-code: "https://github.com/asifahamed11/TF-DFE"
 license: MIT
 authors:
-  - family-names: "Ahamed"
-    given-names: "Asif"
-  - family-names: "Hossain"
-    given-names: "Ahammad"
+  - given-names: "Asif"
+    family-names: "Ahamed"
+    orcid: "https://orcid.org/0009-0008-9980-8806"
+    email: asifahamedstudent@gmail.com
+    affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
+  - given-names: "Md. Tanvir"
+    family-names: "Hasan"
+    email: info.tanvirhasan01@gmail.com
+    affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
+  - given-names: "Most. Alisa"
+    family-names: "Tabassum"
+    email: alisatabassum101@gmail.com
+    affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
+  - given-names: "Ahammad"
+    family-names: "Hossain"
+    orcid: "https://orcid.org/0000-0001-9081-5905"
+    email: ahammadstatru@gmail.com
+    affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
+    # Corresponding author
+  - given-names: "A.H.M. Rahmatullah"
+    family-names: "Imon"
+    orcid: "https://orcid.org/0000-0003-2767-2037"
+    email: director.cir@vu.edu.bd
+    affiliation: "Center for Interdisciplinary Research (CIR), Varendra University, Rajshahi, Bangladesh"
 keywords:
   - bioinformatics
   - cancer-genomics
