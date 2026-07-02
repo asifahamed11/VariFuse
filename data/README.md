@@ -24,6 +24,5 @@ data/
 ## Setup
 
 1. Download the datasets: **[Google Drive Link](https://drive.google.com/drive/folders/1sWNL6u6Fj5UEpQuplooFZFaDzfc0eUwS?usp=sharing)**
-2. Place them directly into this `data/` folder, matching the layout above, **or**
-
+2. Place them directly into this `data/` folder, matching the layout above.
    `src/config.py` reads this env var automatically — no code edits needed.
