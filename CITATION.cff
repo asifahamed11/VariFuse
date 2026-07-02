@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+type: software
+title: "TF-DFE: Topo-Fractal Dynamic Fuzzy Ensemble Framework for Somatic Variant Pathogenicity Prediction"
+version: 1.0.0
+date-released: 2026-07-02
+url: "https://github.com/asifahamed11/TF-DFE"
+repository-code: "https://github.com/asifahamed11/TF-DFE"
+license: MIT
+authors:
+  - family-names: "Ahamed"
+    given-names: "Asif"
+  - family-names: "Hossain"
+    given-names: "Ahammad"
+keywords:
+  - bioinformatics
+  - cancer-genomics
+  - somatic-variants
+  - topological-data-analysis
+  - ensemble-learning
