@@ -746,7 +746,7 @@ def compute_pairwise_diversity(
 
     # Plot heatmap
     fig, axes = plt.subplots(
-        1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 1.2)
+        1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 1.45)
     )
     sns.heatmap(
         q_df,
@@ -762,6 +762,14 @@ def compute_pairwise_diversity(
     axes[0].set_title(
         "(A) Q-Statistic\n(−1=diverse, +1=correlated)", fontweight="bold", loc="left"
     )
+    plt.setp(
+        axes[0].get_xticklabels(),
+        rotation=45,
+        ha="right",
+        rotation_mode="anchor",
+        fontsize=7,
+    )
+    plt.setp(axes[0].get_yticklabels(), rotation=0, fontsize=7)
     sns.heatmap(
         dis_df,
         ax=axes[1],
@@ -778,6 +786,14 @@ def compute_pairwise_diversity(
         fontweight="bold",
         loc="left",
     )
+    plt.setp(
+        axes[1].get_xticklabels(),
+        rotation=45,
+        ha="right",
+        rotation_mode="anchor",
+        fontsize=7,
+    )
+    plt.setp(axes[1].get_yticklabels(), rotation=0, fontsize=7)
     plt.tight_layout()
     plt.savefig(
         output_dir / "Fig_Diversity_Heatmap.png", dpi=FIG_DPI, bbox_inches="tight"

@@ -1,21 +1,3 @@
-"""Supplementary experiments and audits for the pathogenicity framework.
-
-Reuses the fitted preprocessor and ensemble from the stage-08 model to produce
-the supporting analyses reported alongside the main results:
-
-- ``audit_feature_counts``   : verify the size of each feature block (FCGR,
-  TDA, biological) against the expected configuration.
-- ``run_diversity_analysis`` : summarise the pairwise Q-statistic and
-  disagreement matrices written by the ensemble, rendering a table and heatmap.
-  Skips gracefully when those CSVs are not present.
-- ``run_feature_ablation``   : measure the contribution of each feature block.
-- ``save_best_params_table`` : export the final model hyper-parameters.
-
-``STEP8_SCRIPT_PATH`` points at the stage-08 script so that
-``build_full_feature_matrix`` imports the correct preprocessor automatically;
-update it if that file is renamed.
-"""
-
 import importlib.util
 import sys
 import time
@@ -209,7 +191,9 @@ def build_full_feature_matrix(variant_df):
             all_indices = nbrs.kneighbors(X, return_distance=False)
 
             actual_jobs = mp.cpu_count() if n_jobs == -1 else max(1, n_jobs)
-            print(f"Extracting TDA features using {actual_jobs} CPU cores (threading)...")
+            print(
+                f"Extracting TDA features using {actual_jobs} CPU cores (threading)..."
+            )
             tda_features_list = joblib.Parallel(
                 n_jobs=actual_jobs, backend="threading", verbose=10
             )(
@@ -289,7 +273,9 @@ def build_tabular_features(variant_df, target_col, leakage_cols, fitted=None):
     for col in fitted["cat_cols"]:
         enc = fitted["encoders"][col]
         known = set(enc.classes_)
-        X_cat[col] = X_cat[col].astype(str).apply(lambda v: v if v in known else enc.classes_[0])
+        X_cat[col] = (
+            X_cat[col].astype(str).apply(lambda v: v if v in known else enc.classes_[0])
+        )
         X_cat[col] = enc.transform(X_cat[col])
     X_combined = pd.concat([X_num, X_cat], axis=1)[fitted["feature_names"]]
     X_scaled = fitted["scaler"].transform(X_combined)
@@ -457,7 +443,9 @@ def plot_combined_roc_pr(curve_data, output_dir, filename="Fig_All_Models_ROC_PR
     for i, (name, (y_true, proba)) in enumerate(curve_data.items()):
         fpr, tpr, _ = roc_curve(y_true, proba)
         auroc = roc_auc_score(y_true, proba)
-        ax1.plot(fpr, tpr, linewidth=1.3, color=palette[i], label=f"{name} ({auroc:.3f})")
+        ax1.plot(
+            fpr, tpr, linewidth=1.3, color=palette[i], label=f"{name} ({auroc:.3f})"
+        )
     ax1.plot([0, 1], [0, 1], "k--", linewidth=0.8, alpha=0.6)
     ax1.set_xlabel("False Positive Rate")
     ax1.set_ylabel("True Positive Rate")
@@ -467,15 +455,25 @@ def plot_combined_roc_pr(curve_data, output_dir, filename="Fig_All_Models_ROC_PR
     for i, (name, (y_true, proba)) in enumerate(curve_data.items()):
         precision, recall, _ = precision_recall_curve(y_true, proba)
         auprc = average_precision_score(y_true, proba)
-        ax2.plot(recall, precision, linewidth=1.3, color=palette[i], label=f"{name} ({auprc:.3f})")
+        ax2.plot(
+            recall,
+            precision,
+            linewidth=1.3,
+            color=palette[i],
+            label=f"{name} ({auprc:.3f})",
+        )
     ax2.set_xlabel("Recall")
     ax2.set_ylabel("Precision")
     ax2.set_title("(B) Precision-Recall Curves", fontweight="bold", loc="left")
     ax2.legend(loc="lower left", fontsize=6, frameon=True, edgecolor="black")
     ax2.grid(False)
     plt.tight_layout()
-    plt.savefig(output_dir / f"{filename}.png", dpi=RevisionConfig.DPI, bbox_inches="tight")
-    plt.savefig(output_dir / f"{filename}.tiff", dpi=RevisionConfig.DPI, bbox_inches="tight")
+    plt.savefig(
+        output_dir / f"{filename}.png", dpi=RevisionConfig.DPI, bbox_inches="tight"
+    )
+    plt.savefig(
+        output_dir / f"{filename}.tiff", dpi=RevisionConfig.DPI, bbox_inches="tight"
+    )
     plt.close()
 
 
@@ -621,7 +619,7 @@ def run_diversity_analysis(output_dir):
     fig, axes = plt.subplots(
         1,
         2,
-        figsize=(RevisionConfig.DOUBLE_COL, RevisionConfig.DOUBLE_COL / 2.2),
+        figsize=(RevisionConfig.DOUBLE_COL, RevisionConfig.DOUBLE_COL / 1.9),
     )
     sns.heatmap(
         q_df,
@@ -640,7 +638,13 @@ def run_diversity_analysis(output_dir):
         fontweight="bold",
         loc="left",
     )
-    axes[0].tick_params(axis="x", rotation=45, labelsize=7)
+    plt.setp(
+        axes[0].get_xticklabels(),
+        rotation=45,
+        ha="right",
+        rotation_mode="anchor",
+        fontsize=7,
+    )
     axes[0].tick_params(axis="y", rotation=0, labelsize=7)
 
     sns.heatmap(
@@ -660,15 +664,25 @@ def run_diversity_analysis(output_dir):
         fontweight="bold",
         loc="left",
     )
-    axes[1].tick_params(axis="x", rotation=45, labelsize=7)
+    plt.setp(
+        axes[1].get_xticklabels(),
+        rotation=45,
+        ha="right",
+        rotation_mode="anchor",
+        fontsize=7,
+    )
     axes[1].tick_params(axis="y", rotation=0, labelsize=7)
 
     plt.tight_layout()
     plt.savefig(
-        output_dir / "Fig_Diversity_Summary.png", dpi=RevisionConfig.DPI, bbox_inches="tight"
+        output_dir / "Fig_Diversity_Summary.png",
+        dpi=RevisionConfig.DPI,
+        bbox_inches="tight",
     )
     plt.savefig(
-        output_dir / "Fig_Diversity_Summary.tiff", dpi=RevisionConfig.DPI, bbox_inches="tight"
+        output_dir / "Fig_Diversity_Summary.tiff",
+        dpi=RevisionConfig.DPI,
+        bbox_inches="tight",
     )
     plt.close()
     print("  Saved: diversity_summary.csv, Fig_Diversity_Summary.png")
@@ -678,7 +692,9 @@ def run_diversity_analysis(output_dir):
 # run_feature_ablation
 
 
-def run_feature_ablation(X_train, y_train, X_test, y_test, n_standard, n_fcgr, n_tda, output_dir):
+def run_feature_ablation(
+    X_train, y_train, X_test, y_test, n_standard, n_fcgr, n_tda, output_dir
+):
     """Feature ablation study.
 
     n_tda is ~20; the TDA slice is sized accordingly. When
@@ -714,8 +730,8 @@ def run_feature_ablation(X_train, y_train, X_test, y_test, n_standard, n_fcgr, n
     if n_fcgr > 0:
         Xtr = np.hstack([X_train[:, std_slice], X_train[:, fcgr_slice]])
         Xte = np.hstack([X_test[:, std_slice], X_test[:, fcgr_slice]])
-        configs["Bio_plus_FCGR_compressed"], curves["Bio_plus_FCGR_compressed"] = fit_eval(
-            Xtr, Xte, "Bio_plus_FCGR_compressed"
+        configs["Bio_plus_FCGR_compressed"], curves["Bio_plus_FCGR_compressed"] = (
+            fit_eval(Xtr, Xte, "Bio_plus_FCGR_compressed")
         )
 
     if n_tda > 0:
@@ -726,7 +742,9 @@ def run_feature_ablation(X_train, y_train, X_test, y_test, n_standard, n_fcgr, n
             Xtr, Xte, "Bio_plus_TDA_FCGR"
         )
 
-    configs["All_features"], curves["All_features"] = fit_eval(X_train, X_test, "All_features")
+    configs["All_features"], curves["All_features"] = fit_eval(
+        X_train, X_test, "All_features"
+    )
 
     # If FCGR is already compressed, test sub-compression
     already_compressed = n_fcgr <= RevisionConfig.FCGR_PCA_COMPONENTS
@@ -776,8 +794,21 @@ def run_feature_ablation(X_train, y_train, X_test, y_test, n_standard, n_fcgr, n
             curves[tag] = c
 
     df = pd.DataFrame(list(configs.values()))
-    front = ["configuration", "n_features", "mcc", "accuracy", "f1", "auroc", "auprc", "fpr", "fnr"]
-    df = df[[c for c in front if c in df.columns] + [c for c in df.columns if c not in front]]
+    front = [
+        "configuration",
+        "n_features",
+        "mcc",
+        "accuracy",
+        "f1",
+        "auroc",
+        "auprc",
+        "fpr",
+        "fnr",
+    ]
+    df = df[
+        [c for c in front if c in df.columns]
+        + [c for c in df.columns if c not in front]
+    ]
     df = df.sort_values("mcc", ascending=False).reset_index(drop=True)
     df.to_csv(output_dir / "fcgr_ablation_results.csv", index=False)
     plot_combined_roc_pr(curves, output_dir, filename="Fig_Ablation_ROC_PR")
@@ -796,8 +827,20 @@ def run_threshold_sweep(model, X_test, y_test, output_dir):
         m["threshold"] = float(thr)
         rows.append(m)
     df = pd.DataFrame(rows)
-    front = ["threshold", "recall", "specificity", "precision", "fpr", "fnr", "f1", "mcc"]
-    df = df[[c for c in front if c in df.columns] + [c for c in df.columns if c not in front]]
+    front = [
+        "threshold",
+        "recall",
+        "specificity",
+        "precision",
+        "fpr",
+        "fnr",
+        "f1",
+        "mcc",
+    ]
+    df = df[
+        [c for c in front if c in df.columns]
+        + [c for c in df.columns if c not in front]
+    ]
     df.to_csv(output_dir / "threshold_sensitivity_sweep.csv", index=False)
     return df
 
@@ -808,7 +851,9 @@ def run_threshold_sweep(model, X_test, y_test, output_dir):
 def run_imbalanced_evaluation(bio_model, n_standard, train_fitted, output_dir):
     path = Path(RevisionConfig.IMBALANCED_DATA_PATH)
     if not path.exists():
-        empty = pd.DataFrame([{"status": "imbalanced_source_not_found", "path": str(path)}])
+        empty = pd.DataFrame(
+            [{"status": "imbalanced_source_not_found", "path": str(path)}]
+        )
         empty.to_csv(output_dir / "imbalanced_fp_evaluation.csv", index=False)
         return empty
     try:
@@ -888,7 +933,9 @@ def run_imbalanced_evaluation(bio_model, n_standard, train_fitted, output_dir):
         m = compute_extended_metrics(y_imb, pred, proba)
         m["threshold"] = thr
         m["n_test"] = len(y_imb)
-        m["benign_pathogenic_ratio"] = f"{int((y_imb == 0).sum())}:{int((y_imb == 1).sum())}"
+        m["benign_pathogenic_ratio"] = (
+            f"{int((y_imb == 0).sum())}:{int((y_imb == 1).sum())}"
+        )
         rows.append(m)
 
     df = pd.DataFrame(rows)
@@ -904,7 +951,10 @@ def run_imbalanced_evaluation(bio_model, n_standard, train_fitted, output_dir):
         "auroc",
         "auprc",
     ]
-    df = df[[c for c in front if c in df.columns] + [c for c in df.columns if c not in front]]
+    df = df[
+        [c for c in front if c in df.columns]
+        + [c for c in df.columns if c not in front]
+    ]
     df.to_csv(output_dir / "imbalanced_fp_evaluation.csv", index=False)
     return df
 
@@ -961,7 +1011,10 @@ def audit_feature_counts(n_standard, n_fcgr, n_tda, output_dir):
 def verify_consensus_score(variant_df, output_dir):
     needed = ["REVEL_score", "SIFT_score", "Polyphen2_HDIV_score"]
     rows = []
-    if all(c in variant_df.columns for c in needed) and "CONSENSUS_SCORE" in variant_df.columns:
+    if (
+        all(c in variant_df.columns for c in needed)
+        and "CONSENSUS_SCORE" in variant_df.columns
+    ):
         sub = variant_df[needed + ["CONSENSUS_SCORE"]].dropna().head(100000).copy()
         recomputed = (
             sub["REVEL_score"].fillna(0.5) * 0.6
@@ -1033,10 +1086,14 @@ def run_overfitting_analysis(X, y, n_standard, output_dir):
     df = pd.DataFrame(rows)
     df.to_csv(output_dir / "overfitting_learning_curve.csv", index=False)
 
-    fig, ax = plt.subplots(figsize=(RevisionConfig.SINGLE_COL * 1.4, RevisionConfig.SINGLE_COL))
+    fig, ax = plt.subplots(
+        figsize=(RevisionConfig.SINGLE_COL * 1.4, RevisionConfig.SINGLE_COL)
+    )
     ax.plot(df["n_train"], df["train_mcc"], "o-", color="#0077BB", label="Train MCC")
     ax.plot(df["n_train"], df["test_mcc"], "s--", color="#CC3311", label="Test MCC")
-    ax.fill_between(df["n_train"], df["test_mcc"], df["train_mcc"], alpha=0.15, color="gray")
+    ax.fill_between(
+        df["n_train"], df["test_mcc"], df["train_mcc"], alpha=0.15, color="gray"
+    )
     ax.set_xlabel("Number of training samples")
     ax.set_ylabel("MCC")
     ax.set_title("Train vs Test MCC (overfitting check)", fontweight="bold", loc="left")
@@ -1044,10 +1101,14 @@ def run_overfitting_analysis(X, y, n_standard, output_dir):
     ax.grid(False)
     plt.tight_layout()
     plt.savefig(
-        output_dir / "Fig_Overfitting_Check.png", dpi=RevisionConfig.DPI, bbox_inches="tight"
+        output_dir / "Fig_Overfitting_Check.png",
+        dpi=RevisionConfig.DPI,
+        bbox_inches="tight",
     )
     plt.savefig(
-        output_dir / "Fig_Overfitting_Check.tiff", dpi=RevisionConfig.DPI, bbox_inches="tight"
+        output_dir / "Fig_Overfitting_Check.tiff",
+        dpi=RevisionConfig.DPI,
+        bbox_inches="tight",
     )
     plt.close()
     return df
@@ -1099,9 +1160,13 @@ def run_parameter_sensitivity(
     df.to_csv(output_dir / "parameter_sensitivity.csv", index=False)
 
     pivot = df.pivot(
-        index="knora_k", columns="min_competence", values="fraction_confident_neighborhoods"
+        index="knora_k",
+        columns="min_competence",
+        values="fraction_confident_neighborhoods",
     )
-    fig, ax = plt.subplots(figsize=(RevisionConfig.SINGLE_COL * 1.3, RevisionConfig.SINGLE_COL))
+    fig, ax = plt.subplots(
+        figsize=(RevisionConfig.SINGLE_COL * 1.3, RevisionConfig.SINGLE_COL)
+    )
     im = ax.imshow(pivot.values, cmap="viridis", aspect="auto")
     ax.set_xticks(range(len(pivot.columns)))
     ax.set_xticklabels(pivot.columns)
@@ -1113,7 +1178,9 @@ def run_parameter_sensitivity(
     fig.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
     plt.tight_layout()
     plt.savefig(
-        output_dir / "Fig_Parameter_Sensitivity.png", dpi=RevisionConfig.DPI, bbox_inches="tight"
+        output_dir / "Fig_Parameter_Sensitivity.png",
+        dpi=RevisionConfig.DPI,
+        bbox_inches="tight",
     )
     plt.close()
     return df
@@ -1125,13 +1192,21 @@ def run_parameter_sensitivity(
 def save_best_params_table(output_dir):
     rows = [
         # Core KNORA / neighbourhood parameters
-        {"hyperparameter": "knora_k", "value": RevisionConfig.KNORA_K, "change": "FIX 3"},
+        {
+            "hyperparameter": "knora_k",
+            "value": RevisionConfig.KNORA_K,
+            "change": "FIX 3",
+        },
         {
             "hyperparameter": "min_competence",
             "value": RevisionConfig.MIN_COMPETENCE_THRESHOLD,
             "change": "",
         },
-        {"hyperparameter": "tda_neighbors", "value": RevisionConfig.TDA_N_NEIGHBORS, "change": ""},
+        {
+            "hyperparameter": "tda_neighbors",
+            "value": RevisionConfig.TDA_N_NEIGHBORS,
+            "change": "",
+        },
         {
             "hyperparameter": "sequence_window",
             "value": RevisionConfig.SEQUENCE_WINDOW,
@@ -1147,8 +1222,16 @@ def save_best_params_table(output_dir):
             "value": str(RevisionConfig.TDA_HOMOLOGY_DIMS),
             "change": "",
         },
-        {"hyperparameter": "test_size", "value": RevisionConfig.TEST_SIZE, "change": ""},
-        {"hyperparameter": "random_state", "value": RevisionConfig.RANDOM_STATE, "change": ""},
+        {
+            "hyperparameter": "test_size",
+            "value": RevisionConfig.TEST_SIZE,
+            "change": "",
+        },
+        {
+            "hyperparameter": "random_state",
+            "value": RevisionConfig.RANDOM_STATE,
+            "change": "",
+        },
         # Feature sizes
         {
             "hyperparameter": "n_fcgr_features_raw",
@@ -1269,7 +1352,9 @@ def run_lime_analysis(model, X_train, X_test, y_test, output_dir, feature_names=
         case_name = f"Sample_{idx}_True_{true_label}_Pred_{pred_label}"
 
         print(f"  Generating LIME explanation for {case_name}")
-        exp = explainer.explain_instance(X_test[idx], model.predict_proba, num_features=10)
+        exp = explainer.explain_instance(
+            X_test[idx], model.predict_proba, num_features=10
+        )
 
         # Save as HTML
         exp.save_to_file(str(output_dir / f"lime_explanation_{case_name}.html"))
@@ -1287,7 +1372,9 @@ def run_lime_analysis(model, X_train, X_test, y_test, output_dir, feature_names=
         ax.barh(pos, vals, align="center", color=colors)
         ax.set_yticks(pos)
         ax.set_yticklabels(names)
-        ax.set_title(f"Sample {idx}: True={true_label}, Pred={pred_label}", fontweight="bold")
+        ax.set_title(
+            f"Sample {idx}: True={true_label}, Pred={pred_label}", fontweight="bold"
+        )
         ax.axvline(x=0, color="black", linestyle="--", linewidth=1.5, alpha=0.7)
 
     plt.tight_layout()
@@ -1378,7 +1465,11 @@ def main():
             X_test_bio,
             y_test,
             out,
-            feature_names=tab_fitted["feature_names"],
+            feature_names=(
+                full["feature_names"][:n_standard]
+                if full is not None
+                else tab_fitted["feature_names"]
+            ),
         )
 
     import gc
@@ -1391,11 +1482,15 @@ def main():
     gc.collect()
 
     t0 = time.time()
-    run_parameter_sensitivity(X_train, y_train, X_test, y_test, n_standard, n_fcgr, n_tda, out)
+    run_parameter_sensitivity(
+        X_train, y_train, X_test, y_test, n_standard, n_fcgr, n_tda, out
+    )
     timings["parameter_sensitivity"] = time.time() - t0
 
     t0 = time.time()
-    run_feature_ablation(X_train, y_train, X_test, y_test, n_standard, n_fcgr, n_tda, out)
+    run_feature_ablation(
+        X_train, y_train, X_test, y_test, n_standard, n_fcgr, n_tda, out
+    )
     timings["feature_ablation"] = time.time() - t0
 
     best_name = max(
