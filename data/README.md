@@ -25,8 +25,5 @@ data/
 
 1. Download the datasets: **[Google Drive Link](https://drive.google.com/drive/folders/1sWNL6u6Fj5UEpQuplooFZFaDzfc0eUwS?usp=sharing)**
 2. Place them directly into this `data/` folder, matching the layout above, **or**
-3. Keep them wherever they already live and set `TFDFE_DATA_DIR` instead of moving 76GB:
-   ```
-   export TFDFE_DATA_DIR=/path/to/your/Datasets
-   ```
+
    `src/config.py` reads this env var automatically — no code edits needed.
