@@ -1,5 +1,6 @@
 """Stage 08 - TDA + fuzzy KNORA-E ensemble: feature build, training, and evaluation."""
 
+from matplotlib import colors
 import pandas as pd
 from config import DATA_DIR, STAGE07_OUT, STAGE08_OUT
 import numpy as np
@@ -760,7 +761,10 @@ def compute_pairwise_diversity(
         annot_kws={"size": 4},
     )
     axes[0].set_title(
-        "(A) Q-Statistic\n(−1=diverse, +1=correlated)", fontweight="bold", loc="left", fontsize=9
+        "(A) Q-Statistic\n(−1=diverse, +1=correlated)",
+        fontweight="bold",
+        loc="left",
+        fontsize=9,
     )
     plt.setp(
         axes[0].get_xticklabels(),
@@ -785,7 +789,7 @@ def compute_pairwise_diversity(
         "(B) Pairwise Disagreement Rate\n(higher=more diverse)",
         fontweight="bold",
         loc="left",
-        fontsize=9
+        fontsize=9,
     )
     plt.setp(
         axes[1].get_xticklabels(),
@@ -1382,19 +1386,17 @@ class EnhancedKNORAEnsemble:
         )
         self.meta_model.fit(meta_train_X, meta_train_y)
 
-        # Build validation meta-features for threshold search
-        val_meta_X = np.zeros((len(self.y_val), n_active))
-        for idx, (name, clf) in enumerate(active_classifiers.items()):
-            if hasattr(clf, "predict_proba"):
-                try:
-                    p = clf.predict_proba(X_val)
-                    val_meta_X[:, idx] = p[:, 1] if p.shape[1] == 2 else p[:, 0]
-                except Exception:
-                    val_meta_X[:, idx] = clf.predict(X_val).astype(float)
-            else:
-                val_meta_X[:, idx] = clf.predict(X_val).astype(float)
-
-        val_meta_proba = self.meta_model.predict_proba(val_meta_X)[:, 1]
+        # Threshold search on the ACTUAL fused ensemble output.
+        # FIX: previously the threshold and the fallback decision were computed
+        # from the meta-model probability alone (``val_meta_proba``), but
+        # inference (`predict_proba`) returns the blend
+        # ``stacking_weight * meta + (1 - stacking_weight) * KNORA``. The two
+        # signals differ, so the search optimised a threshold that was never
+        # applied and the fallback was triggered against the wrong quantity.
+        # We now evaluate the same fused output that inference produces, so the
+        # threshold and the fallback comparison are self-consistent.
+        val_active_preds = self._compute_active_preds(X_val)
+        fused_val_proba = self._fuse_predictions(X_val, val_active_preds)
 
         # constrained threshold search
         best_mcc = -1.0
@@ -1403,7 +1405,7 @@ class EnhancedKNORAEnsemble:
             Config.THRESHOLD_SEARCH_LOW, Config.THRESHOLD_SEARCH_HIGH, 41
         )
         for thr in thresholds:
-            preds = (val_meta_proba >= thr).astype(int)
+            preds = (fused_val_proba >= thr).astype(int)
             mcc = matthews_corrcoef(self.y_val, preds)
             if mcc > best_mcc:
                 best_mcc = mcc
@@ -1411,7 +1413,7 @@ class EnhancedKNORAEnsemble:
 
         self.decision_threshold = best_thr
 
-        # compare ensemble vs best base on validation
+        # compare the true fused ensemble vs best base on validation
         ensemble_val_mcc = best_mcc
         if ensemble_val_mcc < self.best_base_mcc:
             print(
@@ -1428,20 +1430,15 @@ class EnhancedKNORAEnsemble:
             f"(val MCC={best_mcc:.4f})  |  fallback={self._use_fallback}"
         )
 
-    def predict_proba(self, X):
-        """Return the fused probability for the positive class.
+    def _compute_active_preds(self, X):
+        """Positive-class probabilities from every active base classifier.
 
-        When the best-base fallback is active this returns
-        ``active_preds[:, best_idx]``. ``run_final_model`` passes the model
-        object (not its name) to the SHAP explainer.
+        Returns an (n_samples, n_active) matrix whose columns follow the order
+        of ``self._active_clf_list`` (the same order the meta-model was trained
+        on).
         """
         n_samples = X.shape[0]
         n_active = len(self._active_clf_list)
-
-        print(
-            f"\nKNORA-E Inference ({n_samples} samples, {n_active} active classifiers)..."
-        )
-
         active_preds = np.zeros((n_samples, n_active))
         for idx, (name, clf) in enumerate(self._active_clf_list):
             if hasattr(clf, "predict_proba"):
@@ -1452,16 +1449,19 @@ class EnhancedKNORAEnsemble:
                     active_preds[:, idx] = clf.predict(X).astype(float)
             else:
                 active_preds[:, idx] = clf.predict(X).astype(float)
+        return active_preds
 
-        # fallback to best base model object (not name string)
-        if getattr(self, "_use_fallback", False):
-            best_idx = next(
-                i
-                for i, (name, _) in enumerate(self._active_clf_list)
-                if name == self.best_base_name
-            )
-            print(f"  Using fallback: {self.best_base_name}")
-            return active_preds[:, best_idx]
+    def _fuse_predictions(self, X, active_preds):
+        """Blend meta-model stacking with the KNORA competence-weighted vote.
+
+        This is the single source of truth for the non-fallback ensemble
+        output. Both ``predict_proba`` (inference) and
+        ``_fit_stacking_meta_model`` (threshold search + fallback decision)
+        call it, so the fallback comparison is made against the *actual*
+        ensemble that will be used at inference time.
+        """
+        n_samples = X.shape[0]
+        n_active = len(self._active_clf_list)
 
         # Meta-model prediction
         if self.meta_model is not None:
@@ -1514,11 +1514,38 @@ class EnhancedKNORAEnsemble:
             weights = exp_comps / (np.sum(exp_comps) + 1e-10)
             knora_predictions[i] = np.sum(weights * sel_preds)
 
-        final_predictions = (
+        return (
             self.stacking_weight * meta_proba
             + (1.0 - self.stacking_weight) * knora_predictions
         )
-        return final_predictions
+
+    def predict_proba(self, X):
+        """Return the fused probability for the positive class.
+
+        When the best-base fallback is active this returns
+        ``active_preds[:, best_idx]``. ``run_final_model`` passes the model
+        object (not its name) to the SHAP explainer.
+        """
+        n_samples = X.shape[0]
+        n_active = len(self._active_clf_list)
+
+        print(
+            f"\nKNORA-E Inference ({n_samples} samples, {n_active} active classifiers)..."
+        )
+
+        active_preds = self._compute_active_preds(X)
+
+        # fallback to best base model object (not name string)
+        if getattr(self, "_use_fallback", False):
+            best_idx = next(
+                i
+                for i, (name, _) in enumerate(self._active_clf_list)
+                if name == self.best_base_name
+            )
+            print(f"  Using fallback: {self.best_base_name}")
+            return active_preds[:, best_idx]
+
+        return self._fuse_predictions(X, active_preds)
 
     def predict(self, X, threshold=None):
         if threshold is None:
@@ -1616,13 +1643,47 @@ class EnhancedTFDFEEnsemble:
                 self.n_tda = max(0, n_features - self.n_standard)
 
         if X_val is None or y_val is None:
-            X_train, X_val, y_train, y_val = train_test_split(
-                X_train,
-                y_train,
-                test_size=0.15,
-                stratify=y_train,
-                random_state=Config.RANDOM_STATE,
-            )
+            # FIX: split consensus_scores_train ALONGSIDE X_train/y_train so it
+            # stays row-aligned with the (reduced) training set. Previously the
+            # inner split shrank y_train but left consensus_scores_train at the
+            # full length, causing "consensus_scores length mismatch" and the
+            # sample weights being silently dropped.
+            if (
+                consensus_scores_train is not None
+                and len(np.asarray(consensus_scores_train)) == len(y_train)
+            ):
+                cs_arr = np.asarray(consensus_scores_train)
+                (
+                    X_train,
+                    X_val,
+                    y_train,
+                    y_val,
+                    consensus_scores_train,
+                    _cs_val,
+                ) = train_test_split(
+                    X_train,
+                    y_train,
+                    cs_arr,
+                    test_size=0.15,
+                    stratify=y_train,
+                    random_state=Config.RANDOM_STATE,
+                )
+            else:
+                if consensus_scores_train is not None:
+                    print(
+                        "  WARNING: consensus_scores_train length "
+                        f"({len(np.asarray(consensus_scores_train))}) != "
+                        f"X_train length ({len(y_train)}) before inner split; "
+                        "disabling sample weights."
+                    )
+                    consensus_scores_train = None
+                X_train, X_val, y_train, y_val = train_test_split(
+                    X_train,
+                    y_train,
+                    test_size=0.15,
+                    stratify=y_train,
+                    random_state=Config.RANDOM_STATE,
+                )
 
         self.X_val = X_val
         self.y_val = np.array(y_val)
@@ -1834,10 +1895,12 @@ def plot_tsne(X, y, title, output_dir):
     X_embedded = tsne.fit_transform(X_sub)
     fig, ax = plt.subplots(figsize=(FIG_SINGLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 0.9))
     colors = {0: "#0077BB", 1: "#CC3311"}
+    # Inside plot_tsne function:
     for label, name in [(0, "Benign"), (1, "Pathogenic")]:
-        mask = (
-            (y_sub == label) if hasattr(y_sub, "values") else (np.array(y_sub) == label)
-        )
+        # Ensure y_sub is a numpy array so the boolean mask index matches X_embedded
+        y_arr = np.array(y_sub)
+        mask = y_arr == label
+
         ax.scatter(
             X_embedded[mask, 0],
             X_embedded[mask, 1],
@@ -1851,12 +1914,45 @@ def plot_tsne(X, y, title, output_dir):
     ax.set_ylabel("t-SNE Dimension 2")
     ax.set_title(title, fontweight="bold")
     ax.legend(
-        title="Class", bbox_to_anchor=(1.05, 1), loc="upper left", frameon=True, fancybox=False, edgecolor="black"
+        title="Class", loc="best", frameon=True, fancybox=False, edgecolor="black"
     )
     plt.tight_layout()
     plt.savefig(output_dir / "Fig_tSNE_TFDFE.png", dpi=FIG_DPI, bbox_inches="tight")
     plt.savefig(output_dir / "Fig_tSNE_TFDFE.tiff", dpi=FIG_DPI, bbox_inches="tight")
     plt.close()
+
+
+def _unwrap_calibrated_estimator(m):
+    """Return a *fitted* underlying estimator from a CalibratedClassifierCV.
+
+    In modern scikit-learn (>=1.2) ``CalibratedClassifierCV.base_estimator`` no
+    longer returns the estimator: it is the deprecated-parameter sentinel and
+    resolves to the string ``"deprecated"`` (or is missing entirely). The old
+    code did ``raw.base_estimator``, so ``agg_model`` became a *str* and the
+    aggregated SHAP step crashed with
+    ``'str' object has no attribute 'predict_proba'``.
+
+    This helper pulls the genuine fitted sub-estimator out of
+    ``calibrated_classifiers_`` (which exposes ``estimator`` / ``base_estimator``
+    on each fitted fold), so callers get a real model with ``estimators_`` for
+    TreeExplainer. If nothing usable is found the original object is returned
+    unchanged (its own ``predict_proba`` still works for KernelExplainer).
+    """
+    if not isinstance(m, CalibratedClassifierCV):
+        return m
+    # Prefer a fitted underlying estimator (has estimators_/tree structure).
+    fitted = getattr(m, "calibrated_classifiers_", None)
+    if fitted:
+        for attr in ("estimator", "base_estimator"):
+            est = getattr(fitted[0], attr, None)
+            if est is not None and not isinstance(est, str):
+                return est
+    # Fall back to the (possibly unfitted) template estimator parameter.
+    for attr in ("estimator", "base_estimator"):
+        est = getattr(m, attr, None)
+        if est is not None and not isinstance(est, str):
+            return est
+    return m
 
 
 def perform_shap_analysis(
@@ -2390,19 +2486,31 @@ class TFDFEvaluator:
                 va="center",
                 fontsize=FIG_FONT_SIZE - 1,
             )
-        wedges, texts, autotexts = ax2.pie(
+        ax2.set_aspect("equal")
+        wedges, texts = ax2.pie(
             aggregated_df["relative_importance"],
-            labels=categories,
             colors=bar_colors,
-            autopct="%1.1f%%",
             startangle=90,
             explode=[0.02] * len(categories),
             wedgeprops=dict(linewidth=1, edgecolor="white"),
         )
         ax2.set_title("(B) Relative Contribution", fontweight="bold")
-        for at in autotexts:
-            at.set_fontsize(FIG_FONT_SIZE)
-            at.set_fontweight("bold")
+        
+        # Use a legend instead of direct labels to avoid overlapping on small slices
+        legend_labels = [
+            f"{c} ({v:.1f}%)"
+            for c, v in zip(categories, aggregated_df["relative_importance"])
+        ]
+        ax2.legend(
+            wedges,
+            legend_labels,
+            title="Category",
+            loc="center left",
+            bbox_to_anchor=(0.95, 0.5),
+            frameon=True,
+            fontsize=FIG_FONT_SIZE - 1,
+            edgecolor="black"
+        )
         plt.tight_layout()
         plt.savefig(
             output_dir / "Fig_Feature_Importance_Stacked.png",
@@ -2771,9 +2879,10 @@ def run_final_model():
         and model.diverse_factory is not None
     ):
         for name, m in model.diverse_factory.models.items():
-            # Unwrap CalibratedClassifierCV to get the underlying
-            # estimator for SHAP compatibility. Never pass the string name.
-            base_m = m.base_estimator if isinstance(m, CalibratedClassifierCV) else m
+            # Unwrap CalibratedClassifierCV to get the underlying fitted
+            # estimator for SHAP compatibility. Never pass the string name and
+            # never the "deprecated" base_estimator sentinel.
+            base_m = _unwrap_calibrated_estimator(m)
             if hasattr(base_m, "estimators_") or any(
                 k in name for k in ["XGB", "LGB", "CatBoost"]
             ):
@@ -2857,12 +2966,11 @@ def run_final_model():
             for cand in ["Full_GradientBoosting", "Full_HistGradient"]:
                 if cand in model.diverse_factory.models:
                     raw = model.diverse_factory.models[cand]
-                    # always extract the underlying estimator object
-                    agg_model = (
-                        raw.base_estimator
-                        if isinstance(raw, CalibratedClassifierCV)
-                        else raw
-                    )
+                    # Unwrap CalibratedClassifierCV to the fitted underlying
+                    # estimator. FIX: raw.base_estimator returns the string
+                    # "deprecated" in modern sklearn, which crashed SHAP with
+                    # "'str' object has no attribute 'predict_proba'".
+                    agg_model = _unwrap_calibrated_estimator(raw)
                     agg_indices = model.diverse_factory.feature_indices[cand]
                     break
             if agg_model is None:
@@ -2871,6 +2979,13 @@ def run_final_model():
 
             X_sample_subset = X_sample_full[:, agg_indices]
             agg_feature_names = [preprocessor.all_feature_names[i] for i in agg_indices]
+
+            # Final guard: never let a non-estimator (e.g. a leftover string)
+            # reach the explainer.
+            if isinstance(agg_model, str) or not hasattr(agg_model, "predict_proba"):
+                raise RuntimeError(
+                    f"aggregation model is not a usable estimator: {type(agg_model)!r}"
+                )
 
             if hasattr(agg_model, "estimators_"):
                 explainer = shap.TreeExplainer(agg_model)
