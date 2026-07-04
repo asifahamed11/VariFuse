@@ -2459,7 +2459,8 @@ class TFDFEvaluator:
     def plot_feature_importance_stacked(aggregated_df, output_dir):
         print("  Generating feature importance stacked bar chart...")
         fig, (ax1, ax2) = plt.subplots(
-            1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 0.7)
+            1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 0.7),
+            gridspec_kw={'wspace': 0.6}
         )
         colors = {
             "Standard/Biological": "#0077BB",
@@ -2511,7 +2512,7 @@ class TFDFEvaluator:
             fontsize=FIG_FONT_SIZE - 1,
             edgecolor="black"
         )
-        plt.tight_layout()
+        plt.tight_layout(w_pad=4.0)
         plt.savefig(
             output_dir / "Fig_Feature_Importance_Stacked.png",
             dpi=FIG_DPI,
