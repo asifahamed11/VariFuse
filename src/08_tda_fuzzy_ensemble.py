@@ -129,7 +129,7 @@ class Config:
     N_JOBS = -1
 
     KNORA_K = 11
-    MIN_COMPETENCE_THRESHOLD = 0.7
+    MIN_COMPETENCE_THRESHOLD = 0.55  # was 0.70 (diversity patch)
     TDA_N_NEIGHBORS = 75
     SEQUENCE_WINDOW = 75
     FCGR_K_VALUES = [3, 4]
@@ -139,7 +139,7 @@ class Config:
 
     FCGR_PCA_COMPONENTS = 20
 
-    WEAK_LEARNER_MARGIN = 0.10
+    WEAK_LEARNER_MARGIN = 0.22  # was 0.10 (diversity patch: keep specialists)
 
     THRESHOLD_SEARCH_LOW = 0.45
     THRESHOLD_SEARCH_HIGH = 0.65
@@ -152,7 +152,14 @@ class Config:
     # below this value are treated as ambiguous; their sample weight during
     # base-learner training is scaled down to AMBIGUOUS_SAMPLE_WEIGHT.
     AMBIGUOUS_MARGIN = 0.10
-    AMBIGUOUS_SAMPLE_WEIGHT = 0.30
+    AMBIGUOUS_SAMPLE_WEIGHT = 1.0  # was 0.30 (diversity patch: disable down-weighting)
+
+    # --- NEW: random-subspace + bagging diversity controls (diversity patch) ---
+    BOOTSTRAP_FRACTION = 0.75      # per-model row bootstrap sample size
+    SUBSPACE_BIO_FRACTION = 0.60   # fraction of bio cols each member keeps
+    SUBSPACE_OTHER_FRACTION = 0.70 # fraction of FCGR/TDA cols each member keeps
+    DIRICHLET_ALPHA = 0.60         # <1 => sharper per-model reweighting
+    POOL_REPLICAS = 2              # bagging replicas per base architecture
 
     DATA_PATH = STAGE07_OUT / "Final_Dataset_Balanced.csv"
     GENOME_PATH = DATA_DIR / "hg19.fa"
@@ -247,25 +254,6 @@ class MultiScaleFCGR:
         return np.hstack(encoded_features)
 
 
-# Expanded TopologicalFeatureExtractor
-# Key changes vs:
-# 1. TDA is now computed over the FCGR/sequence representation (X_fcgr_raw
-# is passed in as `X_fcgr` from TFDFEPreprocessor) instead of the
-# biological feature space. Topology over the genomic sequence captures
-# information that tree-based models trained on scalar biological scores
-# fundamentally cannot access.
-# 2. Feature set expanded from 6 → ~24:
-# - total_persistence_h{0,1} (2)
-# - entropy_h{0,1} (2)
-# - n_components_h{0,1} (2)
-# - amplitude_h{0,1} (2) (max-normalised persistence amplitude)
-# - betti_mean_h{0,1} (2) (mean Betti number over filtration)
-# - landscape_l1_h{0,1} (2) (L1 norm of first persistence landscape)
-# - birth_mean_h{0,1} (2) (mean birth time)
-# - death_mean_h{0,1} (2) (mean death time)
-# - persistence_std_h{0,1} (2) (std of persistence lifetimes)
-# - persistence_max_h{0,1} (2) (longest-lived feature)
-# Total: 20 features per sample (6 original + 14 new)
 
 
 class TopologicalFeatureExtractor:
@@ -747,7 +735,7 @@ def compute_pairwise_diversity(
 
     # Plot heatmap
     fig, axes = plt.subplots(
-        1, 2, figsize=(FIG_DOUBLE_COL_WIDTH, FIG_SINGLE_COL_WIDTH * 1.45)
+        1, 2, figsize=(FIG_DOUBLE_COL_WIDTH * 4, FIG_SINGLE_COL_WIDTH * 4)
     )
     sns.heatmap(
         q_df,
@@ -756,24 +744,25 @@ def compute_pairwise_diversity(
         vmin=-1,
         vmax=1,
         annot=True,
-        fmt=".2f",
-        linewidths=0.2,
-        annot_kws={"size": 4},
+        fmt=".1f",
+        linewidths=0.1,
+        annot_kws={"size": 8},
+        cbar_kws={'shrink': 0.8}
     )
     axes[0].set_title(
         "(A) Q-Statistic\n(−1=diverse, +1=correlated)",
         fontweight="bold",
-        loc="left",
-        fontsize=9,
+        loc="center",
+        fontsize=16,
     )
     plt.setp(
         axes[0].get_xticklabels(),
         rotation=45,
         ha="right",
         rotation_mode="anchor",
-        fontsize=7,
+        fontsize=12,
     )
-    plt.setp(axes[0].get_yticklabels(), rotation=0, fontsize=7)
+    plt.setp(axes[0].get_yticklabels(), rotation=0, fontsize=12)
     sns.heatmap(
         dis_df,
         ax=axes[1],
@@ -782,23 +771,24 @@ def compute_pairwise_diversity(
         vmax=0.3,
         annot=True,
         fmt=".2f",
-        linewidths=0.2,
-        annot_kws={"size": 4},
+        linewidths=0.1,
+        annot_kws={"size": 8},
+        cbar_kws={'shrink': 0.8}
     )
     axes[1].set_title(
         "(B) Pairwise Disagreement Rate\n(higher=more diverse)",
         fontweight="bold",
-        loc="left",
-        fontsize=9,
+        loc="center",
+        fontsize=16,
     )
     plt.setp(
         axes[1].get_xticklabels(),
         rotation=45,
         ha="right",
         rotation_mode="anchor",
-        fontsize=7,
+        fontsize=12,
     )
-    plt.setp(axes[1].get_yticklabels(), rotation=0, fontsize=7)
+    plt.setp(axes[1].get_yticklabels(), rotation=0, fontsize=12)
     plt.tight_layout()
     plt.savefig(
         output_dir / "Fig_Diversity_Heatmap.png", dpi=FIG_DPI, bbox_inches="tight"
@@ -828,31 +818,37 @@ def compute_pairwise_diversity(
 # DiverseFeatureSubspaceFactory
 
 
-class DiverseFeatureSubspaceFactory:
-    """Creates diverse base models with different feature subspaces.
+# Random subspace helper (diversity patch)
 
-    Three learners with structurally different inductive biases are added
-    to break the error-correlated tree pool:
+def _rand_subspace(rng, bio_cols, fcgr_cols, tda_cols,
+                   bio_frac, other_frac, force=None):
+    """Return a randomized, mostly-disjoint column subset.
 
-      1. MLP_BioTDA — calibrated MLP on standard+TDA block.
-         Neural networks partition the feature space with smooth nonlinear
-         boundaries that differ fundamentally from axis-aligned tree splits.
-
-      2. kNN_SML — k-NN classifier operating in the 15-D supervised metric
-         learning (SML) space produced by SupervisedMetricLearner.  This is
-         nearly free (SML is already computed for KNORA), and k-NN errors are
-         instance-based rather than global-model-based, decorrelating from all
-         boosting members.  Note: SML space must be pre-projected before
-         calling fit; this is handled in train_ensemble().
-
-      3. ElasticNet_Bio — elastic-net logistic regression on the biological
-         block.  Linear classifiers fail on the same nonlinear boundary regions
-         where trees succeed, and vice versa — exactly the complementary error
-         pattern needed.
-
-    Isotonic calibration is applied to RandomForest, ExtraTrees,
-    GradientBoosting, and the MLP (3-fold CV).
+    Every member keeps SOME bio (bio carries 91% of signal, so starving it
+    entirely just gets the member pruned) but a *different* random subset,
+    plus a random subset of FCGR/TDA. `force` builds true single-view
+    specialists whose errors are structurally different from the bio pool.
     """
+    cols = []
+    if force == "fcgr":
+        k = max(3, int(round(len(bio_cols) * 0.30)))
+        cols += list(rng.choice(bio_cols, size=k, replace=False))
+        cols += list(fcgr_cols)
+    elif force == "tda":
+        k = max(3, int(round(len(bio_cols) * 0.30)))
+        cols += list(rng.choice(bio_cols, size=k, replace=False))
+        cols += list(tda_cols)
+    else:
+        k_bio = max(3, int(round(len(bio_cols) * bio_frac)))
+        cols += list(rng.choice(bio_cols, size=k_bio, replace=False))
+        other = list(fcgr_cols) + list(tda_cols)
+        if other:
+            k_other = max(1, int(round(len(other) * other_frac)))
+            cols += list(rng.choice(other, size=k_other, replace=False))
+    return sorted(set(int(c) for c in cols))
+
+
+class DiverseFeatureSubspaceFactory:
 
     def __init__(self, n_standard=18, n_fcgr=20, n_tda=20):
         self.view_manager = MultiViewFeatureManager(n_standard, n_fcgr, n_tda)
@@ -860,325 +856,244 @@ class DiverseFeatureSubspaceFactory:
         self.feature_indices = {}
         self._metric_learner = None  # set by train_ensemble() for kNN_SML
 
+
     def create_diverse_ensemble(self, random_state=42):
+        from sklearn.ensemble import (
+            RandomForestClassifier, ExtraTreesClassifier,
+            GradientBoostingClassifier, HistGradientBoostingClassifier)
+        from sklearn.linear_model import LogisticRegression
+        from sklearn.neural_network import MLPClassifier
+        from sklearn.neighbors import KNeighborsClassifier
+        from sklearn.calibration import CalibratedClassifierCV
+
         n_std = self.view_manager.n_standard
         n_fcgr = self.view_manager.n_fcgr
         n_tda = self.view_manager.n_tda
 
-        models = {}
-        feature_indices = {}
+        bio_cols = list(range(n_std))
+        fcgr_cols = list(range(n_std, n_std + n_fcgr))
+        tda_cols = list(range(n_std + n_fcgr, n_std + n_fcgr + n_tda))
 
-        bio_idx = list(range(n_std))
-        fcgr_idx = list(range(n_std, n_std + n_fcgr))
-        tda_bio_idx = bio_idx + list(range(n_std + n_fcgr, n_std + n_fcgr + n_tda))
-        bio_fcgr_idx = bio_idx + fcgr_idx
-        full_idx = list(range(n_std + n_fcgr + n_tda))
+        bio_frac = getattr(Config, "SUBSPACE_BIO_FRACTION", 0.60)
+        other_frac = getattr(Config, "SUBSPACE_OTHER_FRACTION", 0.70)
+        replicas = getattr(Config, "POOL_REPLICAS", 2)
 
-        if XGBOOST_AVAILABLE:
-            models["Bio_XGBoost"] = XGBClassifier(
-                n_estimators=200,
-                max_depth=5,
-                learning_rate=0.05,
-                random_state=random_state,
-                n_jobs=-1,
-                verbosity=0,
-            )
-            feature_indices["Bio_XGBoost"] = bio_idx
+        models, feature_indices = {}, {}
+        bootstrap_seeds, dirichlet_seeds = {}, {}
 
-        if CATBOOST_AVAILABLE:
-            models["Bio_CatBoost"] = CatBoostClassifier(
-                iterations=200,
-                depth=5,
-                learning_rate=0.05,
-                random_state=random_state,
-                verbose=False,
-            )
-            feature_indices["Bio_CatBoost"] = bio_idx
+        def make_arch(kind, seed):
+            if kind == "xgb" and XGBOOST_AVAILABLE:
+                return XGBClassifier(n_estimators=180, max_depth=4, learning_rate=0.05,
+                                     subsample=0.8, colsample_bytree=0.7,
+                                     tree_method='hist', device='cuda',
+                                     random_state=seed, n_jobs=-1, verbosity=0)
+            if kind == "cat" and CATBOOST_AVAILABLE:
+                return CatBoostClassifier(iterations=180, depth=4, learning_rate=0.05,
+                                          random_seed=seed, verbose=False)
+            if kind == "lgbm" and LGBM_AVAILABLE:
+                return LGBMClassifier(n_estimators=160, num_leaves=48, learning_rate=0.05,
+                                      feature_fraction=0.7, bagging_fraction=0.8,
+                                      device_type='gpu',
+                                      bagging_freq=1, random_state=seed, n_jobs=-1,
+                                      verbose=-1)
+            if kind == "rf":
+                base = RandomForestClassifier(n_estimators=180, max_depth=12,
+                                              max_features="sqrt", min_samples_leaf=5,
+                                              random_state=seed, n_jobs=-1)
+                return CalibratedClassifierCV(base, method="isotonic", cv=3)
+            if kind == "et":
+                base = ExtraTreesClassifier(n_estimators=180, max_depth=12,
+                                            max_features="sqrt", random_state=seed,
+                                            n_jobs=-1)
+                return CalibratedClassifierCV(base, method="isotonic", cv=3)
+            if kind == "gb":
+                base = GradientBoostingClassifier(n_estimators=100, max_depth=3,
+                                                  learning_rate=0.05, subsample=0.8,
+                                                  max_features="sqrt", random_state=seed)
+                return CalibratedClassifierCV(base, method="isotonic", cv=3)
+            if kind == "hgb":
+                return HistGradientBoostingClassifier(max_iter=150, max_depth=6,
+                                                      learning_rate=0.05,
+                                                      random_state=seed)
+            if kind == "mlp":
+                base = MLPClassifier(hidden_layer_sizes=(128, 64), activation="relu",
+                                     solver="adam", alpha=1e-4, learning_rate_init=1e-3,
+                                     max_iter=300, early_stopping=True,
+                                     validation_fraction=0.1, random_state=seed)
+                return CalibratedClassifierCV(base, method="isotonic", cv=3)
+            if kind == "enet":
+                return LogisticRegression(penalty="elasticnet", solver="saga",
+                                          l1_ratio=0.5, C=0.5, max_iter=3000,
+                                          random_state=seed, n_jobs=-1)
+            return None
 
-        if LGBM_AVAILABLE:
-            models["BioFCGR_LightGBM"] = LGBMClassifier(
-                n_estimators=150,
-                num_leaves=63,
-                learning_rate=0.05,
-                feature_fraction=0.7,
-                random_state=random_state,
-                n_jobs=-1,
-                verbose=-1,
-            )
-            feature_indices["BioFCGR_LightGBM"] = bio_fcgr_idx
+        # Recipe = (kind, subspace-mode). replicated `replicas` times with
+        # different seeds/subspaces to form a bagging pool.
+        recipes = [
+            ("xgb",  None), ("cat",  None), ("lgbm", None),
+            ("rf",   None), ("et",   None), ("hgb",  None),
+            ("mlp",  None), ("gb",   None),
+            ("xgb",  "fcgr"), ("hgb", "tda"), ("enet", None),
+        ]
 
-        # Calibrated RandomForest
-        _rf_base = RandomForestClassifier(
-            n_estimators=200,
-            max_depth=15,
-            max_features="sqrt",
-            min_samples_leaf=5,
-            random_state=random_state + 1,
-            n_jobs=-1,
-        )
-        models["BioFCGR_RF"] = CalibratedClassifierCV(_rf_base, method="isotonic", cv=3)
-        feature_indices["BioFCGR_RF"] = bio_fcgr_idx
+        counter = 0
+        for rep in range(replicas):
+            for kind, force in recipes:
+                seed = random_state + 101 * rep + 7 * counter
+                est = make_arch(kind, seed)
+                if est is None:
+                    continue
+                rng = np.random.RandomState(seed)
+                idx = _rand_subspace(rng, bio_cols, fcgr_cols, tda_cols,
+                                     bio_frac, other_frac, force=force)
+                name = f"{kind}_{('all' if force is None else force)}_r{rep}_{counter}"
+                models[name] = est
+                feature_indices[name] = idx
+                bootstrap_seeds[name] = seed + 1
+                dirichlet_seeds[name] = seed + 2
+                counter += 1
 
-        # Calibrated ExtraTrees
-        _et_base = ExtraTreesClassifier(
-            n_estimators=200,
-            max_depth=12,
-            max_features="sqrt",
-            random_state=random_state + 2,
-            n_jobs=-1,
-        )
-        models["TDABio_ExtraTrees"] = CalibratedClassifierCV(
-            _et_base, method="isotonic", cv=3
-        )
-        feature_indices["TDABio_ExtraTrees"] = tda_bio_idx
-
-        if XGBOOST_AVAILABLE:
-            models["BioFCGR_XGBoost"] = XGBClassifier(
-                n_estimators=150,
-                max_depth=4,
-                learning_rate=0.03,
-                colsample_bytree=0.5,
-                subsample=0.7,
-                random_state=random_state + 3,
-                n_jobs=-1,
-                verbosity=0,
-            )
-            feature_indices["BioFCGR_XGBoost"] = bio_fcgr_idx
-
-        # Calibrated GradientBoosting
-        _gb_base = GradientBoostingClassifier(
-            n_estimators=100,
-            max_depth=4,
-            learning_rate=0.05,
-            subsample=0.8,
-            max_features="sqrt",
-            random_state=random_state + 4,
-        )
-        models["Full_GradientBoosting"] = CalibratedClassifierCV(
-            _gb_base, method="isotonic", cv=3
-        )
-        feature_indices["Full_GradientBoosting"] = full_idx
-
-        models["Full_HistGradient"] = HistGradientBoostingClassifier(
-            max_iter=150,
-            max_depth=6,
-            learning_rate=0.05,
-            random_state=random_state + 5,
-        )
-        feature_indices["Full_HistGradient"] = full_idx
-
-        # Inject algorithmic diversity
-
-        # 1. Elastic-net logistic regression — linear, biologically interpretable,
-        # systematically fails on nonlinear regions where trees succeed.
-        models["ElasticNet_Bio"] = LogisticRegression(
-            penalty="elasticnet",
-            solver="saga",
-            l1_ratio=0.5,
-            C=0.5,
-            max_iter=3000,
-            random_state=random_state + 6,
-            n_jobs=-1,
-        )
-        feature_indices["ElasticNet_Bio"] = bio_idx
-
-        # 2. MLP on bio+TDA — smooth nonlinear boundaries; calibrated (isotonic)
-        # so its probabilities are directly comparable to the tree models.
-        _mlp_base = MLPClassifier(
-            hidden_layer_sizes=(128, 64, 32),
-            activation="relu",
-            solver="adam",
-            alpha=1e-4,
-            learning_rate_init=1e-3,
-            max_iter=300,
-            early_stopping=True,
-            validation_fraction=0.1,
-            random_state=random_state + 7,
-        )
-        models["MLP_BioTDA"] = CalibratedClassifierCV(
-            _mlp_base, method="isotonic", cv=3
-        )
-        feature_indices["MLP_BioTDA"] = tda_bio_idx
-
-        # 3. k-NN in supervised metric space — registered here with a sentinel
-        # index of -1 (full index); train_ensemble will replace the feature
-        # matrix with the pre-projected SML space before fitting.
-        models["kNN_SML"] = KNeighborsClassifier(
-            n_neighbors=15,
-            metric="euclidean",
-            n_jobs=-1,
-        )
-        feature_indices["kNN_SML"] = full_idx  # overridden in train_ensemble()
+        # One instance-based specialist in the SML metric space (kept full-view,
+        # no row bootstrap -- kNN is already high-variance / instance-based).
+        models["kNN_SML"] = KNeighborsClassifier(n_neighbors=15, metric="euclidean",
+                                                 n_jobs=-1)
+        feature_indices["kNN_SML"] = list(range(n_std + n_fcgr + n_tda))
+        dirichlet_seeds["kNN_SML"] = random_state + 999
 
         self.models = models
         self.feature_indices = feature_indices
-        print(
-            f"\nCreated {len(models)} diverse base models  "
-            f"(+MLP, +kNN_SML, +ElasticNet)"
-        )
+        self.bootstrap_seeds = bootstrap_seeds
+        self.dirichlet_seeds = dirichlet_seeds
+        self.no_bootstrap = {"kNN_SML"}
+        print(f"\nCreated {len(models)} random-subspace/bagging base models "
+              f"(replicas={replicas}, +FCGR/TDA specialists, +kNN_SML)")
         return models, feature_indices
 
-    def train_ensemble(
-        self, X_train, y_train, X_val=None, y_val=None, consensus_scores=None
-    ):
-        """Train all base models; returns fitted models, val set, and OOF probas.
+    def train_ensemble(self, X_train, y_train, X_val=None, y_val=None,
+                       consensus_scores=None):
+        from sklearn.model_selection import StratifiedKFold, train_test_split
 
-        Out-of-fold predicted probabilities are produced via StratifiedKFold.
-
-        Consensus-margin sample weighting:
-        When `consensus_scores` is provided (a 1-D array of CONSENSUS_SCORE
-        values aligned with X_train/y_train), variants whose score is within
-        Config.AMBIGUOUS_MARGIN of 0.5 are down-weighted to
-        Config.AMBIGUOUS_SAMPLE_WEIGHT during base-learner training.  This
-        prevents the ambiguous boundary zone from dominating the loss of each
-        base model and reduces correlated FP/FN on hard variants.
-
-        The kNN_SML model is trained in the 15-D supervised metric
-        space produced by SupervisedMetricLearner (fitted on the validation
-        set here to avoid leakage into the training set).
-        """
         trained_models = {}
-
         if X_val is None or y_val is None:
             X_train, X_val, y_train, y_val = train_test_split(
-                X_train,
-                y_train,
-                test_size=0.15,
-                stratify=y_train,
-                random_state=42,
-            )
+                X_train, y_train, test_size=0.15, stratify=y_train,
+                random_state=42)
 
-        # Build sample weights from consensus margin
-        if consensus_scores is not None:
-            cs = np.array(consensus_scores)
-            # Align consensus to training rows if needed
-            if len(cs) != len(y_train):
-                print(
-                    "  WARNING: consensus_scores length mismatch; "
-                    "ignoring sample weights."
-                )
-                sample_weights = None
-            else:
-                margin = np.abs(cs - 0.5)
-                sample_weights = np.where(
-                    margin < Config.AMBIGUOUS_MARGIN,
-                    Config.AMBIGUOUS_SAMPLE_WEIGHT,
-                    1.0,
-                )
-                n_ambig = int(np.sum(sample_weights < 1.0))
-                pct = 100 * n_ambig / len(sample_weights)
-                print(
-                    f"  Down-weighted {n_ambig:,} ambiguous variants "
-                    f"({pct:.1f}%) in training set."
-                )
-        else:
-            sample_weights = None
+        # NOTE: consensus-margin DOWN-weighting is intentionally NOT used here.
+        # With AMBIGUOUS_SAMPLE_WEIGHT == 1.0 it is a no-op; we instead give each
+        # model its own Dirichlet (Bayesian-bootstrap) reweighting below, so
+        # members emphasize DIFFERENT samples rather than all ignoring the same
+        # ambiguous ones. (Old down-weighting shown to peg Q -> ~1.)
+        base_weight = np.ones(len(y_train))
+        if consensus_scores is not None and len(np.asarray(consensus_scores)) == len(y_train):
+            cs = np.asarray(consensus_scores)
+            aw = getattr(Config, "AMBIGUOUS_SAMPLE_WEIGHT", 1.0)
+            if aw != 1.0:  # preserved for backward-compat if ever re-enabled
+                base_weight = np.where(np.abs(cs - 0.5) < Config.AMBIGUOUS_MARGIN,
+                                       aw, 1.0)
 
-        print(f"\nTraining {len(self.models)} diverse models (with OOF generation)...")
-
+        print(f"\nTraining {len(self.models)} random-subspace/bagging models (OOF)...")
         n_classifiers = len(self.models)
         n_train = len(y_train)
         oof_probas = np.zeros((n_train, n_classifiers))
-        skf = StratifiedKFold(
-            n_splits=5, shuffle=True, random_state=Config.RANDOM_STATE
-        )
+        skf = StratifiedKFold(n_splits=5, shuffle=True,
+                              random_state=Config.RANDOM_STATE)
 
-        # Pre-fit SML on validation set so kNN_SML can use it.
-        # SML only needs X_val/y_val; it doesn't see test labels.
         sml = SupervisedMetricLearner(n_components=15)
         sml.fit(X_val, y_val)
         self._metric_learner = sml
         X_train_sml = sml.transform(X_train)
         X_val_sml = sml.transform(X_val)
-        # Map kNN_SML feature index to the SML-projected space:
-        # We replace the full feature matrix with X_train_sml / X_val_sml
-        # when fitting/predicting kNN_SML, via a flag checked below.
-        KNN_SML_NAME = "kNN_SML"
 
-        for clf_idx, (name, model) in enumerate(
-            tqdm(self.models.items(), desc="Training Models", ncols=80)
-        ):
-            is_knn_sml = name == KNN_SML_NAME
+        boot_frac = getattr(Config, "BOOTSTRAP_FRACTION", 0.75)
+        dir_alpha = getattr(Config, "DIRICHLET_ALPHA", 0.60)
+
+
+
+        def boot_rows(name, n):
+            if name in getattr(self, "no_bootstrap", set()):
+                return np.arange(n)
+            seed = self.bootstrap_seeds.get(name, 0)
+            m = max(1, int(round(boot_frac * n)))
+            return np.random.RandomState(seed).choice(n, size=m, replace=True)
+
+        import time
+        for clf_idx, (name, model) in enumerate(self.models.items()):
+            start_time = time.time()
+            print(f"    -> Training {clf_idx+1}/{n_classifiers}: {name} (OOF 5-fold CV) ...")
+            is_knn_sml = (name == "kNN_SML")
             indices = self.feature_indices[name]
-
-            if is_knn_sml:
-                X_train_view = X_train_sml
-            else:
-                X_train_view = X_train[:, indices]
+            X_view = X_train_sml if is_knn_sml else X_train[:, indices]
 
             try:
-                # OOF generation
+                # ----- OOF: bootstrap + Dirichlet applied WITHIN each fold-train
                 fold_oof = np.zeros(n_train)
-                for fold_train_idx, fold_val_idx in skf.split(X_train_view, y_train):
-                    fold_model = copy.deepcopy(model)
-                    Xf = X_train_view[fold_train_idx]
-                    yf = y_train[fold_train_idx]
-                    sw_fold = (
-                        sample_weights[fold_train_idx]
-                        if sample_weights is not None
-                        else None
-                    )
-                    try:
-                        if sw_fold is not None and hasattr(fold_model, "fit"):
-                            fold_model.fit(Xf, yf, sample_weight=sw_fold)
-                        else:
-                            fold_model.fit(Xf, yf)
-                    except TypeError:
-                        fold_model.fit(Xf, yf)
-
-                    if hasattr(fold_model, "predict_proba"):
-                        p = fold_model.predict_proba(X_train_view[fold_val_idx])
-                        fold_oof[fold_val_idx] = p[:, 1] if p.shape[1] == 2 else p[:, 0]
+                for tr_idx, va_idx in skf.split(X_view, y_train):
+                    fm = copy.deepcopy(model)
+                    # bootstrap the fold-train rows (indices are positions in tr_idx)
+                    if name in getattr(self, "no_bootstrap", set()):
+                        br = np.arange(len(tr_idx))
                     else:
-                        fold_oof[fold_val_idx] = fold_model.predict(
-                            X_train_view[fold_val_idx]
-                        ).astype(float)
+                        seed = self.bootstrap_seeds.get(name, 0) + 13
+                        m = max(1, int(round(boot_frac * len(tr_idx))))
+                        br = np.random.RandomState(seed).choice(len(tr_idx), size=m,
+                                                                replace=True)
+                    rows = tr_idx[br]
+                    # Dirichlet drawn on the *resampled* block:
+                    w = (np.random.RandomState(self.dirichlet_seeds.get(name, 0) + 1)
+                         .dirichlet(np.full(len(rows), dir_alpha)) * len(rows)) \
+                        * base_weight[rows]
+                    Xf, yf = X_view[rows], y_train[rows]
+                    try:
+                        fm.fit(Xf, yf, sample_weight=w)
+                    except TypeError:
+                        fm.fit(Xf, yf)
+                    if hasattr(fm, "predict_proba"):
+                        p = fm.predict_proba(X_view[va_idx])
+                        fold_oof[va_idx] = p[:, 1] if p.shape[1] == 2 else p[:, 0]
+                    else:
+                        fold_oof[va_idx] = fm.predict(X_view[va_idx]).astype(float)
                 oof_probas[:, clf_idx] = fold_oof
 
-                # Train final model on full training view
+                # ----- final fit on bootstrap + Dirichlet of the full train view
+                rows = boot_rows(name, n_train)
+                w = (np.random.RandomState(self.dirichlet_seeds.get(name, 0))
+                     .dirichlet(np.full(len(rows), dir_alpha)) * len(rows)) \
+                    * base_weight[rows]
                 try:
-                    if sample_weights is not None and hasattr(model, "fit"):
-                        model.fit(X_train_view, y_train, sample_weight=sample_weights)
-                    else:
-                        model.fit(X_train_view, y_train)
+                    model.fit(X_view[rows], y_train[rows], sample_weight=w)
                 except TypeError:
-                    model.fit(X_train_view, y_train)
-
+                    model.fit(X_view[rows], y_train[rows])
                 trained_models[name] = model
+                
+                elapsed = time.time() - start_time
+                print(f"       [Done] {name} trained in {elapsed:.1f}s.")
             except Exception as e:
                 print(f"  Failed: {name} - {e}")
                 oof_probas[:, clf_idx] = 0.5
 
-        # Store SML-projected val set for kNN_SML inference in EnhancedKNORAEnsemble
-        self._X_val_sml = X_val_sml
-        self._X_train_sml = X_train_sml
-
+        self._X_val_sml, self._X_train_sml = X_val_sml, X_train_sml
         self.models = trained_models
         self.oof_probas = oof_probas
         self.oof_y_train = y_train
 
-        # Compute diversity matrix right after training
         print("\n[Diversity Analysis] Computing pairwise Q-statistic matrix...")
         try:
-            # For kNN_SML we need to predict in SML space — wrap for diversity call
-            tmp_models = {}
-            tmp_indices = {}
+            tmp_models, tmp_indices = {}, {}
             for nm, mdl in trained_models.items():
-                if nm == KNN_SML_NAME:
-                    # Create a thin wrapper that projects to SML before predict
+                if nm == "kNN_SML":
                     tmp_models[nm] = _SMLWrappedKNN(mdl, sml, n_total=X_val.shape[1])
-                    tmp_indices[nm] = self.feature_indices[nm]
                 else:
                     tmp_models[nm] = mdl
-                    tmp_indices[nm] = self.feature_indices[nm]
+                tmp_indices[nm] = self.feature_indices[nm]
             self.q_df, self.dis_df = compute_pairwise_diversity(
-                tmp_models, tmp_indices, X_val, y_val, Config.OUTPUT_DIR
-            )
+                tmp_models, tmp_indices, X_val, y_val, Config.OUTPUT_DIR)
         except Exception as e:
             print(f"  Diversity analysis failed: {e}")
             self.q_df = self.dis_df = None
 
         return trained_models, X_val, y_val
+
 
 
 # Helper: SML-wrapped kNN for diversity matrix computation
@@ -1234,21 +1149,6 @@ class FeatureSubspaceWrapper:
 
 
 class EnhancedKNORAEnsemble:
-    """Enhanced KNORA-E with Supervised Metric Learning.
-
-    When the best-base fallback is active, ``predict_proba`` returns
-    ``active_preds[:, best_idx]``; ``run_final_model`` looks up the model object
-    from ``base_classifiers`` (rather than passing its name) so the SHAP
-    explainer receives the fitted estimator.
-
-    ``selective_predict`` uses KNORA neighbourhood purity (fraction of k-NN neighbours in the
-    validation set that share the predicted class) as a confidence signal.
-    Samples whose purity < Config.SELECTIVE_ABSTAIN_THRESHOLD are flagged as
-    ABSTAIN (-1).  This turns TF-DFE's local-competence design into a
-    selective-prediction framework that can report near-perfect accuracy on
-    the confident 96–97% while honestly abstaining on the ambiguous tail.
-    """
-
     def __init__(
         self,
         base_classifiers,
@@ -1283,7 +1183,7 @@ class EnhancedKNORAEnsemble:
         self.active_classifier_names = list(base_classifiers.keys())
 
     def fit(self, X_val, y_val):
-        print("\nBuilding Enhanced KNORA-E (All Fixes + v4 Changes Applied)")
+        print("\nBuilding Enhanced KNORA-E (All Fixes + Changes Applied)")
 
         self.X_val = X_val
         self.y_val = np.array(y_val)
@@ -1386,15 +1286,6 @@ class EnhancedKNORAEnsemble:
         )
         self.meta_model.fit(meta_train_X, meta_train_y)
 
-        # Threshold search on the ACTUAL fused ensemble output.
-        # FIX: previously the threshold and the fallback decision were computed
-        # from the meta-model probability alone (``val_meta_proba``), but
-        # inference (`predict_proba`) returns the blend
-        # ``stacking_weight * meta + (1 - stacking_weight) * KNORA``. The two
-        # signals differ, so the search optimised a threshold that was never
-        # applied and the fallback was triggered against the wrong quantity.
-        # We now evaluate the same fused output that inference produces, so the
-        # threshold and the fallback comparison are self-consistent.
         val_active_preds = self._compute_active_preds(X_val)
         fused_val_proba = self._fuse_predictions(X_val, val_active_preds)
 
@@ -1452,14 +1343,6 @@ class EnhancedKNORAEnsemble:
         return active_preds
 
     def _fuse_predictions(self, X, active_preds):
-        """Blend meta-model stacking with the KNORA competence-weighted vote.
-
-        This is the single source of truth for the non-fallback ensemble
-        output. Both ``predict_proba`` (inference) and
-        ``_fit_stacking_meta_model`` (threshold search + fallback decision)
-        call it, so the fallback comparison is made against the *actual*
-        ensemble that will be used at inference time.
-        """
         n_samples = X.shape[0]
         n_active = len(self._active_clf_list)
 
@@ -1555,23 +1438,6 @@ class EnhancedKNORAEnsemble:
 
     # Selective prediction
     def selective_predict(self, X, threshold=None, abstain_threshold=None):
-        """Predict with abstention for low-confidence samples.
-
-        Uses neighbourhood purity in the supervised metric space as a
-        confidence signal. Samples whose purity (fraction of k-NN
-        validation neighbours sharing the predicted class) is below
-        `abstain_threshold` (default: Config.SELECTIVE_ABSTAIN_THRESHOLD)
-        are assigned label -1 (ABSTAIN).
-
-        Returns
-        -------
-        y_pred_selective : ndarray of int
-            Predicted class (0 or 1) for confident samples; -1 for ABSTAIN.
-        purity_scores : ndarray of float
-            Per-sample neighbourhood purity (0–1).
-        coverage : float
-            Fraction of samples that received a definite prediction.
-        """
         if threshold is None:
             threshold = self.decision_threshold
         if abstain_threshold is None:
@@ -1923,21 +1789,6 @@ def plot_tsne(X, y, title, output_dir):
 
 
 def _unwrap_calibrated_estimator(m):
-    """Return a *fitted* underlying estimator from a CalibratedClassifierCV.
-
-    In modern scikit-learn (>=1.2) ``CalibratedClassifierCV.base_estimator`` no
-    longer returns the estimator: it is the deprecated-parameter sentinel and
-    resolves to the string ``"deprecated"`` (or is missing entirely). The old
-    code did ``raw.base_estimator``, so ``agg_model`` became a *str* and the
-    aggregated SHAP step crashed with
-    ``'str' object has no attribute 'predict_proba'``.
-
-    This helper pulls the genuine fitted sub-estimator out of
-    ``calibrated_classifiers_`` (which exposes ``estimator`` / ``base_estimator``
-    on each fitted fold), so callers get a real model with ``estimators_`` for
-    TreeExplainer. If nothing usable is found the original object is returned
-    unchanged (its own ``predict_proba`` still works for KernelExplainer).
-    """
     if not isinstance(m, CalibratedClassifierCV):
         return m
     # Prefer a fitted underlying estimator (has estimators_/tree structure).
@@ -2833,6 +2684,32 @@ def run_final_model():
     metrics = compute_metrics(y_test, y_pred, y_pred_proba)
     print_metrics_report(metrics, model_name="TF-DFE")
 
+    print("\nEvaluating all base models on Unseen Test Set...")
+    try:
+        active_preds_proba = model.enhanced_knora._compute_active_preds(X_test)
+        all_metrics_list = []
+        
+        # Add main TF-DFE metrics
+        tf_dfe_row = {"Model": "TF-DFE (Full Ensemble)"}
+        tf_dfe_row.update(metrics)
+        all_metrics_list.append(tf_dfe_row)
+
+        # Compute metrics for each active base model
+        for idx, (name, clf) in enumerate(model.enhanced_knora._active_clf_list):
+            y_base_proba = active_preds_proba[:, idx]
+            y_base_pred = (y_base_proba >= 0.5).astype(int)
+            base_metrics = compute_metrics(y_test, y_base_pred, y_base_proba)
+            row = {"Model": name}
+            row.update(base_metrics)
+            all_metrics_list.append(row)
+            
+        all_metrics_df = pd.DataFrame(all_metrics_list)
+        out_csv = Config.OUTPUT_DIR / "final_all_models_test_metrics.csv"
+        all_metrics_df.to_csv(out_csv, index=False)
+        print(f"  Successfully saved test metrics for all models to: {out_csv.name}")
+    except Exception as e:
+        print(f"  Failed to compute base model test metrics: {e}")
+
     # Selective prediction metrics
     print("\nStep 3A: Selective Prediction Metrics")
     y_selective, purity_scores, coverage = model.selective_predict(X_test)
@@ -3087,7 +2964,7 @@ def run_final_model():
         rf.write("TF-DFE Final Analysis Report\n")
         rf.write("All 7 Fixes + Supervisor Changes 1, 2, 3 Applied\n\n")
         rf.write("Change Summary:\n")
-        rf.write("  FIX 1–7 (retained from v3)\n")
+        rf.write("  FIX 1–7 (Pre-processing and data structure fixes retained)\n")
         rf.write(
             "  CHANGE 1: +MLP (BioTDA), +kNN_SML, +ElasticNet LR; Q-statistic diversity\n"
         )
@@ -3148,5 +3025,32 @@ def run_final_model():
     print(f"\nTotal Runtime: {total_time/60:.2f} minutes")
 
 
+import sys
+
+class TerminalLogger(object):
+    def __init__(self, filename):
+        self.terminal = sys.stdout
+        self.log = open(filename, "w", encoding="utf-8")
+        self.log.write("Terminal Output - Stage 08\n==========================\n\n")
+        self.flush()
+
+    def write(self, message):
+        self.terminal.write(message)
+        self.log.write(message)
+        self.log.flush()
+
+    def flush(self):
+        self.terminal.flush()
+        self.log.flush()
+
 if __name__ == "__main__":
-    run_final_model()
+    log_file = Config.OUTPUT_DIR / "code_8_terminal_output.txt"
+    # Ensure directory exists before creating the logger file
+    Config.OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    
+    sys.stdout = TerminalLogger(log_file)
+    try:
+        run_final_model()
+    finally:
+        sys.stdout.log.close()
+        sys.stdout = sys.stdout.terminal

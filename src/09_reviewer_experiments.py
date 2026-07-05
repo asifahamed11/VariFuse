@@ -357,6 +357,8 @@ def build_comparison_models(random_state):
             learning_rate=0.05,
             subsample=0.8,
             colsample_bytree=0.8,
+            tree_method='hist',
+            device='cuda',
             n_jobs=RevisionConfig.N_JOBS,
             verbosity=0,
             random_state=random_state,
@@ -368,6 +370,7 @@ def build_comparison_models(random_state):
             num_leaves=63,
             learning_rate=0.05,
             feature_fraction=0.8,
+            device_type='gpu',
             n_jobs=RevisionConfig.N_JOBS,
             verbose=-1,
             random_state=random_state,
@@ -377,8 +380,9 @@ def build_comparison_models(random_state):
             iterations=300,
             depth=5,
             learning_rate=0.05,
+            random_seed=random_state,
             verbose=False,
-            random_state=random_state,
+            thread_count=1 if RevisionConfig.N_JOBS == 1 else -1,
         )
     return models
 
@@ -619,7 +623,7 @@ def run_diversity_analysis(output_dir):
     fig, axes = plt.subplots(
         1,
         2,
-        figsize=(RevisionConfig.DOUBLE_COL, RevisionConfig.DOUBLE_COL / 1.9),
+        figsize=(RevisionConfig.DOUBLE_COL * 4, RevisionConfig.DOUBLE_COL * 4),
     )
     sns.heatmap(
         q_df,
@@ -628,25 +632,26 @@ def run_diversity_analysis(output_dir):
         vmin=-1,
         vmax=1,
         annot=True,
-        fmt=".2f",
-        linewidths=0.2,
-        annot_kws={"size": 4},
+        fmt=".1f",
+        linewidths=0.1,
+        annot_kws={"size": 8},
+        cbar_kws={'shrink': 0.8}
     )
     axes[0].set_title(
         f"(A) Q-Statistic  (mean={mean_q:.3f})\n"
         f"{'PASS' if q_target_pass else 'FAIL'}: target < 0.50",
         fontweight="bold",
-        loc="left",
-        fontsize=9,
+        loc="center",
+        fontsize=16,
     )
     plt.setp(
         axes[0].get_xticklabels(),
         rotation=45,
         ha="right",
         rotation_mode="anchor",
-        fontsize=7,
+        fontsize=12,
     )
-    axes[0].tick_params(axis="y", rotation=0, labelsize=7)
+    axes[0].tick_params(axis="y", rotation=0, labelsize=12)
 
     sns.heatmap(
         dis_df,
@@ -656,24 +661,25 @@ def run_diversity_analysis(output_dir):
         vmax=0.30,
         annot=True,
         fmt=".2f",
-        linewidths=0.2,
-        annot_kws={"size": 4},
+        linewidths=0.1,
+        annot_kws={"size": 8},
+        cbar_kws={'shrink': 0.8}
     )
     axes[1].set_title(
         f"(B) Disagreement Rate  (mean={mean_dis:.3f})\n"
         f"{'PASS' if dis_target_pass else 'FAIL'}: target > 0.05",
         fontweight="bold",
-        loc="left",
-        fontsize=9,
+        loc="center",
+        fontsize=16,
     )
     plt.setp(
         axes[1].get_xticklabels(),
         rotation=45,
         ha="right",
         rotation_mode="anchor",
-        fontsize=7,
+        fontsize=12,
     )
-    axes[1].tick_params(axis="y", rotation=0, labelsize=7)
+    axes[1].tick_params(axis="y", rotation=0, labelsize=12)
 
     plt.tight_layout()
     plt.savefig(
@@ -1063,13 +1069,24 @@ def run_overfitting_analysis(X, y, n_standard, output_dir):
             stratify=y,
             random_state=RevisionConfig.RANDOM_STATE,
         )
-        model = HistGradientBoostingClassifier(
-            max_iter=200,
-            max_depth=6,
-            learning_rate=0.05,
-            random_state=RevisionConfig.RANDOM_STATE,
-            early_stopping=False,
-        )
+        if XGBOOST_AVAILABLE:
+            model = XGBClassifier(
+                n_estimators=180,
+                max_depth=4,
+                learning_rate=0.05,
+                n_jobs=-1,
+                eval_metric="logloss",
+                random_state=RevisionConfig.RANDOM_STATE,
+            )
+        else:
+            # Fallback if XGBoost is somehow not available
+            model = HistGradientBoostingClassifier(
+                max_iter=200,
+                max_depth=6,
+                learning_rate=0.05,
+                random_state=RevisionConfig.RANDOM_STATE,
+                early_stopping=False,
+            )
         model.fit(X_tr, y_tr)
         train_pred = model.predict(X_tr)
         test_pred = model.predict(X_te)
@@ -1534,5 +1551,29 @@ def main():
     print(comparison_df.to_string(index=False))
 
 
+class TerminalLogger(object):
+    def __init__(self, filename):
+        self.terminal = sys.stdout
+        self.log = open(filename, "w", encoding="utf-8")
+        self.log.write("Terminal Output - Stage 09\n==========================\n\n")
+        self.flush()
+
+    def write(self, message):
+        self.terminal.write(message)
+        self.log.write(message)
+        self.log.flush()
+
+    def flush(self):
+        self.terminal.flush()
+        self.log.flush()
+
 if __name__ == "__main__":
-    main()
+    log_file = STAGE09_OUT / "code_9_terminal_output.txt"
+    STAGE09_OUT.mkdir(parents=True, exist_ok=True)
+    
+    sys.stdout = TerminalLogger(log_file)
+    try:
+        main()
+    finally:
+        sys.stdout.log.close()
+        sys.stdout = sys.stdout.terminal
