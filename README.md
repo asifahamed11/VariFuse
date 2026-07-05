@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![License: MIT](https://img.shields.io/github/license/asifahamed11/TF-DFE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21128095.svg)](https://doi.org/10.5281/zenodo.21128095)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21202203.svg)](https://doi.org/10.5281/zenodo.21202203)
 ![MCC](https://img.shields.io/badge/MCC-0.8858-brightgreen)
 ![AUROC](https://img.shields.io/badge/AUROC-0.9681-brightgreen)
 
