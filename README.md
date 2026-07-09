@@ -4,7 +4,6 @@ Evidence-aware somatic variant pathogenicity classifier fusing ESM-2 protein emb
 with tabular biological features.
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21202232.svg)](https://doi.org/10.5281/zenodo.21202232)
 
 Two models are trained on an **identical feature set, CV split, and recall-aware
 threshold** for a fair comparison:
