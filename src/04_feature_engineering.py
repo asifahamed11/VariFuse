@@ -680,6 +680,44 @@ def build_smart_gene_mapping_optimized(
     return optimized_features
 
 
+def annotate_variants(
+    dataset: pd.DataFrame,
+    uniprot_file: str,
+    alphafold_dir: str,
+    n_workers: int = None,
+    force_reparse: bool = False,
+) -> pd.DataFrame:
+    """
+    Core feature engineering logic. Can be imported and used on arbitrary
+    DataFrames (like external validation sets) to add UniProt and AlphaFold features.
+    """
+    # Parse UniProt with caching
+    print("\nSTEP 1: UniProt Functional Annotation")
+    parser = OptimizedUniProtParser(uniprot_file)
+    uniprot_features = parser.parse(force_reparse=force_reparse)
+
+    # Build AlphaFold index
+    print("\nSTEP 2: Building AlphaFold Structure Index")
+    alphafold_index = AlphaFoldStructureIndex(alphafold_dir)
+
+    # Smart mapping
+    optimized_features = build_smart_gene_mapping_optimized(
+        uniprot_features, alphafold_index
+    )
+
+    # Annotate with UniProt features (vectorized)
+    print("\nSTEP 3: UniProt Annotation")
+    dataset = annotate_with_uniprot_vectorized(dataset, optimized_features)
+
+    # Add structural features (parallel)
+    print("\nSTEP 4: AlphaFold Structural Features")
+    dataset = add_structural_features_parallel(
+        dataset, alphafold_index, optimized_features, n_workers=n_workers
+    )
+
+    return dataset
+
+
 def enrich_dataset_with_structure_function_optimized(
     input_csv: str = str(
         STAGE03_OUT / "somatic_variant_dbNSFP_Removes_missing_values_Deduplication.csv"
@@ -721,28 +759,13 @@ def enrich_dataset_with_structure_function_optimized(
             dataset = dataset.head(max_rows)
         print(f"  Loaded {len(dataset):,} variants")
 
-    # Parse UniProt with caching
-    print("\nSTEP 1: UniProt Functional Annotation")
-    parser = OptimizedUniProtParser(uniprot_file)
-    uniprot_features = parser.parse(force_reparse=force_reparse)
-
-    # Build AlphaFold index
-    print("\nSTEP 2: Building AlphaFold Structure Index")
-    alphafold_index = AlphaFoldStructureIndex(alphafold_dir)
-
-    # Smart mapping
-    optimized_features = build_smart_gene_mapping_optimized(
-        uniprot_features, alphafold_index
-    )
-
-    # Annotate with UniProt features (vectorized)
-    print("\nSTEP 3: UniProt Annotation")
-    dataset = annotate_with_uniprot_vectorized(dataset, optimized_features)
-
-    # Add structural features (parallel)
-    print("\nSTEP 4: AlphaFold Structural Features")
-    dataset = add_structural_features_parallel(
-        dataset, alphafold_index, optimized_features, n_workers=n_workers
+    # Delegate to reusable annotation function
+    dataset = annotate_variants(
+        dataset=dataset,
+        uniprot_file=uniprot_file,
+        alphafold_dir=alphafold_dir,
+        n_workers=n_workers,
+        force_reparse=force_reparse,
     )
 
     # Save results

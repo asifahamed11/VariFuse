@@ -15,19 +15,16 @@ def clean_dataset():
     try:
         Path(OUTPUT_FILE).parent.mkdir(parents=True, exist_ok=True)
 
-        # 1. Load Data
         print(f"Loading dataset: {INPUT_FILE}...")
         df = pd.read_csv(INPUT_FILE)
         print(f"Original Shape: {df.shape} (Rows, Columns)\n")
 
-        # Step 1: Drop DOMAIN_NAME Column
         if "DOMAIN_NAME" in df.columns:
             df.drop(columns=["DOMAIN_NAME"], inplace=True)
             print(" Step 1: Dropped 'DOMAIN_NAME' column.")
         else:
             print(" Step 1: 'DOMAIN_NAME' column not found (skipped).")
 
-        # Step 2: Drop columns having only 'U' value
         u_cols_dropped = []
         for col in df.columns:
             if (
@@ -43,7 +40,7 @@ def clean_dataset():
         else:
             print(" Step 2: No columns found with only 'U' values.")
 
-        # Step 3: Remove rows with -1 values (Missing Structural Data)
+
         if "SASA" in df.columns:
             initial_count = len(df)
             df = df[df["SASA"] != -1]
