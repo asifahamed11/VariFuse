@@ -6,6 +6,7 @@ version: 3.0.0
 date-released: 2026-07-09
 url: "https://github.com/asifahamed11/VariFuse"
 repository-code: "https://github.com/asifahamed11/VariFuse"
+doi: "10.5281/zenodo.21278850"
 license: MIT
 authors:
   - given-names: "Asif"
