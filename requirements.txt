@@ -12,9 +12,17 @@ shap>=0.41.0
 tqdm>=4.64.0
 joblib>=1.1.0
 
-# Structural / topological feature engineering (scripts 04, 08) - core to the method,
-# not optional extras, even though the code guards the imports with try/except.
+# Structural feature engineering (script 04 only) - biopython is core to the method
+# (AlphaFold SASA via Bio.PDB), guarded by a try/except in code.
 biopython>=1.81
+
+# NOTE: not currently imported anywhere in src/ as of this pipeline version.
+# Kept in case upcoming topological-feature work depends on them; prune if unused.
 giotto-tda>=0.6.0
 pyfaidx>=0.7.2
 psutil>=5.9.0
+
+# ESM-2 embeddings + Cross-Attention fusion net (scripts 10, 11, 12; common.py).
+# A CUDA build of torch is strongly recommended for stage 10 (FP16 auto-enabled).
+torch>=2.0.0
+fair-esm>=2.0.0
