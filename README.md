@@ -29,12 +29,12 @@ Scripts in `src/` run in order; each reads the previous output and writes to its
 
 | # | Script | Stage |
 | --- | --- | --- |
-| 01 | `01_dbnsfp_processor.py` | Parse/filter dbNSFP |
-| 02 | `02_remove_missing_values.py` | Drop missing values |
-| 03 | `03_remove_duplicates.py` | Deduplicate variants |
+| 01 | `01_dbnsfp.py` | Parse/filter dbNSFP |
+| 02 | `02_missing_values.py` | Drop missing values |
+| 03 | `03_duplicates.py` | Deduplicate variants |
 | 04 | `04_feature_engineering.py` | UniProt + AlphaFold features |
-| 05 | `05_remove_leakage.py` | Drop leaking columns |
-| 06 | `06_clean_and_finalize.py` | Final cleaning |
+| 05 | `05_leakage.py` | Drop leaking columns |
+| 06 | `06_clean.py` | Final cleaning |
 | 07 | `07_dataset_balancing.py` | Balance classes |
 | 08 | `08_prepare_esm_dataset.py` | Map sequences, ref-AA check |
 | 09 | `09_prepare_external_esm_dataset.py` | Build independent ClinVar/DMS external set |
