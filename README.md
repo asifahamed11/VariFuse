@@ -57,7 +57,7 @@ and leakage-audit configs are reported.
 ## Quick start
 
     pip install -r requirements.txt
-    export TFDFE_DATA_DIR=/path/to/your/Datasets   # or place files under data/
+    export VARIFUSE_DATA_DIR=/path/to/your/Datasets   # or place files under data/
 
 ESM extraction (Stage 10) uses `fair-esm` + `torch`; a CUDA GPU is recommended (FP16 auto).
 See **[`data/README.md`](data/README.md)** for the expected data layout.
