@@ -1,11 +1,12 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the metadata below."
 type: software
-title: "TF-DFE: Topo-Fractal Dynamic Fuzzy Ensemble Framework for Somatic Variant Pathogenicity Prediction"
-version: 1.0.0
-date-released: 2026-07-02
-url: "https://github.com/asifahamed11/TF-DFE"
-repository-code: "https://github.com/asifahamed11/TF-DFE"
+title: "VariFuse: ESM-2 Cross-Attention Fusion for Evidence-Aware Somatic Variant Pathogenicity Classification"
+version: 3.0.0
+date-released: 2026-07-09
+url: "https://github.com/asifahamed11/VariFuse"
+repository-code: "https://github.com/asifahamed11/VariFuse"
+doi: 10.5281/zenodo.21202232
 license: MIT
 authors:
   - given-names: "Asif"
@@ -26,7 +27,7 @@ authors:
     orcid: "https://orcid.org/0000-0001-9081-5905"
     email: ahammadstatru@gmail.com
     affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
-    # Corresponding author
+  # Corresponding author
   - given-names: "A.H.M. Rahmatullah"
     family-names: "Imon"
     orcid: "https://orcid.org/0000-0003-2767-2037"
@@ -36,5 +37,8 @@ keywords:
   - bioinformatics
   - cancer-genomics
   - somatic-variants
-  - topological-data-analysis
-  - ensemble-learning
+  - variant-classification
+  - protein-language-model
+  - esm2
+  - cross-attention
+  - machine-learning
