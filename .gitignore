@@ -10,9 +10,7 @@ __pycache__/
 venv/
 env/
 
-# Raw datasets (large; download separately, see data/README.md)
-data/*
-!data/README.md
+
 
 # Generated artefacts (CSVs, models, figures, reports)
 outputs/
