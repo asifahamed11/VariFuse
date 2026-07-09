@@ -3,7 +3,7 @@
 Raw and external inputs are large and **not tracked in Git**. Point the pipeline at a local
 copy:
 
-    export DATA_DIR=/path/to/your/Datasets
+    export VARIFUSE_DATA_DIR=/path/to/your/Datasets
 
 `src/config.py` reads this automatically and falls back to this `data/` folder.
 
