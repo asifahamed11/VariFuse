@@ -518,15 +518,7 @@ def _type1_from_json(results_path, fig_name, suptitle):
     _save(fig, fig_name)
 
 
-# ===========================================================================
-# Figure 9 - Type-1 circularity (internal)
-# ===========================================================================
-def fig9_type1():
-    _type1_from_json(
-        RESULTS_JSON,
-        "fig09_type1_circularity",
-        "Type-1 circularity: performance under predictor-score ablation",
-    )
+
 
 # ---------------------------------------------------------------------------
 # External prediction loader (Stage 12 -> STAGE12_OUT/external_predictions.npz)
@@ -564,13 +556,61 @@ def fig7b_confusion_external():
 
 
 # ===========================================================================
-# Figure 9b - Type-1 circularity (external validation)
+# Figure 9 / 9b - Model comparison (LightGBM vs CrossAttention)
+# Replaces the old Type-1 circularity panels. Grouped bars over key metrics,
+# annotated with the McNemar winner + p-value.
 # ===========================================================================
-def fig9b_type1_external():
-    _type1_from_json(
+def _model_comparison_from_json(results_path, fig_name, title):
+    if not _exists(results_path, fig_name):
+        return
+    res = json.loads(Path(results_path).read_text())
+    prim = res.get("primary", {})
+    models = [("lightgbm", "LightGBM"), ("cross_attention", "CrossAttention")]
+    present = [(k, d) for k, d in models if isinstance(prim.get(k), dict)]
+    if not present:
+        logger.warning("SKIP %s: no model metrics in %s", fig_name, Path(results_path).name)
+        return
+    metrics = [("mcc", "MCC"), ("auroc", "AUROC"), ("auprc", "AUPRC"), ("f1", "F1")]
+    x = np.arange(len(metrics))
+    width = 0.8 / len(present)
+    fig, ax = plt.subplots(figsize=(7.2, 4.6))
+    for i, (k, disp) in enumerate(present):
+        vals = [prim[k].get(m, np.nan) for m, _ in metrics]
+        offset = (i - (len(present) - 1) / 2) * width
+        bars = ax.bar(x + offset, vals, width, label=disp,
+                      color=MODEL_COLORS.get(disp, None))
+        for b, v in zip(bars, vals):
+            if v == v:  # skip NaN
+                ax.text(b.get_x() + b.get_width() / 2, v + 0.01, f"{v:.3f}",
+                        ha="center", va="bottom", fontsize=8)
+    ax.set_xticks(x)
+    ax.set_xticklabels([lbl for _, lbl in metrics])
+    ax.set_ylim(0, 1.05)
+    ax.set_ylabel("Score")
+    ax.set_title(title)
+    mc = prim.get("mcnemar", {})
+    if mc:
+        ax.text(0.5, -0.16,
+                f"McNemar: winner={mc.get('winner', '?')}, p={mc.get('p_value', '?')}",
+                transform=ax.transAxes, ha="center", va="top",
+                fontsize=8, color="#555555")
+    ax.legend()
+    _save(fig, fig_name)
+
+
+def fig9_model_comparison():
+    _model_comparison_from_json(
+        RESULTS_JSON,
+        "fig09_model_comparison",
+        "Model comparison (internal, gene-level OOF)",
+    )
+
+
+def fig9b_model_comparison_external():
+    _model_comparison_from_json(
         EXT_JSON,
-        "fig09b_type1_circularity_external",
-        "Type-1 circularity (external): performance under predictor-score ablation",
+        "fig09b_model_comparison_external",
+        "Model comparison (external validation)",
     )
 
 
@@ -695,8 +735,8 @@ def main():
         fig7_confusion,
         fig7b_confusion_external,
         fig8_shap,
-        fig9_type1,
-        fig9b_type1_external,
+        fig9_model_comparison,             
+        fig9b_model_comparison_external,   
         fig10_roc_external,
         fig11_pr_external,
         fig12_calibration_external,

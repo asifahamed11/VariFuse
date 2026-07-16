@@ -1,10 +1,12 @@
 import json
 import logging
+
 import numpy as np
 import pandas as pd
 import torch
 from lightgbm import LGBMClassifier, early_stopping, log_evaluation
 from sklearn.model_selection import StratifiedGroupKFold, StratifiedKFold
+
 from config import STAGE09_OUT, STAGE10_OUT
 import common as C
 
@@ -18,10 +20,10 @@ INPUT_NPY = STAGE09_OUT / "esm_residue_embeddings.npy"
 N_SPLITS = 5
 
 
-def run_config(df, E, y, groups, use_groups, tag, ablate, oof_store):
+def run_config(df, E, y, groups, use_groups, tag, oof_store):
     logger.info("=" * 66)
     logger.info("CONFIG: %s", tag)
-    feats = C.select_features(df, ablate)
+    feats = C.select_features(df)
     Xb_all = df[feats].to_numpy(dtype=np.float32)
     oof_lgbm = np.zeros(len(df))
     oof_xattn = np.zeros(len(df))
@@ -56,7 +58,6 @@ def run_config(df, E, y, groups, use_groups, tag, ablate, oof_store):
         model = C.train_deep_model(tb(Xb_all[tr_in]), te(E[tr_in]), y[tr_in],
                                    tb(Xb_all[val_in]), te(E[val_in]), y[val_in])
         oof_xattn[va] = C.predict(model, tb(Xb_all[va]), te(E[va]))
-
         logger.info("Fold %d/%d | LGBM AUC=%.4f | XATTN AUC=%.4f", fold, N_SPLITS,
                     C.roc_auc_score(y[va], oof_lgbm[va]),
                     C.roc_auc_score(y[va], oof_xattn[va]))
@@ -84,6 +85,7 @@ def run_evaluation():
     C.set_seeds()
     STAGE10_OUT.mkdir(parents=True, exist_ok=True)
     logger.info("Device: %s", C.DEVICE)
+
     df = pd.read_csv(INPUT_CSV)
     E = np.load(INPUT_NPY)
     assert len(df) == len(E), f"Row mismatch: CSV={len(df)} vs NPY={len(E)}"
@@ -93,6 +95,7 @@ def run_evaluation():
         df = df[valid].reset_index(drop=True)
         E = E[valid]
     y = df[C.LABEL_COL].to_numpy(dtype=int)
+
     use_groups = C.GENE_COL in df.columns
     groups = df[C.GENE_COL].to_numpy() if use_groups else None
     logger.info("Split: %s", "StratifiedGroupKFold (gene-level)" if use_groups else "StratifiedKFold")
@@ -102,19 +105,11 @@ def run_evaluation():
         oof_store.unlink()  # fresh run
 
     results = {
-        "primary": run_config(df, E, y, groups, use_groups, "bio_full", False, oof_store),
-        "leakage_audit": run_config(df, E, y, groups, use_groups,
-                                    "bio_minus_predictor_scores", True, oof_store),
-    }
-    results["type1_mcc_inflation"] = {
-        "lightgbm": round(results["primary"]["lightgbm"]["mcc"]
-                          - results["leakage_audit"]["lightgbm"]["mcc"], 4),
-        "cross_attention": round(results["primary"]["cross_attention"]["mcc"]
-                                 - results["leakage_audit"]["cross_attention"]["mcc"], 4),
+        "primary": run_config(df, E, y, groups, use_groups, "bio_full", oof_store),
     }
 
     rows = []
-    for tag in ("primary", "leakage_audit"):
+    for tag in ("primary",):
         r = results[tag]
         for name, key in [("LightGBM", "lightgbm"), ("CrossAttention", "cross_attention")]:
             m = r[key]
@@ -126,11 +121,11 @@ def run_evaluation():
     table.to_csv(STAGE10_OUT / "comparison_table.csv", index=False)
     (STAGE10_OUT / "results.json").write_text(json.dumps(results, indent=2))
 
-    print("\n" + "=" * 66)
+    print()
+    print("=" * 66)
     print(table.to_string(index=False))
-    print("\nMcNemar (bio_full): ", results["primary"]["mcnemar"])
-    print("McNemar (leakage_audit): ", results["leakage_audit"]["mcnemar"])
-    print("Type-1 MCC inflation: ", results["type1_mcc_inflation"])
+    print()
+    print("McNemar (bio_full): ", results["primary"]["mcnemar"])
     logger.info("Saved -> comparison_table.csv, results.json, oof_predictions.npz, shap_values_*.npz")
 
 

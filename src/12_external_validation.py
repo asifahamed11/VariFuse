@@ -1,10 +1,12 @@
 import json
 import logging
+
 import numpy as np
 import pandas as pd
 import torch
 from lightgbm import LGBMClassifier, early_stopping, log_evaluation
 from sklearn.model_selection import StratifiedGroupKFold
+
 from config import DATA_DIR, STAGE09_OUT, STAGE12_OUT
 import common as C
 
@@ -48,13 +50,7 @@ def variant_key(df):
     if len(cols) < 4:
         return None
     return (
-        df["chr"].astype(str)
-        + ":"
-        + df["pos"].astype(str)
-        + ":"
-        + df["ref"].astype(str)
-        + ":"
-        + df["alt"].astype(str)
+        df["chr"].astype(str) + ":" + df["pos"].astype(str) + ":" + df["ref"].astype(str) + ":" + df["alt"].astype(str)
     )
 
 
@@ -83,10 +79,11 @@ def deoverlap_external(int_df, ext_df, ext_E):
     return ext_df2, ext_E2
 
 
-def run_external(tag, ablate, int_df, int_E, ext_df, ext_E, pred_store):
+def run_external(tag, int_df, int_E, ext_df, ext_E, pred_store):
     logger.info("=" * 66)
     logger.info("EXTERNAL VALIDATION | config: %s", tag)
-    feats_int = C.select_features(int_df, ablate)
+
+    feats_int = C.select_features(int_df)
     feats = [f for f in feats_int if f in ext_df.columns]
     dropped_feats = set(feats_int) - set(feats)
     if dropped_feats:
@@ -122,7 +119,6 @@ def run_external(tag, ablate, int_df, int_E, ext_df, ext_E, pred_store):
         eval_metric="auc",
         callbacks=[early_stopping(C.LGBM_EARLY_STOP, verbose=False), log_evaluation(0)],
     )
-    # Calculate LightGBM threshold from validation fold
     p_lgbm_val = clf.predict_proba(Xb_int[ival])[:, 1]
     thr_lgbm = C.select_threshold(y_int[ival], p_lgbm_val)
     logger.info("Frozen internal threshold (LightGBM): %.3f", thr_lgbm)
@@ -137,7 +133,6 @@ def run_external(tag, ablate, int_df, int_E, ext_df, ext_E, pred_store):
         te(int_E[ival]),
         y_int[ival],
     )
-    # Calculate Cross-Attention threshold from validation fold
     p_xattn_val = C.predict(model, tb(Xb_int[ival]), te(int_E[ival]))
     thr_xattn = C.select_threshold(y_int[ival], p_xattn_val)
     logger.info("Frozen internal threshold (Cross-Attention): %.3f", thr_xattn)
@@ -147,7 +142,6 @@ def run_external(tag, ablate, int_df, int_E, ext_df, ext_E, pred_store):
         torch.cuda.empty_cache()
 
     # ---- persist external probability vectors for Stage 13 figures ----
-    # Enables external ROC / PR / calibration curves (fig05/06 external analogues).
     C.save_oof_artifacts(
         pred_store, y_ext,
         {"lightgbm": p_lgbm, "cross_attention": p_xattn}, tag,
@@ -184,6 +178,7 @@ def main():
     C.set_seeds()
     STAGE12_OUT.mkdir(parents=True, exist_ok=True)
     logger.info("Device: %s", C.DEVICE)
+
     int_df, int_E = load_pair(INT_CSV, INT_NPY, "internal")
     ext_df, ext_E = load_pair(EXT_CSV, EXT_NPY, "external")
     ext_df, ext_E = deoverlap_external(int_df, ext_df, ext_E)
@@ -200,26 +195,11 @@ def main():
 
     results = {
         "external_source": str(EXT_CSV),
-        "primary": run_external("bio_full", False, int_df, int_E, ext_df, ext_E, EXT_PRED_STORE),
-        "leakage_audit": run_external(
-            "bio_minus_predictor_scores", True, int_df, int_E, ext_df, ext_E, EXT_PRED_STORE
-        ),
-    }
-    results["type1_mcc_inflation_external"] = {
-        "lightgbm": round(
-            results["primary"]["lightgbm"]["mcc"]
-            - results["leakage_audit"]["lightgbm"]["mcc"],
-            4,
-        ),
-        "cross_attention": round(
-            results["primary"]["cross_attention"]["mcc"]
-            - results["leakage_audit"]["cross_attention"]["mcc"],
-            4,
-        ),
+        "primary": run_external("bio_full", int_df, int_E, ext_df, ext_E, EXT_PRED_STORE),
     }
 
     rows = []
-    for tag in ("primary", "leakage_audit"):
+    for tag in ("primary",):
         r = results[tag]
         for name, key in [
             ("LightGBM", "lightgbm"),
@@ -246,11 +226,11 @@ def main():
     table.to_csv(STAGE12_OUT / "external_validation_table.csv", index=False)
     (STAGE12_OUT / "external_validation.json").write_text(json.dumps(results, indent=2))
 
-    print("\n" + "=" * 66)
+    print()
+    print("=" * 66)
     print("EXTERNAL VALIDATION (frozen internal threshold, gene-disjoint)")
     print("=" * 66)
     print(table.to_string(index=False))
-    print("\nType-1 MCC inflation (external):", results["type1_mcc_inflation_external"])
     logger.info("Saved -> external_validation_table.csv, external_validation.json, external_predictions.npz")
 
 

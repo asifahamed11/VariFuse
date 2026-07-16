@@ -1,7 +1,5 @@
-
 from __future__ import annotations
 
-import copy
 import logging
 import math
 
@@ -10,63 +8,57 @@ import pandas as pd
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
-
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import (average_precision_score, brier_score_loss,
                              confusion_matrix, f1_score, matthews_corrcoef,
                              precision_score, recall_score, roc_auc_score)
 from sklearn.preprocessing import StandardScaler
 
-logger = logging.getLogger("tf_dfe.common")
+logger = logging.getLogger("pipeline.common")
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 RANDOM_STATE = 42
+torch.backends.cudnn.benchmark = True
 
 # ---- Shared schema constants ----------------------------------------------
 LABEL_COL = "LABEL_PATHOGENIC"
 GENE_COL = "genename"
 ESM_DIM = 1280
-
 RECALL_FLOOR = 0.90
 FBETA_BETA = 2.0
 ABSTAIN_MARGIN = 0.10
 
 LEAKAGE_COLS = ["chr", "pos", "ref", "alt", "CONSENSUS_SCORE", "TIER",
                 "DOMAIN_NAME", "SECONDARY_STRUCTURE", "IS_CLINVAR_BENIGN"]
+# Kept for reference only. No longer dropped anywhere (bio_full uses these).
 PREDICTOR_COLS = ["SIFT_score", "Polyphen2_HDIV_score", "CADD_phred", "REVEL_score"]
 ID_COLS = ["aa_pos", "aa_ref", "aa_alt", "protein_sequence",
            "Ensembl_transcriptid", "HGVSp_snpEff", "HGVSc_snpEff"]
 
-# LightGBM hyperparameters shared by both stages (UNCHANGED — fair comparison)
 LGBM_PARAMS = dict(
-    n_estimators=3000, learning_rate=0.02, num_leaves=63, max_depth=-1,
+    n_estimators=1000, learning_rate=0.02, num_leaves=30, max_depth=-1,
     min_child_samples=60, subsample=0.8, subsample_freq=1, colsample_bytree=0.8,
     reg_alpha=0.5, reg_lambda=2.0, n_jobs=-1, verbose=-1, random_state=RANDOM_STATE,
 )
-LGBM_EARLY_STOP = 150
+LGBM_EARLY_STOP = 100
 
-# ---- Cross-Attention deep-model configuration -----------------------------
-# These affect ONLY the deep model's training procedure. LightGBM, the feature
-# set, CV splits, thresholding and evaluation are all untouched, so the
-# LGBM-vs-CrossAttention comparison remains completely fair.
-D_MODEL = 160            # token width (was 128)
+D_MODEL = 256
 N_HEADS = 8
-N_CROSS_BLOCKS = 3       # bidirectional bio<->esm blocks (was 2)
-N_FUSION_LAYERS = 2      # self-attention fusion layers (was 1)
-N_ESM_SLOTS = 16         # ESM embedding -> this many tokens (was 8)
-DROPOUT = 0.15
-
-N_ENSEMBLE = 3           # seed-averaged members per fold (biggest stabilizer)
+N_CROSS_BLOCKS = 3
+N_FUSION_LAYERS = 2
+N_ESM_SLOTS = 16
+DROPOUT = 0.23131003180165313
+DEEP_LR = 0.0003577380577877598
+DEEP_WD = 3.5786341385752017e-05
+WARMUP_EPOCHS = 11
+EMA_DECAY = 0.995
+MIXUP_ALPHA = 0.22862321425429072
+LABEL_SMOOTH = 0.00023378541799429914
+BATCH_SIZE = 256
+N_ENSEMBLE = 3
 DEEP_MAX_EPOCHS = 60
 DEEP_PATIENCE = 10
-DEEP_LR = 1e-3
-DEEP_WD = 1e-4
-WARMUP_EPOCHS = 5
-EMA_DECAY = 0.999
-MIXUP_ALPHA = 0.2
-LABEL_SMOOTH = 0.02
 GRAD_CLIP = 1.0
-BATCH_SIZE = 512
 
 
 def set_seeds(seed: int = RANDOM_STATE) -> None:
@@ -85,7 +77,7 @@ class FeatureTokenizer(nn.Module):
         self.weight = nn.Parameter(torch.randn(n_features, d_model) * 0.02)
         self.bias = nn.Parameter(torch.zeros(n_features, d_model))
 
-    def forward(self, x):                      # (B, Nf)
+    def forward(self, x):  # (B, Nf)
         return x.unsqueeze(-1) * self.weight + self.bias
 
 
@@ -108,10 +100,7 @@ class CrossAttentionBlock(nn.Module):
 
 class CrossAttnFusionNet(nn.Module):
     """Feature tokens + ESM slot tokens -> cross-attention -> self-attention
-    fusion over [CLS | bio | esm] -> (CLS + mean-pool) readout -> logit.
-
-    Higher-capacity variant: wider tokens, more cross blocks, more ESM slots,
-    and a richer readout so the 1280-dim residue embedding is actually used."""
+    fusion over [CLS | bio | esm] -> (CLS + mean-pool) readout -> logit."""
 
     def __init__(self, n_features: int, esm_dim: int = ESM_DIM):
         super().__init__()
@@ -150,7 +139,7 @@ class CrossAttnFusionNet(nn.Module):
 
 
 # ===========================================================================
-# EMA (exponential moving average of weights) — smoother, better-calibrated
+# EMA (exponential moving average of weights)
 # ===========================================================================
 class EMA:
     def __init__(self, model: nn.Module, decay: float):
@@ -167,12 +156,13 @@ class EMA:
 
 
 # ===========================================================================
-# Ensemble wrapper (logit-averaging). Kept API-compatible with predict().
+# Ensemble wrapper (logit-averaging). API-compatible with predict().
 # ===========================================================================
 class EnsembleModel(nn.Module):
-    def __init__(self, members: list[nn.Module]):
+    def __init__(self, members: list[nn.Module], T: float = 1.0):
         super().__init__()
         self.members = nn.ModuleList(members)
+        self.T = T
 
     def forward(self, x_bio, x_esm):
         logits = torch.stack([m(x_bio, x_esm) for m in self.members], dim=0)
@@ -188,19 +178,23 @@ class EnsembleModel(nn.Module):
 # ===========================================================================
 # Training / prediction
 # ===========================================================================
-def _loader(Xb, Xe, y, bs, shuffle):
+def _loader(Xb, Xe, y, bs, shuffle, workers=0):
     ds = TensorDataset(torch.from_numpy(Xb).float(),
                        torch.from_numpy(Xe).float(),
                        torch.from_numpy(y).float())
-    return DataLoader(ds, batch_size=bs, shuffle=shuffle, pin_memory=(DEVICE == "cuda"))
+    return DataLoader(ds, batch_size=bs, shuffle=shuffle, pin_memory=(DEVICE == "cuda"),
+                      num_workers=workers, persistent_workers=(workers > 0))
 
 
 @torch.no_grad()
-def predict(model, Xb, Xe, bs: int = 512) -> np.ndarray:
+def predict(model, Xb, Xe, bs: int = 2048) -> np.ndarray:
     model.eval()
     dummy = np.zeros(len(Xb), np.float32)
-    out = [torch.sigmoid(model(xb.to(DEVICE), xe.to(DEVICE))).cpu().numpy()
-           for xb, xe, _ in _loader(Xb, Xe, dummy, bs, False)]
+    T = getattr(model, 'T', 1.0)
+    out = []
+    with torch.amp.autocast('cuda', enabled=(DEVICE == "cuda")):
+        for xb, xe, _ in _loader(Xb, Xe, dummy, bs, False):
+            out.append(torch.sigmoid(model(xb.to(DEVICE), xe.to(DEVICE)) / T).cpu().numpy())
     return np.concatenate(out)
 
 
@@ -213,8 +207,7 @@ def _lr_lambda(epoch: int):
 
 
 def _train_single(Xb_tr, Xe_tr, y_tr, Xb_val, Xe_val, y_val, seed: int):
-    """Train ONE fusion net with EMA + cosine LR + mixup + AUROC early stop.
-    Returns a net loaded with the best (EMA) weights."""
+    """Train ONE fusion net with EMA + cosine LR + mixup + MCC early stop."""
     torch.manual_seed(seed)
     np.random.seed(seed)
 
@@ -227,10 +220,11 @@ def _train_single(Xb_tr, Xe_tr, y_tr, Xb_val, Xe_val, y_val, seed: int):
     crit = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
     opt = torch.optim.AdamW(model.parameters(), lr=DEEP_LR, weight_decay=DEEP_WD)
     sched = torch.optim.lr_scheduler.LambdaLR(opt, _lr_lambda)
-    loader = _loader(Xb_tr, Xe_tr, y_tr, BATCH_SIZE, True)
+    loader = _loader(Xb_tr, Xe_tr, y_tr, BATCH_SIZE, True, workers=2)
     rng = np.random.RandomState(seed)
+    scaler = torch.amp.GradScaler('cuda', enabled=(DEVICE == "cuda"))
 
-    best_auroc, wait, best_state = -1.0, 0, None
+    best_score, wait, best_state = -1.0, 0, None
     for _ in range(DEEP_MAX_EPOCHS):
         model.train()
         for xb, xe, yy in loader:
@@ -245,18 +239,23 @@ def _train_single(Xb_tr, Xe_tr, y_tr, Xb_val, Xe_val, y_val, seed: int):
                 xe = lam * xe + (1.0 - lam) * xe[perm]
                 yy = lam * yy + (1.0 - lam) * yy[perm]
             opt.zero_grad()
-            loss = crit(model(xb, xe), yy)
-            loss.backward()
+            with torch.amp.autocast('cuda', enabled=(DEVICE == "cuda")):
+                loss = crit(model(xb, xe), yy)
+            scaler.scale(loss).backward()
+            scaler.unscale_(opt)
             torch.nn.utils.clip_grad_norm_(model.parameters(), GRAD_CLIP)
-            opt.step()
+            scaler.step(opt)
+            scaler.update()
             ema.update(model)
         sched.step()
 
         # early stopping evaluated on the EMA weights
         eval_model.load_state_dict(ema.shadow)
-        auc = roc_auc_score(y_val, predict(eval_model, Xb_val, Xe_val))
-        if auc > best_auroc + 1e-4:
-            best_auroc, wait = auc, 0
+        p_val_raw = predict(eval_model, Xb_val, Xe_val)
+        thr = select_threshold(y_val, p_val_raw)
+        score = matthews_corrcoef(y_val, (p_val_raw >= thr).astype(int))
+        if score > best_score + 1e-4:
+            best_score, wait = score, 0
             best_state = {k: v.detach().cpu().clone() for k, v in ema.shadow.items()}
         else:
             wait += 1
@@ -268,27 +267,49 @@ def _train_single(Xb_tr, Xe_tr, y_tr, Xb_val, Xe_val, y_val, seed: int):
     del eval_model
     if DEVICE == "cuda":
         torch.cuda.empty_cache()
-    return model, best_auroc
+    return model, best_score
+
+
+def fit_temperature(model, Xb_val, Xe_val, y_val):
+    logits = []
+    model.eval()
+    with torch.no_grad():
+        dummy = np.zeros(len(Xb_val), np.float32)
+        with torch.amp.autocast('cuda', enabled=(DEVICE == "cuda")):
+            for xb, xe, _ in _loader(Xb_val, Xe_val, dummy, 2048, False):
+                logits.append(model(xb.to(DEVICE), xe.to(DEVICE)).cpu())
+    logits = torch.cat(logits)
+    y = torch.from_numpy(y_val).float()
+    T = torch.nn.Parameter(torch.ones(1))
+    opt = torch.optim.LBFGS([T], lr=0.01, max_iter=100)
+
+    def closure():
+        opt.zero_grad()
+        loss = nn.BCEWithLogitsLoss()(logits / T, y)
+        loss.backward()
+        return loss
+
+    opt.step(closure)
+    return float(T.detach().clamp(min=1.0).item())
 
 
 def train_deep_model(Xb_tr, Xe_tr, y_tr, Xb_val, Xe_val, y_val,
                      max_epochs: int = DEEP_MAX_EPOCHS, patience: int = DEEP_PATIENCE):
     """Train an ENSEMBLE of independently-seeded fusion nets and return a
-    logit-averaging EnsembleModel. API-compatible with the previous single-model
-    version (predict(model, Xb, Xe) still works unchanged).
-
-    NOTE: max_epochs/patience are accepted for signature compatibility; the deep
-    schedule is governed by the module-level DEEP_* constants."""
-    members, aurocs = [], []
+    logit-averaging EnsembleModel."""
+    members, early_stop_mccs = [], []
     for i in range(N_ENSEMBLE):
         net, auc = _train_single(Xb_tr, Xe_tr, y_tr, Xb_val, Xe_val, y_val,
                                  seed=RANDOM_STATE + 100 * (i + 1))
         members.append(net)
-        aurocs.append(auc)
+        early_stop_mccs.append(auc)
     ens = EnsembleModel(members).to(DEVICE)
+    best_T = fit_temperature(ens, Xb_val, Xe_val, y_val)
+    ens.T = best_T
+    logger.info("Fitted temperature scaling T=%.3f", best_T)
     ens_auc = roc_auc_score(y_val, predict(ens, Xb_val, Xe_val))
-    logger.info("    deep ensemble (%d members) inner-val AUROC=%.4f "
-                "(members mean=%.4f)", N_ENSEMBLE, ens_auc, float(np.mean(aurocs)))
+    logger.info(" deep ensemble (%d members) inner-val AUROC=%.4f "
+                "(members mean MCC=%.4f)", N_ENSEMBLE, ens_auc, float(np.mean(early_stop_mccs)))
     return ens
 
 
@@ -307,18 +328,15 @@ def fit_preprocessors(Xb_fit, Xe_fit):
 
 
 # ===========================================================================
-# Feature selection
+# Feature selection  (bio_full only: predictor scores are ALWAYS kept)
 # ===========================================================================
-def select_features(df: pd.DataFrame, ablate: bool) -> list[str]:
+def select_features(df: pd.DataFrame) -> list[str]:
     drop = set(LEAKAGE_COLS) | {LABEL_COL, GENE_COL} | set(ID_COLS)
     drop |= {c for c in df.columns if "esm_emb" in c}
     drop |= {"dms_score"}  # DMS is a label source, never a feature
-    if ablate:
-        drop |= set(PREDICTOR_COLS)
     feats = [c for c in df.columns
              if c not in drop and pd.api.types.is_numeric_dtype(df[c])]
-    logger.info("Feature set (%s predictor scores): %d features",
-                "WITHOUT" if ablate else "WITH", len(feats))
+    logger.info("Feature set (bio_full, predictor scores INCLUDED): %d features", len(feats))
     return feats
 
 
@@ -327,7 +345,7 @@ def select_features(df: pd.DataFrame, ablate: bool) -> list[str]:
 # ===========================================================================
 def select_threshold(y_true, y_prob) -> float:
     """Max MCC subject to recall >= RECALL_FLOOR; fallback to max-F_beta."""
-    grid = np.linspace(0.05, 0.95, 181)
+    grid = np.linspace(0.01, 0.99, 393)
     best_thr, best_mcc, feasible = 0.5, -1.0, False
     for thr in grid:
         pred = (y_prob >= thr).astype(int)
@@ -378,8 +396,8 @@ def evaluate(y_true, y_prob, threshold) -> dict:
 
 def mcnemar_test(y_true, p1, p2) -> dict:
     """McNemar on paired (thresholded) predictions. p1=lgbm, p2=xattn."""
-    n01 = int(np.sum((p1 == y_true) & (p2 != y_true)))   # lgbm right, xattn wrong
-    n10 = int(np.sum((p1 != y_true) & (p2 == y_true)))   # lgbm wrong, xattn right
+    n01 = int(np.sum((p1 == y_true) & (p2 != y_true)))  # lgbm right, xattn wrong
+    n10 = int(np.sum((p1 != y_true) & (p2 == y_true)))  # lgbm wrong, xattn right
     n = n01 + n10
     try:
         from statsmodels.stats.contingency_tables import mcnemar
@@ -397,14 +415,10 @@ def mcnemar_test(y_true, p1, p2) -> dict:
 
 
 # ============================================================================
-# Artifact persistence for the figure module (Stage 12)
+# Artifact persistence for the figure module
 # ============================================================================
 def save_oof_artifacts(path, y_true, oof_by_model: dict, config_tag: str):
-    """Append/save OOF probability vectors for ROC/PR/confusion figures.
-
-    Stored as an .npz with keys like '<tag>__y', '<tag>__lightgbm',
-    '<tag>__cross_attention'. Existing keys are preserved across configs.
-    """
+    """Append/save OOF probability vectors for ROC/PR/confusion figures."""
     import os
     data = {}
     if os.path.exists(path):
@@ -419,11 +433,7 @@ def save_oof_artifacts(path, y_true, oof_by_model: dict, config_tag: str):
 
 def compute_and_save_shap(model, X_background, feature_names, out_path,
                           max_samples: int = 2000):
-    """Compute SHAP values for a fitted tree model and persist them.
-
-    Saves an .npz with 'shap' (n, d), 'X' (n, d) and object array 'features'.
-    No-op (logged) if the shap package is unavailable.
-    """
+    """Compute SHAP values for a fitted tree model and persist them."""
     try:
         import shap
     except ImportError:
@@ -436,7 +446,7 @@ def compute_and_save_shap(model, X_background, feature_names, out_path,
     try:
         explainer = shap.TreeExplainer(model)
         sv = explainer.shap_values(Xs)
-        if isinstance(sv, list):          # older API: [class0, class1]
+        if isinstance(sv, list):  # older API: [class0, class1]
             sv = sv[1]
         np.savez_compressed(
             out_path, shap=np.asarray(sv), X=np.asarray(Xs),
