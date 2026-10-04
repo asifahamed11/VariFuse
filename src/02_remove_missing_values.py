@@ -1,93 +1,168 @@
-"""Stage 02 - drop rows with missing values outside a set of retained columns."""
+from __future__ import annotations
+
+import logging
+from collections import defaultdict
 
 import pandas as pd
-from config import STAGE01_OUT, STAGE02_OUT
-import gc
+
+from config import (
+    STAGE01_OUT,
+    STAGE02_OUT,
+    ensure_directories,
+    validate_upstream_manifest,
+    write_run_manifest,
+)
+from schema import BASE_FEATURE_ALLOWLIST, LABEL_COL, ROW_ID_COL
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)-7s | %(message)s",
+    datefmt="%H:%M:%S",
+)
+logger = logging.getLogger("stage02_missingness")
 
 INPUT_FILE = STAGE01_OUT / "somatic_variant_dbNSFP.csv"
-OUTPUT_FILE = STAGE02_OUT / "somatic_variant_dbNSFP_Removes_missing_values.csv"
-
-COLUMNS_TO_RETAIN_WITH_MISSING = [
-    "COSMIC_FREQUENCY",
-    "COSMIC_RECURRENCE",
-    "EVIDENCE_SOURCE",
-    "RESCUE_REASON",
-    "WAS_RESCUED",
-    "IS_CLINVAR_PATHOGENIC",
-    "IS_KNOWN_HOTSPOT",
-    "genename",
-    "aapos",
-    "aaref",
-    "aaalt",
-    "Interpro_domain",
-    "variant_type",
-    "ROLE_IN_CANCER",
-]
+OUTPUT_FILE = STAGE02_OUT / "somatic_variant_missingness_preserved.csv"
+REPORT_FILE = STAGE02_OUT / "missingness_report.csv"
+MANIFEST_FILE = STAGE02_OUT / "run_manifest.json"
+UPSTREAM_MANIFEST = STAGE01_OUT / "run_manifest.json"
+CHUNK_SIZE = 100000
 
 
-def clean_dataset_selective(chunksize=100000):
-    """
-    Remove rows with missing values in non-exempt columns
+def _update_missingness(
+    chunk: pd.DataFrame,
+    missing_counts: defaultdict[tuple[str, str], int],
+    totals: defaultdict[str, int],
+) -> None:
+    totals["all"] += len(chunk)
+    for column in chunk.columns:
+        missing_counts[(column, "all")] += int(chunk[column].isna().sum())
+    for label in (0, 1):
+        subset = chunk.loc[chunk[LABEL_COL].eq(label)]
+        totals[str(label)] += len(subset)
+        for column in chunk.columns:
+            missing_counts[(column, str(label))] += int(subset[column].isna().sum())
 
-    Process data in chunks to handle large files efficiently
-    """
-    print(f"Starting selective cleaning: {INPUT_FILE}")
-    print(f"Preserving rows with missing values in: {len(COLUMNS_TO_RETAIN_WITH_MISSING)} columns")
-    print(f"Chunk size: {chunksize:,}\n")
 
+def _build_report(
+    columns: list[str],
+    missing_counts: defaultdict[tuple[str, str], int],
+    totals: defaultdict[str, int],
+) -> pd.DataFrame:
+    rows = []
+    for column in columns:
+        for label in ("all", "0", "1"):
+            total = totals[label]
+            missing = missing_counts[(column, label)]
+            rows.append(
+                {
+                    "column": column,
+                    "class": label,
+                    "rows": total,
+                    "missing": missing,
+                    "missing_fraction": missing / total if total else None,
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def preserve_missing_values(
+    chunksize: int = CHUNK_SIZE, *, validate_upstream: bool = True
+) -> None:
+    """Preserve rows and audit missingness."""
+    if not INPUT_FILE.exists():
+        raise FileNotFoundError(INPUT_FILE)
+    if validate_upstream:
+        validate_upstream_manifest(
+            UPSTREAM_MANIFEST, "01_dbnsfp_processor", [INPUT_FILE]
+        )
+    ensure_directories(STAGE02_OUT)
+    header = pd.read_csv(INPUT_FILE, nrows=0).columns.tolist()
+    required = {LABEL_COL, ROW_ID_COL}
+    missing_required = required - set(header)
+    if missing_required:
+        raise KeyError(f"Stage 02 input misses {sorted(missing_required)}")
+    indicator_bases = [
+        column for column in BASE_FEATURE_ALLOWLIST if column in header
+    ]
+    output_columns = [
+        *header,
+        *[
+            f"{column}__missing"
+            for column in indicator_bases
+            if f"{column}__missing" not in header
+        ],
+    ]
+    missing_counts: defaultdict[tuple[str, str], int] = defaultdict(int)
+    totals: defaultdict[str, int] = defaultdict(int)
+    class_counts: defaultdict[int, int] = defaultdict(int)
+    temporary = OUTPUT_FILE.with_suffix(OUTPUT_FILE.suffix + ".tmp")
+    report_temporary = REPORT_FILE.with_suffix(REPORT_FILE.suffix + ".tmp")
+    temporary.unlink(missing_ok=True)
+    report_temporary.unlink(missing_ok=True)
+    first_chunk = True
     try:
-        first_chunk = True
-        total_original = 0
-        total_kept = 0
-        chunk_num = 0
-
-        print("Processing chunks...")
-
-        for chunk in pd.read_csv(INPUT_FILE, chunksize=chunksize, low_memory=False):
-            chunk_num += 1
-            original_rows = len(chunk)
-            total_original += original_rows
-
-            all_columns = chunk.columns.tolist()
-            columns_to_check = [
-                col for col in all_columns if col not in COLUMNS_TO_RETAIN_WITH_MISSING
-            ]
-
-            chunk_clean = chunk.dropna(how="any", subset=columns_to_check)
-
-            kept_rows = len(chunk_clean)
-            total_kept += kept_rows
-
-            if not chunk_clean.empty:
-                if first_chunk:
-                    chunk_clean.to_csv(OUTPUT_FILE, mode="w", index=False, header=True)
-                    first_chunk = False
-                else:
-                    chunk_clean.to_csv(OUTPUT_FILE, mode="a", index=False, header=False)
-
-            if chunk_num % 10 == 0:
-                drop_in_chunk = original_rows - kept_rows
-                print(
-                    f"   Chunk {chunk_num}: {original_rows:,} -> {kept_rows:,} (dropped: {drop_in_chunk:,})"
+        for chunk_number, chunk in enumerate(
+            pd.read_csv(INPUT_FILE, chunksize=chunksize, low_memory=False), 1
+        ):
+            if chunk.empty:
+                continue
+            invalid_labels = ~chunk[LABEL_COL].isin([0, 1])
+            if invalid_labels.any():
+                raise ValueError(
+                    f"Chunk {chunk_number} has {int(invalid_labels.sum())} invalid labels"
                 )
-
-            del chunk, chunk_clean
-            gc.collect()
-
-        dropped = total_original - total_kept
-        drop_pct = (dropped / total_original) * 100 if total_original > 0 else 0
-
-        print(f"\nCleaning complete")
-        print(f"   Total input rows: {total_original:,}")
-        print(f"   Rows retained: {total_kept:,}")
-        print(f"   Rows dropped: {dropped:,} ({drop_pct:.2f}%)")
-        print(f"\nOutput saved to: {OUTPUT_FILE}")
-
-    except FileNotFoundError:
-        print(f"Error: File '{INPUT_FILE}' not found")
-    except Exception as e:
-        print(f"\nError occurred: {e}")
+            _update_missingness(chunk, missing_counts, totals)
+            for label, count in chunk[LABEL_COL].value_counts().items():
+                class_counts[int(label)] += int(count)
+            for column in indicator_bases:
+                indicator = f"{column}__missing"
+                if indicator not in chunk.columns:
+                    chunk[indicator] = chunk[column].isna().astype("int8")
+            chunk = chunk.reindex(columns=output_columns)
+            chunk.to_csv(
+                temporary,
+                mode="w" if first_chunk else "a",
+                header=first_chunk,
+                index=False,
+            )
+            first_chunk = False
+            if chunk_number % 10 == 0:
+                logger.info("Processed %d chunks", chunk_number)
+        if first_chunk or totals["all"] == 0:
+            raise RuntimeError("Stage 02 input contains no rows")
+        if set(class_counts) != {0, 1}:
+            raise RuntimeError(f"Stage 02 classes are invalid: {dict(class_counts)}")
+        report = _build_report(header, missing_counts, totals)
+        report.to_csv(report_temporary, index=False)
+        output_header = pd.read_csv(temporary, nrows=0).columns.tolist()
+        if output_header != output_columns:
+            raise RuntimeError("Stage 02 output schema changed unexpectedly")
+        temporary.replace(OUTPUT_FILE)
+        report_temporary.replace(REPORT_FILE)
+    except BaseException:
+        temporary.unlink(missing_ok=True)
+        report_temporary.unlink(missing_ok=True)
+        raise
+    write_run_manifest(
+        MANIFEST_FILE,
+        "02_remove_missing_values",
+        [INPUT_FILE, *([UPSTREAM_MANIFEST] if UPSTREAM_MANIFEST.exists() else [])],
+        {
+            "input_rows": totals["all"],
+            "output_rows": totals["all"],
+            "rows_removed": 0,
+            "missingness_indicators": indicator_bases,
+            "class_counts": dict(class_counts),
+            "imputation": "deferred_to_training_folds",
+            "upstream_validation": (
+                "passed" if validate_upstream else "explicitly_skipped_nonpublication"
+            ),
+        },
+        outputs=[OUTPUT_FILE, REPORT_FILE],
+    )
+    logger.info("Preserved %d rows without global imputation", totals["all"])
 
 
 if __name__ == "__main__":
-    clean_dataset_selective()
+    preserve_missing_values(validate_upstream=True)

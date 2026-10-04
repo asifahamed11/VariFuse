@@ -1,0 +1,3 @@
+# Preserve byte-level scientific provenance across Windows and Linux checkouts.
+# Protocol and evidence manifests authenticate raw file bytes with SHA256.
+* -text

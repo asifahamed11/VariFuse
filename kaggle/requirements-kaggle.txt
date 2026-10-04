@@ -1,0 +1,16 @@
+# Preserve the CUDA PyTorch supplied by Kaggle. Preflight requires torch>=2.4.1.
+numpy>=2.0
+pandas>=2.2.2
+pyarrow>=16
+scipy>=1.13
+scikit-learn>=1.5
+fair-esm==2.0.0
+lightgbm>=4.4
+biopython>=1.84
+matplotlib>=3.8.4
+statsmodels>=0.14.2
+shap>=0.46
+optuna>=4.0
+pytest>=8.0
+ruff>=0.8
+packaging>=23

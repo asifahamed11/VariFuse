@@ -1,0 +1,236 @@
+{
+  "reliability_minus_esm_conservation_logistic": {
+    "direction": "second_minus_first",
+    "groups": 3059,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": 0.02632285139229118,
+        "valid_replicates": 1000,
+        "ci95": [
+          0.020642767278152833,
+          0.0325656696430655
+        ]
+      },
+      "auroc": {
+        "difference": 0.02422045399493178,
+        "valid_replicates": 1000,
+        "ci95": [
+          0.01969402687659359,
+          0.028319453001593987
+        ]
+      }
+    }
+  },
+  "reliability_minus_concatenation": {
+    "direction": "second_minus_first",
+    "groups": 3059,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": -0.0022278856591513296,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.004282407906214608,
+          -0.000281182686140705
+        ]
+      },
+      "auroc": {
+        "difference": -0.005606271894607162,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.007661872013160634,
+          -0.003604752348863083
+        ]
+      }
+    }
+  },
+  "reliability_minus_gated_fusion": {
+    "direction": "second_minus_first",
+    "groups": 3059,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": -0.0050773662540211095,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.007076926823876573,
+          -0.003183178014254179
+        ]
+      },
+      "auroc": {
+        "difference": -0.009148389131494739,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.011134756879777555,
+          -0.007127526771771015
+        ]
+      }
+    }
+  },
+  "reliability_residual_minus_AlphaMissense_score": {
+    "direction": "second_minus_first",
+    "groups": 2765,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": 0.005939208514363581,
+        "valid_replicates": 1000,
+        "ci95": [
+          0.0009662961279647498,
+          0.011383503880409198
+        ]
+      },
+      "auroc": {
+        "difference": 0.004586218847419277,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.00036956116816557464,
+          0.009223187244642777
+        ]
+      }
+    }
+  },
+  "gated_fusion_minus_AlphaMissense_score": {
+    "direction": "second_minus_first",
+    "groups": 2765,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": 0.010323239418257746,
+        "valid_replicates": 1000,
+        "ci95": [
+          0.005447272980027007,
+          0.016150711806110093
+        ]
+      },
+      "auroc": {
+        "difference": 0.012870814845406753,
+        "valid_replicates": 1000,
+        "ci95": [
+          0.00824959839398009,
+          0.01744531190476642
+        ]
+      }
+    }
+  },
+  "reliability_residual_minus_REVEL_score": {
+    "direction": "second_minus_first",
+    "groups": 2589,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": -0.009956432775388602,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.014532496614285784,
+          -0.005286507709950631
+        ]
+      },
+      "auroc": {
+        "difference": -0.011528936320355787,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.01649418428904995,
+          -0.006797169088795347
+        ]
+      }
+    }
+  },
+  "gated_fusion_minus_REVEL_score": {
+    "direction": "second_minus_first",
+    "groups": 2589,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": -0.007275716759409079,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.011741903316055614,
+          -0.0026258779884566737
+        ]
+      },
+      "auroc": {
+        "difference": -0.005072358855353842,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.009045838894103445,
+          -0.0007414260092192518
+        ]
+      }
+    }
+  },
+  "reliability_residual_minus_MetaRNN_score": {
+    "direction": "second_minus_first",
+    "groups": 2819,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": -0.0298042926247043,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.0355289153433456,
+          -0.024984231336641634
+        ]
+      },
+      "auroc": {
+        "difference": -0.033349022822885765,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.03791199309503208,
+          -0.029316403760398825
+        ]
+      }
+    }
+  },
+  "gated_fusion_minus_MetaRNN_score": {
+    "direction": "second_minus_first",
+    "groups": 2819,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": -0.026105343518154744,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.031398066762792956,
+          -0.021501852393426137
+        ]
+      },
+      "auroc": {
+        "difference": -0.025676965426132736,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.029650223702247142,
+          -0.02229268282083045
+        ]
+      }
+    }
+  }
+}

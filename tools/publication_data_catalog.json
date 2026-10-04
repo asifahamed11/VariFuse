@@ -1,0 +1,435 @@
+{
+  "schema_version": 1,
+  "catalog_version": "2026-08-22.1",
+  "generated_date": "2026-08-22",
+  "default_destination": "data/publication_sources",
+  "profiles": {
+    "clinical_temporal_tsv": [
+      "clinvar_submission_2024_06",
+      "clinvar_variant_2024_06",
+      "clinvar_submission_2026_08",
+      "clinvar_variant_2026_08"
+    ],
+    "clinical_temporal_vcv": [
+      "clinvar_vcv_2024_06",
+      "clinvar_vcv_2026_08"
+    ],
+    "proteingym_core_v1_3": [
+      "proteingym_dms_metadata_v1_3",
+      "proteingym_dms_substitutions_v1_3",
+      "proteingym_clinical_metadata_v1_3",
+      "proteingym_clinical_substitutions_v1_3",
+      "proteingym_af2_structures_v1_3",
+      "proteingym_cv_folds_singles_v1_3"
+    ],
+    "proteingym_comparators_v1_3": [
+      "proteingym_zero_shot_dms_scores_v1_3",
+      "proteingym_supervised_dms_scores_v1_3",
+      "proteingym_zero_shot_clinical_scores_v1_3"
+    ],
+    "mavedb_bulk_2026_06": [
+      "mavedb_bulk_2026_06_24"
+    ],
+    "publication_core": [
+      "clinvar_submission_2024_06",
+      "clinvar_variant_2024_06",
+      "clinvar_submission_2026_08",
+      "clinvar_variant_2026_08",
+      "proteingym_dms_metadata_v1_3",
+      "proteingym_dms_substitutions_v1_3",
+      "proteingym_clinical_metadata_v1_3",
+      "proteingym_clinical_substitutions_v1_3",
+      "proteingym_af2_structures_v1_3",
+      "proteingym_cv_folds_singles_v1_3"
+    ]
+  },
+  "sources": {
+    "clinvar_submission_2024_06": {
+      "provider": "NCBI ClinVar",
+      "version": "2024-06",
+      "release_date": "2024-06-06",
+      "description": "Archived submission-level SCV summary at the temporal baseline.",
+      "filename": "submission_summary_2024-06.txt.gz",
+      "relative_directory": "clinvar/2024-06/tab_delimited",
+      "urls": [
+        "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/archive/2024/submission_summary_2024-06.txt.gz"
+      ],
+      "size_bytes": 260853747,
+      "checksum": null,
+      "checksum_policy": "publisher_has_no_archive_checksum; verify_size_and_record_sha256",
+      "license": {
+        "name": "NCBI molecular-data usage policy",
+        "url": "https://www.ncbi.nlm.nih.gov/home/about/policies/",
+        "note": "NCBI places no restriction on molecular-data reuse; preserve submitter attribution and review the submitter-rights caveat."
+      },
+      "documentation_url": "https://www.ncbi.nlm.nih.gov/clinvar/docs/identifiers/",
+      "citation_url": "https://www.ncbi.nlm.nih.gov/clinvar/intro/"
+    },
+    "clinvar_variant_2024_06": {
+      "provider": "NCBI ClinVar",
+      "version": "2024-06",
+      "release_date": "2024-06-06",
+      "description": "Archived variant-level summary paired with the 2024-06 SCV snapshot.",
+      "filename": "variant_summary_2024-06.txt.gz",
+      "relative_directory": "clinvar/2024-06/tab_delimited",
+      "urls": [
+        "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/archive/2024/variant_summary_2024-06.txt.gz"
+      ],
+      "size_bytes": 276058849,
+      "checksum": null,
+      "checksum_policy": "publisher_has_no_archive_checksum; verify_size_and_record_sha256",
+      "license": {
+        "name": "NCBI molecular-data usage policy",
+        "url": "https://www.ncbi.nlm.nih.gov/home/about/policies/",
+        "note": "NCBI places no restriction on molecular-data reuse; preserve submitter attribution and review the submitter-rights caveat."
+      },
+      "documentation_url": "https://www.ncbi.nlm.nih.gov/clinvar/docs/downloads/",
+      "citation_url": "https://www.ncbi.nlm.nih.gov/clinvar/intro/"
+    },
+    "clinvar_submission_2026_08": {
+      "provider": "NCBI ClinVar",
+      "version": "2026-08",
+      "release_date": "2026-08-06",
+      "description": "Archived submission-level SCV summary for the held-out temporal endpoint.",
+      "filename": "submission_summary_2026-08.txt.gz",
+      "relative_directory": "clinvar/2026-08/tab_delimited",
+      "urls": [
+        "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/archive/submission_summary_2026-08.txt.gz",
+        "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/archive/2026/submission_summary_2026-08.txt.gz"
+      ],
+      "size_bytes": 385522058,
+      "checksum": null,
+      "checksum_policy": "publisher_has_no_archive_checksum; verify_size_and_record_sha256",
+      "license": {
+        "name": "NCBI molecular-data usage policy",
+        "url": "https://www.ncbi.nlm.nih.gov/home/about/policies/",
+        "note": "NCBI places no restriction on molecular-data reuse; preserve submitter attribution and review the submitter-rights caveat."
+      },
+      "documentation_url": "https://www.ncbi.nlm.nih.gov/clinvar/docs/identifiers/",
+      "citation_url": "https://www.ncbi.nlm.nih.gov/clinvar/intro/"
+    },
+    "clinvar_variant_2026_08": {
+      "provider": "NCBI ClinVar",
+      "version": "2026-08",
+      "release_date": "2026-08-06",
+      "description": "Archived variant-level summary paired with the 2026-08 SCV snapshot.",
+      "filename": "variant_summary_2026-08.txt.gz",
+      "relative_directory": "clinvar/2026-08/tab_delimited",
+      "urls": [
+        "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/archive/variant_summary_2026-08.txt.gz",
+        "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/archive/2026/variant_summary_2026-08.txt.gz"
+      ],
+      "size_bytes": 441792560,
+      "checksum": null,
+      "checksum_policy": "publisher_has_no_archive_checksum; verify_size_and_record_sha256",
+      "license": {
+        "name": "NCBI molecular-data usage policy",
+        "url": "https://www.ncbi.nlm.nih.gov/home/about/policies/",
+        "note": "NCBI places no restriction on molecular-data reuse; preserve submitter attribution and review the submitter-rights caveat."
+      },
+      "documentation_url": "https://www.ncbi.nlm.nih.gov/clinvar/docs/downloads/",
+      "citation_url": "https://www.ncbi.nlm.nih.gov/clinvar/intro/"
+    },
+    "clinvar_vcv_2024_06": {
+      "provider": "NCBI ClinVar",
+      "version": "2024-06",
+      "release_date": "2024-06-06",
+      "description": "Complete archived VCV XML with underlying SCV submissions for the temporal baseline.",
+      "filename": "ClinVarVCVRelease_2024-06.xml.gz",
+      "relative_directory": "clinvar/2024-06/xml",
+      "urls": [
+        "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/archive/2024/ClinVarVCVRelease_2024-06.xml.gz"
+      ],
+      "size_bytes": 3953138560,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "168a1768cc7842306262be4b8b862247",
+        "provenance": "NCBI .md5 sidecar"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "NCBI molecular-data usage policy",
+        "url": "https://www.ncbi.nlm.nih.gov/home/about/policies/",
+        "note": "NCBI places no restriction on molecular-data reuse; preserve submitter attribution and review the submitter-rights caveat."
+      },
+      "documentation_url": "https://www.ncbi.nlm.nih.gov/clinvar/docs/ftp_primer/",
+      "citation_url": "https://www.ncbi.nlm.nih.gov/clinvar/intro/"
+    },
+    "clinvar_vcv_2026_08": {
+      "provider": "NCBI ClinVar",
+      "version": "2026-08",
+      "release_date": "2026-08-06",
+      "description": "Complete fixed monthly VCV XML with SCV submissions for the temporal endpoint.",
+      "filename": "ClinVarVCVRelease_2026-08.xml.gz",
+      "relative_directory": "clinvar/2026-08/xml",
+      "urls": [
+        "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarVCVRelease_2026-08.xml.gz",
+        "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/archive/2026/ClinVarVCVRelease_2026-08.xml.gz"
+      ],
+      "size_bytes": 5851397371,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "15eb690d6f3c9845373e53f7e9ad83f0",
+        "provenance": "NCBI .md5 sidecar"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "NCBI molecular-data usage policy",
+        "url": "https://www.ncbi.nlm.nih.gov/home/about/policies/",
+        "note": "NCBI places no restriction on molecular-data reuse; preserve submitter attribution and review the submitter-rights caveat."
+      },
+      "documentation_url": "https://www.ncbi.nlm.nih.gov/clinvar/docs/ftp_primer/",
+      "citation_url": "https://www.ncbi.nlm.nih.gov/clinvar/intro/"
+    },
+    "proteingym_dms_metadata_v1_3": {
+      "provider": "ProteinGym",
+      "version": "1.3",
+      "release_date": "2025-04-28",
+      "description": "Reference metadata for all ProteinGym DMS substitution assays.",
+      "filename": "DMS_substitutions.csv",
+      "relative_directory": "proteingym/1.3",
+      "urls": [
+        "https://zenodo.org/api/records/15293562/files/DMS_substitutions.csv/content"
+      ],
+      "size_bytes": 208734,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "c434631737013fceb56efc98056151e0",
+        "provenance": "Zenodo record 15293562"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "MIT",
+        "url": "https://github.com/OATML-Markslab/ProteinGym/blob/main/LICENSE",
+        "note": "Retain the ProteinGym license and cite the benchmark paper."
+      },
+      "documentation_url": "https://github.com/OATML-Markslab/ProteinGym",
+      "citation_url": "https://doi.org/10.5281/zenodo.15293562"
+    },
+    "proteingym_dms_substitutions_v1_3": {
+      "provider": "ProteinGym",
+      "version": "1.3",
+      "release_date": "2025-04-28",
+      "description": "Complete processed ProteinGym DMS substitution benchmark (217 assays).",
+      "filename": "DMS_ProteinGym_substitutions.zip",
+      "relative_directory": "proteingym/1.3",
+      "urls": [
+        "https://zenodo.org/api/records/15293562/files/DMS_ProteinGym_substitutions.zip/content"
+      ],
+      "size_bytes": 43021128,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "ca1a4d46941ef33cc972245347118c7d",
+        "provenance": "Zenodo record 15293562"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "MIT",
+        "url": "https://github.com/OATML-Markslab/ProteinGym/blob/main/LICENSE",
+        "note": "Retain the ProteinGym license and cite the benchmark paper."
+      },
+      "documentation_url": "https://github.com/OATML-Markslab/ProteinGym",
+      "citation_url": "https://doi.org/10.5281/zenodo.15293562"
+    },
+    "proteingym_clinical_metadata_v1_3": {
+      "provider": "ProteinGym",
+      "version": "1.3",
+      "release_date": "2025-04-28",
+      "description": "Reference metadata for the ProteinGym clinical substitution benchmark.",
+      "filename": "clinical_substitutions.csv",
+      "relative_directory": "proteingym/1.3",
+      "urls": [
+        "https://zenodo.org/api/records/15293562/files/clinical_substitutions.csv/content"
+      ],
+      "size_bytes": 2191374,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "c08aa57780a9d0d345fe48ed364d166f",
+        "provenance": "Zenodo record 15293562"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "MIT",
+        "url": "https://github.com/OATML-Markslab/ProteinGym/blob/main/LICENSE",
+        "note": "Retain the ProteinGym license and cite the benchmark paper."
+      },
+      "documentation_url": "https://github.com/OATML-Markslab/ProteinGym",
+      "citation_url": "https://doi.org/10.5281/zenodo.15293562"
+    },
+    "proteingym_clinical_substitutions_v1_3": {
+      "provider": "ProteinGym",
+      "version": "1.3",
+      "release_date": "2025-04-28",
+      "description": "Processed ProteinGym clinical substitution benchmark.",
+      "filename": "clinical_ProteinGym_substitutions.zip",
+      "relative_directory": "proteingym/1.3",
+      "urls": [
+        "https://zenodo.org/api/records/15293562/files/clinical_ProteinGym_substitutions.zip/content"
+      ],
+      "size_bytes": 3356697,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "78fa03e133b073f80725d99fc166e53b",
+        "provenance": "Zenodo record 15293562"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "MIT",
+        "url": "https://github.com/OATML-Markslab/ProteinGym/blob/main/LICENSE",
+        "note": "Retain the ProteinGym license and cite the benchmark paper."
+      },
+      "documentation_url": "https://github.com/OATML-Markslab/ProteinGym",
+      "citation_url": "https://doi.org/10.5281/zenodo.15293562"
+    },
+    "proteingym_af2_structures_v1_3": {
+      "provider": "ProteinGym",
+      "version": "1.3",
+      "release_date": "2025-04-28",
+      "description": "ProteinGym-published predicted structures for DMS assays.",
+      "filename": "ProteinGym_AF2_structures.zip",
+      "relative_directory": "proteingym/1.3",
+      "urls": [
+        "https://zenodo.org/api/records/15293562/files/ProteinGym_AF2_structures.zip/content"
+      ],
+      "size_bytes": 19173248,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "442881616899de02cd1c1b0a57badd37",
+        "provenance": "Zenodo record 15293562"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "MIT",
+        "url": "https://github.com/OATML-Markslab/ProteinGym/blob/main/LICENSE",
+        "note": "Retain the ProteinGym license and cite the benchmark paper."
+      },
+      "documentation_url": "https://github.com/OATML-Markslab/ProteinGym",
+      "citation_url": "https://doi.org/10.5281/zenodo.15293562"
+    },
+    "proteingym_cv_folds_singles_v1_3": {
+      "provider": "ProteinGym",
+      "version": "1.3",
+      "release_date": "2025-04-28",
+      "description": "Official supervised single-substitution CV folds for reproducible comparisons.",
+      "filename": "cv_folds_singles_substitutions.zip",
+      "relative_directory": "proteingym/1.3",
+      "urls": [
+        "https://zenodo.org/api/records/15293562/files/cv_folds_singles_substitutions.zip/content"
+      ],
+      "size_bytes": 13412036,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "53b3c9be428aac3724703a877c014f9c",
+        "provenance": "Zenodo record 15293562"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "MIT",
+        "url": "https://github.com/OATML-Markslab/ProteinGym/blob/main/LICENSE",
+        "note": "Retain the ProteinGym license and cite the benchmark paper."
+      },
+      "documentation_url": "https://github.com/OATML-Markslab/ProteinGym",
+      "citation_url": "https://doi.org/10.5281/zenodo.15293562"
+    },
+    "proteingym_zero_shot_dms_scores_v1_3": {
+      "provider": "ProteinGym",
+      "version": "1.3",
+      "release_date": "2025-04-28",
+      "description": "Published mutation-level zero-shot comparator scores for DMS substitutions.",
+      "filename": "zero_shot_substitutions_scores.zip",
+      "relative_directory": "proteingym/1.3/comparators",
+      "urls": [
+        "https://zenodo.org/api/records/15293562/files/zero_shot_substitutions_scores.zip/content"
+      ],
+      "size_bytes": 1911045703,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "7912b6a1f6c80b0b78c12a15c84d96fc",
+        "provenance": "Zenodo record 15293562"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "MIT",
+        "url": "https://github.com/OATML-Markslab/ProteinGym/blob/main/LICENSE",
+        "note": "Check and cite each underlying model when reporting comparator results."
+      },
+      "documentation_url": "https://github.com/OATML-Markslab/ProteinGym",
+      "citation_url": "https://doi.org/10.5281/zenodo.15293562"
+    },
+    "proteingym_supervised_dms_scores_v1_3": {
+      "provider": "ProteinGym",
+      "version": "1.3",
+      "release_date": "2025-04-28",
+      "description": "Published mutation-level supervised comparator scores for DMS substitutions.",
+      "filename": "DMS_supervised_substitutions_scores.zip",
+      "relative_directory": "proteingym/1.3/comparators",
+      "urls": [
+        "https://zenodo.org/api/records/15293562/files/DMS_supervised_substitutions_scores.zip/content"
+      ],
+      "size_bytes": 269797108,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "d9039ee270eb446ef14d42cf4baf258b",
+        "provenance": "Zenodo record 15293562"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "MIT",
+        "url": "https://github.com/OATML-Markslab/ProteinGym/blob/main/LICENSE",
+        "note": "Check and cite each underlying model when reporting comparator results."
+      },
+      "documentation_url": "https://github.com/OATML-Markslab/ProteinGym",
+      "citation_url": "https://doi.org/10.5281/zenodo.15293562"
+    },
+    "proteingym_zero_shot_clinical_scores_v1_3": {
+      "provider": "ProteinGym",
+      "version": "1.3",
+      "release_date": "2025-04-28",
+      "description": "Published mutation-level zero-shot comparator scores for clinical substitutions.",
+      "filename": "zero_shot_clinical_substitutions_scores.zip",
+      "relative_directory": "proteingym/1.3/comparators",
+      "urls": [
+        "https://zenodo.org/api/records/15293562/files/zero_shot_clinical_substitutions_scores.zip/content"
+      ],
+      "size_bytes": 13241411,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "f6700254c1452041e3e4e452656c04ab",
+        "provenance": "Zenodo record 15293562"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "MIT",
+        "url": "https://github.com/OATML-Markslab/ProteinGym/blob/main/LICENSE",
+        "note": "Check and cite each underlying model when reporting comparator results."
+      },
+      "documentation_url": "https://github.com/OATML-Markslab/ProteinGym",
+      "citation_url": "https://doi.org/10.5281/zenodo.15293562"
+    },
+    "mavedb_bulk_2026_06_24": {
+      "provider": "MaveDB",
+      "version": "2026-06-24T18:13:01Z",
+      "release_date": "2026-06-25",
+      "description": "Pinned quarterly MaveDB bulk archive: metadata plus every CC0 score/count dataset.",
+      "filename": "mavedb-dump.2026062418131.tar.gz",
+      "relative_directory": "mavedb/2026-06-24",
+      "urls": [
+        "https://zenodo.org/api/records/20840937/files/mavedb-dump.2026062418131.tar.gz/content"
+      ],
+      "size_bytes": 1907736956,
+      "checksum": {
+        "algorithm": "md5",
+        "value": "2cb818f9add61a378c30766d9b4b45ce",
+        "provenance": "Zenodo record 20840937"
+      },
+      "checksum_policy": "verify_publisher_checksum_and_record_sha256",
+      "license": {
+        "name": "CC0 1.0",
+        "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "note": "The bulk archive contains only score sets released under CC0."
+      },
+      "documentation_url": "https://www.mavedb.org/docs/mavedb/finding-data/downloading.html",
+      "citation_url": "https://doi.org/10.5281/zenodo.20840937"
+    }
+  }
+}

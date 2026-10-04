@@ -1,0 +1,4527 @@
+{
+  "selection_protocol": "fixed_nested_split_group_disjoint_cross_validation",
+  "feature_names_by_architecture": {
+    "concatenation": [
+      "GERP++_RS",
+      "phyloP100way_vertebrate",
+      "phastCons100way_vertebrate",
+      "SASA",
+      "RELATIVE_SASA",
+      "PLDDT_SCORE",
+      "LOCAL_CONTACT_COUNT_8A",
+      "LOCAL_CONTACT_COUNT_12A",
+      "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+      "LOCAL_MEAN_PLDDT_8A",
+      "LOCAL_MIN_PLDDT_8A",
+      "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+      "LOCAL_MEAN_DISTANCE_8A",
+      "LOCAL_HYDROPHOBIC_FRACTION_8A",
+      "LOCAL_CHARGED_FRACTION_8A",
+      "IS_IN_DOMAIN",
+      "DISTANCE_TO_ACTIVE_SITE",
+      "IS_ACTIVE_SITE",
+      "IS_BINDING_SITE",
+      "IS_TRANSMEMBRANE",
+      "esm_variant_score",
+      "aa_ref_is_A",
+      "aa_ref_is_C",
+      "aa_ref_is_D",
+      "aa_ref_is_E",
+      "aa_ref_is_F",
+      "aa_ref_is_G",
+      "aa_ref_is_H",
+      "aa_ref_is_I",
+      "aa_ref_is_K",
+      "aa_ref_is_L",
+      "aa_ref_is_M",
+      "aa_ref_is_N",
+      "aa_ref_is_P",
+      "aa_ref_is_Q",
+      "aa_ref_is_R",
+      "aa_ref_is_S",
+      "aa_ref_is_T",
+      "aa_ref_is_V",
+      "aa_ref_is_W",
+      "aa_ref_is_Y",
+      "aa_alt_is_A",
+      "aa_alt_is_C",
+      "aa_alt_is_D",
+      "aa_alt_is_E",
+      "aa_alt_is_F",
+      "aa_alt_is_G",
+      "aa_alt_is_H",
+      "aa_alt_is_I",
+      "aa_alt_is_K",
+      "aa_alt_is_L",
+      "aa_alt_is_M",
+      "aa_alt_is_N",
+      "aa_alt_is_P",
+      "aa_alt_is_Q",
+      "aa_alt_is_R",
+      "aa_alt_is_S",
+      "aa_alt_is_T",
+      "aa_alt_is_V",
+      "aa_alt_is_W",
+      "aa_alt_is_Y",
+      "aa_hydrophobicity_delta",
+      "aa_volume_delta",
+      "aa_charge_delta"
+    ],
+    "gated_fusion": [
+      "GERP++_RS",
+      "phyloP100way_vertebrate",
+      "phastCons100way_vertebrate",
+      "SASA",
+      "RELATIVE_SASA",
+      "PLDDT_SCORE",
+      "LOCAL_CONTACT_COUNT_8A",
+      "LOCAL_CONTACT_COUNT_12A",
+      "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+      "LOCAL_MEAN_PLDDT_8A",
+      "LOCAL_MIN_PLDDT_8A",
+      "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+      "LOCAL_MEAN_DISTANCE_8A",
+      "LOCAL_HYDROPHOBIC_FRACTION_8A",
+      "LOCAL_CHARGED_FRACTION_8A",
+      "IS_IN_DOMAIN",
+      "DISTANCE_TO_ACTIVE_SITE",
+      "IS_ACTIVE_SITE",
+      "IS_BINDING_SITE",
+      "IS_TRANSMEMBRANE",
+      "esm_variant_score",
+      "aa_ref_is_A",
+      "aa_ref_is_C",
+      "aa_ref_is_D",
+      "aa_ref_is_E",
+      "aa_ref_is_F",
+      "aa_ref_is_G",
+      "aa_ref_is_H",
+      "aa_ref_is_I",
+      "aa_ref_is_K",
+      "aa_ref_is_L",
+      "aa_ref_is_M",
+      "aa_ref_is_N",
+      "aa_ref_is_P",
+      "aa_ref_is_Q",
+      "aa_ref_is_R",
+      "aa_ref_is_S",
+      "aa_ref_is_T",
+      "aa_ref_is_V",
+      "aa_ref_is_W",
+      "aa_ref_is_Y",
+      "aa_alt_is_A",
+      "aa_alt_is_C",
+      "aa_alt_is_D",
+      "aa_alt_is_E",
+      "aa_alt_is_F",
+      "aa_alt_is_G",
+      "aa_alt_is_H",
+      "aa_alt_is_I",
+      "aa_alt_is_K",
+      "aa_alt_is_L",
+      "aa_alt_is_M",
+      "aa_alt_is_N",
+      "aa_alt_is_P",
+      "aa_alt_is_Q",
+      "aa_alt_is_R",
+      "aa_alt_is_S",
+      "aa_alt_is_T",
+      "aa_alt_is_V",
+      "aa_alt_is_W",
+      "aa_alt_is_Y",
+      "aa_hydrophobicity_delta",
+      "aa_volume_delta",
+      "aa_charge_delta"
+    ],
+    "cross_attention": [
+      "GERP++_RS",
+      "phyloP100way_vertebrate",
+      "phastCons100way_vertebrate",
+      "SASA",
+      "RELATIVE_SASA",
+      "PLDDT_SCORE",
+      "LOCAL_CONTACT_COUNT_8A",
+      "LOCAL_CONTACT_COUNT_12A",
+      "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+      "LOCAL_MEAN_PLDDT_8A",
+      "LOCAL_MIN_PLDDT_8A",
+      "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+      "LOCAL_MEAN_DISTANCE_8A",
+      "LOCAL_HYDROPHOBIC_FRACTION_8A",
+      "LOCAL_CHARGED_FRACTION_8A",
+      "IS_IN_DOMAIN",
+      "DISTANCE_TO_ACTIVE_SITE",
+      "IS_ACTIVE_SITE",
+      "IS_BINDING_SITE",
+      "IS_TRANSMEMBRANE",
+      "esm_variant_score",
+      "aa_ref_is_A",
+      "aa_ref_is_C",
+      "aa_ref_is_D",
+      "aa_ref_is_E",
+      "aa_ref_is_F",
+      "aa_ref_is_G",
+      "aa_ref_is_H",
+      "aa_ref_is_I",
+      "aa_ref_is_K",
+      "aa_ref_is_L",
+      "aa_ref_is_M",
+      "aa_ref_is_N",
+      "aa_ref_is_P",
+      "aa_ref_is_Q",
+      "aa_ref_is_R",
+      "aa_ref_is_S",
+      "aa_ref_is_T",
+      "aa_ref_is_V",
+      "aa_ref_is_W",
+      "aa_ref_is_Y",
+      "aa_alt_is_A",
+      "aa_alt_is_C",
+      "aa_alt_is_D",
+      "aa_alt_is_E",
+      "aa_alt_is_F",
+      "aa_alt_is_G",
+      "aa_alt_is_H",
+      "aa_alt_is_I",
+      "aa_alt_is_K",
+      "aa_alt_is_L",
+      "aa_alt_is_M",
+      "aa_alt_is_N",
+      "aa_alt_is_P",
+      "aa_alt_is_Q",
+      "aa_alt_is_R",
+      "aa_alt_is_S",
+      "aa_alt_is_T",
+      "aa_alt_is_V",
+      "aa_alt_is_W",
+      "aa_alt_is_Y",
+      "aa_hydrophobicity_delta",
+      "aa_volume_delta",
+      "aa_charge_delta"
+    ],
+    "reliability_residual": [
+      "GERP++_RS",
+      "phyloP100way_vertebrate",
+      "phastCons100way_vertebrate",
+      "SASA",
+      "RELATIVE_SASA",
+      "PLDDT_SCORE",
+      "LOCAL_CONTACT_COUNT_8A",
+      "LOCAL_CONTACT_COUNT_12A",
+      "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+      "LOCAL_MEAN_PLDDT_8A",
+      "LOCAL_MIN_PLDDT_8A",
+      "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+      "LOCAL_MEAN_DISTANCE_8A",
+      "LOCAL_HYDROPHOBIC_FRACTION_8A",
+      "LOCAL_CHARGED_FRACTION_8A",
+      "IS_IN_DOMAIN",
+      "DISTANCE_TO_ACTIVE_SITE",
+      "IS_ACTIVE_SITE",
+      "IS_BINDING_SITE",
+      "IS_TRANSMEMBRANE",
+      "esm_variant_score",
+      "aa_ref_is_A",
+      "aa_ref_is_C",
+      "aa_ref_is_D",
+      "aa_ref_is_E",
+      "aa_ref_is_F",
+      "aa_ref_is_G",
+      "aa_ref_is_H",
+      "aa_ref_is_I",
+      "aa_ref_is_K",
+      "aa_ref_is_L",
+      "aa_ref_is_M",
+      "aa_ref_is_N",
+      "aa_ref_is_P",
+      "aa_ref_is_Q",
+      "aa_ref_is_R",
+      "aa_ref_is_S",
+      "aa_ref_is_T",
+      "aa_ref_is_V",
+      "aa_ref_is_W",
+      "aa_ref_is_Y",
+      "aa_alt_is_A",
+      "aa_alt_is_C",
+      "aa_alt_is_D",
+      "aa_alt_is_E",
+      "aa_alt_is_F",
+      "aa_alt_is_G",
+      "aa_alt_is_H",
+      "aa_alt_is_I",
+      "aa_alt_is_K",
+      "aa_alt_is_L",
+      "aa_alt_is_M",
+      "aa_alt_is_N",
+      "aa_alt_is_P",
+      "aa_alt_is_Q",
+      "aa_alt_is_R",
+      "aa_alt_is_S",
+      "aa_alt_is_T",
+      "aa_alt_is_V",
+      "aa_alt_is_W",
+      "aa_alt_is_Y",
+      "aa_hydrophobicity_delta",
+      "aa_volume_delta",
+      "aa_charge_delta",
+      "HAS_STRUCTURE",
+      "LOW_CONFIDENCE_STRUCTURE",
+      "GERP++_RS__missing",
+      "phyloP100way_vertebrate__missing",
+      "phastCons100way_vertebrate__missing",
+      "HAS_DOMAIN_ANNOTATION",
+      "HAS_ACTIVE_SITE_ANNOTATION",
+      "HAS_BINDING_SITE_ANNOTATION",
+      "HAS_TRANSMEMBRANE_ANNOTATION"
+    ],
+    "evidential_residual": [
+      "GERP++_RS",
+      "phyloP100way_vertebrate",
+      "phastCons100way_vertebrate",
+      "SASA",
+      "RELATIVE_SASA",
+      "PLDDT_SCORE",
+      "LOCAL_CONTACT_COUNT_8A",
+      "LOCAL_CONTACT_COUNT_12A",
+      "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+      "LOCAL_MEAN_PLDDT_8A",
+      "LOCAL_MIN_PLDDT_8A",
+      "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+      "LOCAL_MEAN_DISTANCE_8A",
+      "LOCAL_HYDROPHOBIC_FRACTION_8A",
+      "LOCAL_CHARGED_FRACTION_8A",
+      "IS_IN_DOMAIN",
+      "DISTANCE_TO_ACTIVE_SITE",
+      "IS_ACTIVE_SITE",
+      "IS_BINDING_SITE",
+      "IS_TRANSMEMBRANE",
+      "esm_variant_score",
+      "aa_ref_is_A",
+      "aa_ref_is_C",
+      "aa_ref_is_D",
+      "aa_ref_is_E",
+      "aa_ref_is_F",
+      "aa_ref_is_G",
+      "aa_ref_is_H",
+      "aa_ref_is_I",
+      "aa_ref_is_K",
+      "aa_ref_is_L",
+      "aa_ref_is_M",
+      "aa_ref_is_N",
+      "aa_ref_is_P",
+      "aa_ref_is_Q",
+      "aa_ref_is_R",
+      "aa_ref_is_S",
+      "aa_ref_is_T",
+      "aa_ref_is_V",
+      "aa_ref_is_W",
+      "aa_ref_is_Y",
+      "aa_alt_is_A",
+      "aa_alt_is_C",
+      "aa_alt_is_D",
+      "aa_alt_is_E",
+      "aa_alt_is_F",
+      "aa_alt_is_G",
+      "aa_alt_is_H",
+      "aa_alt_is_I",
+      "aa_alt_is_K",
+      "aa_alt_is_L",
+      "aa_alt_is_M",
+      "aa_alt_is_N",
+      "aa_alt_is_P",
+      "aa_alt_is_Q",
+      "aa_alt_is_R",
+      "aa_alt_is_S",
+      "aa_alt_is_T",
+      "aa_alt_is_V",
+      "aa_alt_is_W",
+      "aa_alt_is_Y",
+      "aa_hydrophobicity_delta",
+      "aa_volume_delta",
+      "aa_charge_delta",
+      "HAS_STRUCTURE",
+      "LOW_CONFIDENCE_STRUCTURE",
+      "GERP++_RS__missing",
+      "phyloP100way_vertebrate__missing",
+      "phastCons100way_vertebrate__missing",
+      "HAS_DOMAIN_ANNOTATION",
+      "HAS_ACTIVE_SITE_ANNOTATION",
+      "HAS_BINDING_SITE_ANNOTATION",
+      "HAS_TRANSMEMBRANE_ANNOTATION"
+    ]
+  },
+  "production_params_by_architecture": {
+    "concatenation": {
+      "D_MODEL": 96,
+      "DROPOUT": 0.32609999545583673,
+      "DEEP_LR": 0.0005034916913144287,
+      "DEEP_WD": 1.5472967353730763e-05,
+      "WARMUP_EPOCHS": 5,
+      "EMA_DECAY": 0.995,
+      "MIXUP_ALPHA": 0.2309343292223648,
+      "LABEL_SMOOTH": 0.018590822557095123,
+      "BATCH_SIZE": 128,
+      "N_ENSEMBLE": 3,
+      "DEEP_MAX_EPOCHS": 60,
+      "DEEP_PATIENCE": 10
+    },
+    "gated_fusion": {
+      "D_MODEL": 192,
+      "DROPOUT": 0.2948605197289993,
+      "DEEP_LR": 0.0012849752511553166,
+      "DEEP_WD": 0.0002021569266436487,
+      "WARMUP_EPOCHS": 8,
+      "EMA_DECAY": 0.995,
+      "MIXUP_ALPHA": 0.2950960052399401,
+      "LABEL_SMOOTH": 0.03297765151955466,
+      "BATCH_SIZE": 128,
+      "N_ENSEMBLE": 3,
+      "DEEP_MAX_EPOCHS": 60,
+      "DEEP_PATIENCE": 10
+    },
+    "cross_attention": {
+      "N_HEADS": 8,
+      "N_CROSS_BLOCKS": 4,
+      "N_FUSION_LAYERS": 1,
+      "N_ESM_SLOTS": 32,
+      "DROPOUT": 0.31094131549842363,
+      "DEEP_LR": 0.0014469678423792494,
+      "DEEP_WD": 1.8786601698659224e-06,
+      "WARMUP_EPOCHS": 8,
+      "EMA_DECAY": 0.99,
+      "MIXUP_ALPHA": 0.35915639545668177,
+      "LABEL_SMOOTH": 0.01204076358182033,
+      "BATCH_SIZE": 128,
+      "D_MODEL": 256,
+      "N_ENSEMBLE": 3,
+      "DEEP_MAX_EPOCHS": 60,
+      "DEEP_PATIENCE": 10
+    },
+    "reliability_residual": {
+      "D_MODEL": 64,
+      "DROPOUT": 0.28034725487708106,
+      "DEEP_LR": 0.0016624141710435626,
+      "DEEP_WD": 6.137919567217822e-05,
+      "WARMUP_EPOCHS": 3,
+      "EMA_DECAY": 0.999,
+      "LABEL_SMOOTH": 0.01884169612272639,
+      "BATCH_SIZE": 128,
+      "MODALITY_DROPOUT": 0.10460189959115294,
+      "RELIABILITY_RESIDUAL_SCALE": 2.9913932709359443,
+      "MIXUP_ALPHA": 0.0,
+      "N_ENSEMBLE": 3,
+      "DEEP_MAX_EPOCHS": 60,
+      "DEEP_PATIENCE": 10
+    },
+    "evidential_residual": {
+      "D_MODEL": 128,
+      "DROPOUT": 0.25666954450100316,
+      "DEEP_LR": 0.001915397282125791,
+      "DEEP_WD": 1.174832370933586e-06,
+      "WARMUP_EPOCHS": 2,
+      "EMA_DECAY": 0.995,
+      "LABEL_SMOOTH": 0.03605218978411673,
+      "BATCH_SIZE": 128,
+      "MODALITY_DROPOUT": 0.22912892412624164,
+      "RELIABILITY_RESIDUAL_SCALE": 2.044091774145598,
+      "EVIDENTIAL_PRECISION_FLOOR": 0.1794578555561141,
+      "EVIDENTIAL_GATE_TEMPERATURE": 3.399044181989022,
+      "MIXUP_ALPHA": 0.0,
+      "N_ENSEMBLE": 3,
+      "DEEP_MAX_EPOCHS": 60,
+      "DEEP_PATIENCE": 10
+    }
+  },
+  "architectures": {
+    "concatenation": {
+      "search": {
+        "trials_target_per_outer_fold": 40,
+        "outer_folds": 5,
+        "inner_folds": 3,
+        "search_ensemble": 1,
+        "search_epochs": 25,
+        "search_patience": 5,
+        "final_ensemble": 3,
+        "final_epochs": 60,
+        "final_patience": 10,
+        "objective": "auprc",
+        "storage": "sqlite:////kaggle/working/VariFuse_2/outputs/14_tuning/optuna.db",
+        "search_space": {
+          "D_MODEL": [
+            96,
+            128,
+            160,
+            192,
+            256,
+            320
+          ],
+          "DROPOUT": [
+            0.05,
+            0.35
+          ],
+          "DEEP_LR": [
+            0.0001,
+            0.002
+          ],
+          "DEEP_WD": [
+            1e-06,
+            0.002
+          ],
+          "WARMUP_EPOCHS": [
+            2,
+            12
+          ],
+          "EMA_DECAY": [
+            0.99,
+            0.995,
+            0.999
+          ],
+          "MIXUP_ALPHA": [
+            0.0,
+            0.4
+          ],
+          "LABEL_SMOOTH": [
+            0.0,
+            0.05
+          ],
+          "BATCH_SIZE": [
+            128,
+            256,
+            512
+          ]
+        },
+        "feature_names": [
+          "GERP++_RS",
+          "phyloP100way_vertebrate",
+          "phastCons100way_vertebrate",
+          "SASA",
+          "RELATIVE_SASA",
+          "PLDDT_SCORE",
+          "LOCAL_CONTACT_COUNT_8A",
+          "LOCAL_CONTACT_COUNT_12A",
+          "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+          "LOCAL_MEAN_PLDDT_8A",
+          "LOCAL_MIN_PLDDT_8A",
+          "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+          "LOCAL_MEAN_DISTANCE_8A",
+          "LOCAL_HYDROPHOBIC_FRACTION_8A",
+          "LOCAL_CHARGED_FRACTION_8A",
+          "IS_IN_DOMAIN",
+          "DISTANCE_TO_ACTIVE_SITE",
+          "IS_ACTIVE_SITE",
+          "IS_BINDING_SITE",
+          "IS_TRANSMEMBRANE",
+          "esm_variant_score",
+          "aa_ref_is_A",
+          "aa_ref_is_C",
+          "aa_ref_is_D",
+          "aa_ref_is_E",
+          "aa_ref_is_F",
+          "aa_ref_is_G",
+          "aa_ref_is_H",
+          "aa_ref_is_I",
+          "aa_ref_is_K",
+          "aa_ref_is_L",
+          "aa_ref_is_M",
+          "aa_ref_is_N",
+          "aa_ref_is_P",
+          "aa_ref_is_Q",
+          "aa_ref_is_R",
+          "aa_ref_is_S",
+          "aa_ref_is_T",
+          "aa_ref_is_V",
+          "aa_ref_is_W",
+          "aa_ref_is_Y",
+          "aa_alt_is_A",
+          "aa_alt_is_C",
+          "aa_alt_is_D",
+          "aa_alt_is_E",
+          "aa_alt_is_F",
+          "aa_alt_is_G",
+          "aa_alt_is_H",
+          "aa_alt_is_I",
+          "aa_alt_is_K",
+          "aa_alt_is_L",
+          "aa_alt_is_M",
+          "aa_alt_is_N",
+          "aa_alt_is_P",
+          "aa_alt_is_Q",
+          "aa_alt_is_R",
+          "aa_alt_is_S",
+          "aa_alt_is_T",
+          "aa_alt_is_V",
+          "aa_alt_is_W",
+          "aa_alt_is_Y",
+          "aa_hydrophobicity_delta",
+          "aa_volume_delta",
+          "aa_charge_delta"
+        ]
+      },
+      "best_params_by_outer_fold": {
+        "1": {
+          "D_MODEL": 96,
+          "DROPOUT": 0.32609999545583673,
+          "DEEP_LR": 0.0005034916913144287,
+          "DEEP_WD": 1.5472967353730763e-05,
+          "WARMUP_EPOCHS": 5,
+          "EMA_DECAY": 0.995,
+          "MIXUP_ALPHA": 0.2309343292223648,
+          "LABEL_SMOOTH": 0.018590822557095123,
+          "BATCH_SIZE": 128
+        },
+        "2": {
+          "D_MODEL": 192,
+          "DROPOUT": 0.31674301503328933,
+          "DEEP_LR": 0.00137492900781966,
+          "DEEP_WD": 0.00033724105643720393,
+          "WARMUP_EPOCHS": 2,
+          "EMA_DECAY": 0.995,
+          "MIXUP_ALPHA": 0.16317080185725324,
+          "LABEL_SMOOTH": 0.02716497287531086,
+          "BATCH_SIZE": 128
+        },
+        "3": {
+          "D_MODEL": 160,
+          "DROPOUT": 0.30805328869021076,
+          "DEEP_LR": 0.0011480645026906088,
+          "DEEP_WD": 9.692762864635875e-06,
+          "WARMUP_EPOCHS": 4,
+          "EMA_DECAY": 0.995,
+          "MIXUP_ALPHA": 0.0014825321848892757,
+          "LABEL_SMOOTH": 0.019030767432820145,
+          "BATCH_SIZE": 128
+        },
+        "4": {
+          "D_MODEL": 96,
+          "DROPOUT": 0.30967009097959286,
+          "DEEP_LR": 0.0008077559602520353,
+          "DEEP_WD": 1.757308341997266e-05,
+          "WARMUP_EPOCHS": 7,
+          "EMA_DECAY": 0.995,
+          "MIXUP_ALPHA": 0.30507921394823845,
+          "LABEL_SMOOTH": 0.03555160510577846,
+          "BATCH_SIZE": 128
+        },
+        "5": {
+          "D_MODEL": 256,
+          "DROPOUT": 0.3386916142847438,
+          "DEEP_LR": 0.001494432568364106,
+          "DEEP_WD": 7.369949325918813e-05,
+          "WARMUP_EPOCHS": 2,
+          "EMA_DECAY": 0.99,
+          "MIXUP_ALPHA": 0.08816744090421988,
+          "LABEL_SMOOTH": 0.04994232204276472,
+          "BATCH_SIZE": 128
+        }
+      },
+      "production_selection": {
+        "rule": "hyperparameter_medoid_of_outer_fold_inner_cv_winners",
+        "uses_outer_validation_metrics": false,
+        "source_outer_fold": 1,
+        "total_normalized_distance": 1.0378268726912179,
+        "candidate_parameter_sha256": [
+          "3ed3c0c02601cf7d2d9b1c24daef18f02e01f21af6caafe6b39315065203afcb",
+          "b18ccbdcfe118647263c1f3ba4392185ab4562afb55b82b6e90217f1bf8bf1a0",
+          "5c7a5c5ee3ff0d2ca50e059f9a0ba747be7eadc30488cd6d5835f982f467729f",
+          "3ab561d74dcc6d77fa29a43e0eb4a7c1bd6771bf864f95395fb1744a0385fb9e",
+          "55bab2cd0a5f0ee13a2b241c2a169a41ff22a34c2a59dea34eb285dd9f8cf520"
+        ],
+        "tie_break": "lexicographically_smallest_canonical_parameter_sha256",
+        "note": "This is a deployable consensus candidate. Nested OOF metrics estimate the tuning procedure, not this single production configuration."
+      },
+      "reproducibility": {
+        "legacy_seed": 42,
+        "split_seed": 42,
+        "training_seed": 42,
+        "sampler_seed": 42,
+        "deterministic": true,
+        "protocol_fingerprint": {
+          "source_sha256": {
+            "stage14": "31b008c1b5ec684ff67dd3147745e24fa0881c137fc9af8fb06e15e24cbc413c",
+            "common": "aaacf5e0ef46897b5416af3c61899fcbf24d6de7a39354fc2bbb8d44db8fb391",
+            "gpu_runtime": "204a283323082d7ebb6da3a4d671336b56019b70705e8da06f35ecd6a5072fb0",
+            "config": "36ab2795d0c31131e9f61d757e951f681979e722f763e3fd90005e45f705e3e9",
+            "schema": "f228b8681a4d81a814aef51449569d5e36fc9cfcb487e0933bf456aedad44c8f"
+          },
+          "runtime": {
+            "python": "3.12.13",
+            "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+            "numpy": "2.0.2",
+            "pandas": "2.3.3",
+            "torch": "2.10.0+cu128",
+            "lightgbm": "4.6.0",
+            "scikit_learn": "1.6.1",
+            "optuna": "4.9.0"
+          },
+          "accelerator": {
+            "device": "cuda",
+            "cuda_available": true,
+            "visible_cuda_devices": 2,
+            "selected_cuda_devices": [
+              0,
+              1
+            ],
+            "data_parallel": true,
+            "devices": [
+              {
+                "index": 0,
+                "name": "Tesla T4",
+                "total_bytes": 15636037632,
+                "free_bytes": 15526068224,
+                "capability": [
+                  7,
+                  5
+                ]
+              },
+              {
+                "index": 1,
+                "name": "Tesla T4",
+                "total_bytes": 15636037632,
+                "free_bytes": 15526068224,
+                "capability": [
+                  7,
+                  5
+                ]
+              }
+            ],
+            "available": true,
+            "torch_cuda": "12.8",
+            "cudnn": 91002,
+            "cublas_workspace_config": ":4096:8"
+          },
+          "deterministic": true,
+          "early_stopping_metric": "auprc",
+          "threshold_policy": {
+            "recall_floor": 0.9,
+            "fallback_fbeta": 2.0
+          },
+          "search_budget": {
+            "trials": 40,
+            "ensemble": 1,
+            "epochs": 25,
+            "patience": 5
+          },
+          "final_budget": {
+            "ensemble": 3,
+            "epochs": 60,
+            "patience": 10
+          },
+          "lightgbm_nested_grid": [
+            {
+              "num_leaves": 15,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 15,
+              "min_child_samples": 90
+            },
+            {
+              "num_leaves": 31,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 31,
+              "min_child_samples": 90
+            },
+            {
+              "num_leaves": 63,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 63,
+              "min_child_samples": 90
+            }
+          ],
+          "reliability_residual_contract": {
+            "architecture": "reliability_residual",
+            "sequence_anchor": "esm_variant_score",
+            "anchor_direction": "lower_esm_log_likelihood_ratio_is_more_pathogenic",
+            "anchor_constraint": "positive_softplus_slope_on_negated_score",
+            "fusion_rule": "anchor_logit_plus_reliability_gate_times_bounded_residual",
+            "safe_fallback": "exact_sequence_anchor_when_no_reliable_structure_or_conservation",
+            "availability_features_are_gate_only": true,
+            "local_structure_encoder": "dedicated_lightweight_structural_expert_zeroed_when_structure_unreliable",
+            "evolution_encoder": "dedicated_conservation_expert_zeroed_when_conservation_unavailable",
+            "modality_dropout_training_only": true,
+            "mixup_disabled": true,
+            "required_gate_features": [
+              "HAS_STRUCTURE",
+              "LOW_CONFIDENCE_STRUCTURE"
+            ],
+            "conservation_missing_features": [
+              "GERP++_RS__missing",
+              "phyloP100way_vertebrate__missing",
+              "phastCons100way_vertebrate__missing"
+            ],
+            "optional_gate_features": [
+              "HAS_DOMAIN_ANNOTATION",
+              "HAS_ACTIVE_SITE_ANNOTATION",
+              "HAS_BINDING_SITE_ANNOTATION",
+              "HAS_TRANSMEMBRANE_ANNOTATION",
+              "PLDDT_SCORE",
+              "LOCAL_MEAN_PLDDT_8A",
+              "LOCAL_MIN_PLDDT_8A",
+              "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+              "LOCAL_CONTACT_COUNT_8A",
+              "LOCAL_CONTACT_COUNT_12A",
+              "LOCAL_LONG_RANGE_CONTACT_COUNT_8A"
+            ],
+            "available_gate_features": [],
+            "modality_dropout_probability": 0.25,
+            "maximum_absolute_residual_logit": 2.0
+          }
+        },
+        "gpu": {
+          "device": "cuda",
+          "cuda_available": true,
+          "visible_cuda_devices": 2,
+          "selected_cuda_devices": [
+            0,
+            1
+          ],
+          "data_parallel": true,
+          "devices": [
+            {
+              "index": 0,
+              "name": "Tesla T4",
+              "total_bytes": 15636037632,
+              "free_bytes": 15299575808,
+              "capability": [
+                7,
+                5
+              ]
+            },
+            {
+              "index": 1,
+              "name": "Tesla T4",
+              "total_bytes": 15636037632,
+              "free_bytes": 15299575808,
+              "capability": [
+                7,
+                5
+              ]
+            }
+          ],
+          "available": true
+        },
+        "input_sha256": "e5bf6ecddaea837dba4a3302074f80e1a1930c65e15d875f2df6c481adee0935",
+        "embedding_sha256": "a74e27574ff2d715b21c3203bda97dd52e94133e07b97bcea7a47183f753df2d",
+        "split_plan_path": "/kaggle/working/VariFuse_2/outputs/14_tuning/nested_inner_splits.json",
+        "split_plan_canonical_sha256": "eeb2283b3539c8a17f0f9b76e3b3431b3fb3a276458ce34d280bf8a261067487",
+        "split_plan_file_sha256": "9d07b64214691ed303303538479a0c303b9c0aa39b3bb435f7d3fac85e34b46a"
+      },
+      "fold_results": [
+        {
+          "architecture": "concatenation",
+          "outer_fold": 1,
+          "study_name": "concatenation_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_1",
+          "successful_trials": 25,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.9022,
+          "best_parameters": {
+            "D_MODEL": 96,
+            "DROPOUT": 0.32609999545583673,
+            "DEEP_LR": 0.0005034916913144287,
+            "DEEP_WD": 1.5472967353730763e-05,
+            "WARMUP_EPOCHS": 5,
+            "EMA_DECAY": 0.995,
+            "MIXUP_ALPHA": 0.2309343292223648,
+            "LABEL_SMOOTH": 0.018590822557095123,
+            "BATCH_SIZE": 128
+          },
+          "outer_metrics": {
+            "threshold": 0.4319,
+            "mcc": 0.7255,
+            "auroc": 0.9414,
+            "auprc": 0.9021,
+            "brier": 0.090594,
+            "precision": 0.8015,
+            "recall": 0.851,
+            "f1": 0.8255,
+            "tp": 3056,
+            "fp": 757,
+            "fn": 535,
+            "tn": 5756,
+            "specificity": 0.8838,
+            "npv": 0.915,
+            "calibration": {
+              "prevalence": 0.355404,
+              "prevalence_brier": 0.229092,
+              "brier_skill": 0.604552,
+              "log_loss": 0.298065,
+              "adaptive_ece": 0.02011,
+              "calibration_slope": 0.914252,
+              "calibration_intercept": -0.247136
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.026524,
+                "mcc": 0.9433
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.06853,
+                "mcc": 0.8499
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.092149,
+                "mcc": 0.7997
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.12787,
+                "mcc": 0.7255
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.06853,
+              "mcc": 0.8499
+            },
+            "partition_sizes": {
+              "fit": 25087,
+              "early_stopping": 3983,
+              "temperature": 4776,
+              "threshold": 4247,
+              "outer_validation": 10104
+            }
+          },
+          "outer_fold_plan_sha256": "40c628d14630f50d948df36f8b3386011718f2c38a92b1d0011963132c9b23eb",
+          "outer_validation_rows_sha256": "e40b29e739b0edc80f3b751698d454c25b76842c314ef79d15ca27a91c4ba6bc",
+          "outer_validation_row_count": 10104
+        },
+        {
+          "architecture": "concatenation",
+          "outer_fold": 2,
+          "study_name": "concatenation_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_2",
+          "successful_trials": 25,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.8964,
+          "best_parameters": {
+            "D_MODEL": 192,
+            "DROPOUT": 0.31674301503328933,
+            "DEEP_LR": 0.00137492900781966,
+            "DEEP_WD": 0.00033724105643720393,
+            "WARMUP_EPOCHS": 2,
+            "EMA_DECAY": 0.995,
+            "MIXUP_ALPHA": 0.16317080185725324,
+            "LABEL_SMOOTH": 0.02716497287531086,
+            "BATCH_SIZE": 128
+          },
+          "outer_metrics": {
+            "threshold": 0.2429,
+            "mcc": 0.7514,
+            "auroc": 0.9598,
+            "auprc": 0.9286,
+            "brier": 0.073141,
+            "precision": 0.7648,
+            "recall": 0.9359,
+            "f1": 0.8417,
+            "tp": 3430,
+            "fp": 1055,
+            "fn": 235,
+            "tn": 5664,
+            "specificity": 0.843,
+            "npv": 0.9602,
+            "calibration": {
+              "prevalence": 0.352947,
+              "prevalence_brier": 0.228375,
+              "brier_skill": 0.679732,
+              "log_loss": 0.247076,
+              "adaptive_ece": 0.016815,
+              "calibration_slope": 1.100082,
+              "calibration_intercept": -0.140061
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.042373,
+                "mcc": 0.9179
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.068609,
+                "mcc": 0.8633
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.090413,
+                "mcc": 0.8186
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.12423,
+                "mcc": 0.7514
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.068609,
+              "mcc": 0.8633
+            },
+            "partition_sizes": {
+              "fit": 26045,
+              "early_stopping": 3446,
+              "temperature": 4264,
+              "threshold": 4058,
+              "outer_validation": 10384
+            }
+          },
+          "outer_fold_plan_sha256": "3d6a70b6051c5ed9350cbebbf14d6052baf3b94b85ad64cf965cd6c4bc1bbe0d",
+          "outer_validation_rows_sha256": "2e4a4cc0a68258357b7a466b36e477569afd55b2eb2a0754876166ee681c606c",
+          "outer_validation_row_count": 10384
+        },
+        {
+          "architecture": "concatenation",
+          "outer_fold": 3,
+          "study_name": "concatenation_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_3",
+          "successful_trials": 18,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.9061,
+          "best_parameters": {
+            "D_MODEL": 160,
+            "DROPOUT": 0.30805328869021076,
+            "DEEP_LR": 0.0011480645026906088,
+            "DEEP_WD": 9.692762864635875e-06,
+            "WARMUP_EPOCHS": 4,
+            "EMA_DECAY": 0.995,
+            "MIXUP_ALPHA": 0.0014825321848892757,
+            "LABEL_SMOOTH": 0.019030767432820145,
+            "BATCH_SIZE": 128
+          },
+          "outer_metrics": {
+            "threshold": 0.2995,
+            "mcc": 0.7273,
+            "auroc": 0.9469,
+            "auprc": 0.9053,
+            "brier": 0.084687,
+            "precision": 0.7639,
+            "recall": 0.891,
+            "f1": 0.8225,
+            "tp": 2860,
+            "fp": 884,
+            "fn": 350,
+            "tn": 5462,
+            "specificity": 0.8607,
+            "npv": 0.9398,
+            "calibration": {
+              "prevalence": 0.335915,
+              "prevalence_brier": 0.223076,
+              "brier_skill": 0.620367,
+              "log_loss": 0.27749,
+              "adaptive_ece": 0.012197,
+              "calibration_slope": 0.925939,
+              "calibration_intercept": -0.108993
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.029092,
+                "mcc": 0.9396
+              },
+              "coverage_80": {
+                "coverage": 0.8,
+                "risk": 0.071681,
+                "mcc": 0.8463
+              },
+              "coverage_90": {
+                "coverage": 0.9001,
+                "risk": 0.097663,
+                "mcc": 0.7927
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.129134,
+                "mcc": 0.7273
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8,
+              "risk": 0.071681,
+              "mcc": 0.8463
+            },
+            "partition_sizes": {
+              "fit": 24627,
+              "early_stopping": 5095,
+              "temperature": 4622,
+              "threshold": 4297,
+              "outer_validation": 9556
+            }
+          },
+          "outer_fold_plan_sha256": "5fde899369c4cca57a1ac107dad8f6064afd53d21e64c8e30efadee293573eb2",
+          "outer_validation_rows_sha256": "1319738b9968af2dfdce9342c0391682aac9e6e607b51e2e8378d615e569669e",
+          "outer_validation_row_count": 9556
+        },
+        {
+          "architecture": "concatenation",
+          "outer_fold": 4,
+          "study_name": "concatenation_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_4",
+          "successful_trials": 20,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.9031,
+          "best_parameters": {
+            "D_MODEL": 96,
+            "DROPOUT": 0.30967009097959286,
+            "DEEP_LR": 0.0008077559602520353,
+            "DEEP_WD": 1.757308341997266e-05,
+            "WARMUP_EPOCHS": 7,
+            "EMA_DECAY": 0.995,
+            "MIXUP_ALPHA": 0.30507921394823845,
+            "LABEL_SMOOTH": 0.03555160510577846,
+            "BATCH_SIZE": 128
+          },
+          "outer_metrics": {
+            "threshold": 0.2608,
+            "mcc": 0.73,
+            "auroc": 0.9484,
+            "auprc": 0.9103,
+            "brier": 0.084479,
+            "precision": 0.7733,
+            "recall": 0.8896,
+            "f1": 0.8274,
+            "tp": 2957,
+            "fp": 867,
+            "fn": 367,
+            "tn": 5393,
+            "specificity": 0.8615,
+            "npv": 0.9363,
+            "calibration": {
+              "prevalence": 0.346828,
+              "prevalence_brier": 0.226538,
+              "brier_skill": 0.627087,
+              "log_loss": 0.276717,
+              "adaptive_ece": 0.016497,
+              "calibration_slope": 0.938845,
+              "calibration_intercept": 0.049685
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.031093,
+                "mcc": 0.9374
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.070814,
+                "mcc": 0.8516
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.097496,
+                "mcc": 0.7947
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.128756,
+                "mcc": 0.73
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.070814,
+              "mcc": 0.8516
+            },
+            "partition_sizes": {
+              "fit": 26198,
+              "early_stopping": 4635,
+              "temperature": 3784,
+              "threshold": 3996,
+              "outer_validation": 9584
+            }
+          },
+          "outer_fold_plan_sha256": "9000ce1c3a07ad4275043cdb98ffb45a5ab9048d3f9a1810d466499535087e91",
+          "outer_validation_rows_sha256": "ade336e79563d9b41071f12688633f9bef5143402c59497d78823f540105e494",
+          "outer_validation_row_count": 9584
+        },
+        {
+          "architecture": "concatenation",
+          "outer_fold": 5,
+          "study_name": "concatenation_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_5",
+          "successful_trials": 23,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.9097,
+          "best_parameters": {
+            "D_MODEL": 256,
+            "DROPOUT": 0.3386916142847438,
+            "DEEP_LR": 0.001494432568364106,
+            "DEEP_WD": 7.369949325918813e-05,
+            "WARMUP_EPOCHS": 2,
+            "EMA_DECAY": 0.99,
+            "MIXUP_ALPHA": 0.08816744090421988,
+            "LABEL_SMOOTH": 0.04994232204276472,
+            "BATCH_SIZE": 128
+          },
+          "outer_metrics": {
+            "threshold": 0.1984,
+            "mcc": 0.71,
+            "auroc": 0.9454,
+            "auprc": 0.9015,
+            "brier": 0.086592,
+            "precision": 0.7342,
+            "recall": 0.9129,
+            "f1": 0.8138,
+            "tp": 2693,
+            "fp": 975,
+            "fn": 257,
+            "tn": 4644,
+            "specificity": 0.8265,
+            "npv": 0.9476,
+            "calibration": {
+              "prevalence": 0.344264,
+              "prevalence_brier": 0.225746,
+              "brier_skill": 0.616418,
+              "log_loss": 0.286246,
+              "adaptive_ece": 0.020956,
+              "calibration_slope": 0.980447,
+              "calibration_intercept": -0.061493
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5001,
+                "risk": 0.074212,
+                "mcc": 0.8592
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.091599,
+                "mcc": 0.8192
+              },
+              "coverage_90": {
+                "coverage": 0.9001,
+                "risk": 0.112019,
+                "mcc": 0.7755
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.143774,
+                "mcc": 0.71
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.091599,
+              "mcc": 0.8192
+            },
+            "partition_sizes": {
+              "fit": 26089,
+              "early_stopping": 4618,
+              "temperature": 4616,
+              "threshold": 4305,
+              "outer_validation": 8569
+            }
+          },
+          "outer_fold_plan_sha256": "aff190f4a235c95b5f389617ccd7b4c1d3e168308c309c7d90d33ca72b33c1ff",
+          "outer_validation_rows_sha256": "3996e9b39af7e05a08d94745905ee527cd5d1c157f50827ffe925bdc8a4799e9",
+          "outer_validation_row_count": 8569
+        }
+      ]
+    },
+    "gated_fusion": {
+      "search": {
+        "trials_target_per_outer_fold": 40,
+        "outer_folds": 5,
+        "inner_folds": 3,
+        "search_ensemble": 1,
+        "search_epochs": 25,
+        "search_patience": 5,
+        "final_ensemble": 3,
+        "final_epochs": 60,
+        "final_patience": 10,
+        "objective": "auprc",
+        "storage": "sqlite:////kaggle/working/VariFuse_2/outputs/14_tuning/optuna.db",
+        "search_space": {
+          "D_MODEL": [
+            96,
+            128,
+            160,
+            192
+          ],
+          "DROPOUT": [
+            0.05,
+            0.35
+          ],
+          "DEEP_LR": [
+            0.0001,
+            0.002
+          ],
+          "DEEP_WD": [
+            1e-06,
+            0.002
+          ],
+          "WARMUP_EPOCHS": [
+            2,
+            12
+          ],
+          "EMA_DECAY": [
+            0.99,
+            0.995,
+            0.999
+          ],
+          "MIXUP_ALPHA": [
+            0.0,
+            0.4
+          ],
+          "LABEL_SMOOTH": [
+            0.0,
+            0.05
+          ],
+          "BATCH_SIZE": [
+            128,
+            256,
+            512
+          ]
+        },
+        "feature_names": [
+          "GERP++_RS",
+          "phyloP100way_vertebrate",
+          "phastCons100way_vertebrate",
+          "SASA",
+          "RELATIVE_SASA",
+          "PLDDT_SCORE",
+          "LOCAL_CONTACT_COUNT_8A",
+          "LOCAL_CONTACT_COUNT_12A",
+          "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+          "LOCAL_MEAN_PLDDT_8A",
+          "LOCAL_MIN_PLDDT_8A",
+          "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+          "LOCAL_MEAN_DISTANCE_8A",
+          "LOCAL_HYDROPHOBIC_FRACTION_8A",
+          "LOCAL_CHARGED_FRACTION_8A",
+          "IS_IN_DOMAIN",
+          "DISTANCE_TO_ACTIVE_SITE",
+          "IS_ACTIVE_SITE",
+          "IS_BINDING_SITE",
+          "IS_TRANSMEMBRANE",
+          "esm_variant_score",
+          "aa_ref_is_A",
+          "aa_ref_is_C",
+          "aa_ref_is_D",
+          "aa_ref_is_E",
+          "aa_ref_is_F",
+          "aa_ref_is_G",
+          "aa_ref_is_H",
+          "aa_ref_is_I",
+          "aa_ref_is_K",
+          "aa_ref_is_L",
+          "aa_ref_is_M",
+          "aa_ref_is_N",
+          "aa_ref_is_P",
+          "aa_ref_is_Q",
+          "aa_ref_is_R",
+          "aa_ref_is_S",
+          "aa_ref_is_T",
+          "aa_ref_is_V",
+          "aa_ref_is_W",
+          "aa_ref_is_Y",
+          "aa_alt_is_A",
+          "aa_alt_is_C",
+          "aa_alt_is_D",
+          "aa_alt_is_E",
+          "aa_alt_is_F",
+          "aa_alt_is_G",
+          "aa_alt_is_H",
+          "aa_alt_is_I",
+          "aa_alt_is_K",
+          "aa_alt_is_L",
+          "aa_alt_is_M",
+          "aa_alt_is_N",
+          "aa_alt_is_P",
+          "aa_alt_is_Q",
+          "aa_alt_is_R",
+          "aa_alt_is_S",
+          "aa_alt_is_T",
+          "aa_alt_is_V",
+          "aa_alt_is_W",
+          "aa_alt_is_Y",
+          "aa_hydrophobicity_delta",
+          "aa_volume_delta",
+          "aa_charge_delta"
+        ]
+      },
+      "best_params_by_outer_fold": {
+        "1": {
+          "D_MODEL": 192,
+          "DROPOUT": 0.2948605197289993,
+          "DEEP_LR": 0.0012849752511553166,
+          "DEEP_WD": 0.0002021569266436487,
+          "WARMUP_EPOCHS": 8,
+          "EMA_DECAY": 0.995,
+          "MIXUP_ALPHA": 0.2950960052399401,
+          "LABEL_SMOOTH": 0.03297765151955466,
+          "BATCH_SIZE": 128
+        },
+        "2": {
+          "D_MODEL": 160,
+          "DROPOUT": 0.23438002441345618,
+          "DEEP_LR": 0.0011610543842082302,
+          "DEEP_WD": 0.0001825993527069817,
+          "WARMUP_EPOCHS": 3,
+          "EMA_DECAY": 0.995,
+          "MIXUP_ALPHA": 0.2380524917539456,
+          "LABEL_SMOOTH": 0.03329992007491314,
+          "BATCH_SIZE": 128
+        },
+        "3": {
+          "D_MODEL": 192,
+          "DROPOUT": 0.27838505306958466,
+          "DEEP_LR": 0.0005686761686333432,
+          "DEEP_WD": 3.0409055149960276e-06,
+          "WARMUP_EPOCHS": 8,
+          "EMA_DECAY": 0.99,
+          "MIXUP_ALPHA": 0.3981542247484474,
+          "LABEL_SMOOTH": 0.012790841707931315,
+          "BATCH_SIZE": 128
+        },
+        "4": {
+          "D_MODEL": 160,
+          "DROPOUT": 0.24913619893931652,
+          "DEEP_LR": 0.0013152362997346657,
+          "DEEP_WD": 2.1321789273022574e-06,
+          "WARMUP_EPOCHS": 2,
+          "EMA_DECAY": 0.995,
+          "MIXUP_ALPHA": 0.009993052689799886,
+          "LABEL_SMOOTH": 0.026137639598880002,
+          "BATCH_SIZE": 128
+        },
+        "5": {
+          "D_MODEL": 192,
+          "DROPOUT": 0.2435476457759005,
+          "DEEP_LR": 0.0019730965130673158,
+          "DEEP_WD": 3.0812350605320244e-05,
+          "WARMUP_EPOCHS": 2,
+          "EMA_DECAY": 0.995,
+          "MIXUP_ALPHA": 0.07576297000466564,
+          "LABEL_SMOOTH": 0.04003806276166775,
+          "BATCH_SIZE": 128
+        }
+      },
+      "production_selection": {
+        "rule": "hyperparameter_medoid_of_outer_fold_inner_cv_winners",
+        "uses_outer_validation_metrics": false,
+        "source_outer_fold": 1,
+        "total_normalized_distance": 1.0553667414566168,
+        "candidate_parameter_sha256": [
+          "d233966bbd5927a5c6a9eaa3a16c585969d221412580d2349cf44efdd200d0ca",
+          "4958d5aeaa0a98f7305117481b46e9a9c2fe46ca4f38f8c809ea789cf92cf38e",
+          "af4e47d971123c328d754e1a93609290e470d558cb91aaf31758f31aef99334f",
+          "1df6f35e358c32c010dd1edb94d2eabe12eca13b0d5239d131abcfe51954138b",
+          "210be1e8cbef7fff105e8af41d636dce9e8bc7001749e237866bc6239defbd84"
+        ],
+        "tie_break": "lexicographically_smallest_canonical_parameter_sha256",
+        "note": "This is a deployable consensus candidate. Nested OOF metrics estimate the tuning procedure, not this single production configuration."
+      },
+      "reproducibility": {
+        "legacy_seed": 42,
+        "split_seed": 42,
+        "training_seed": 42,
+        "sampler_seed": 42,
+        "deterministic": true,
+        "protocol_fingerprint": {
+          "source_sha256": {
+            "stage14": "31b008c1b5ec684ff67dd3147745e24fa0881c137fc9af8fb06e15e24cbc413c",
+            "common": "aaacf5e0ef46897b5416af3c61899fcbf24d6de7a39354fc2bbb8d44db8fb391",
+            "gpu_runtime": "204a283323082d7ebb6da3a4d671336b56019b70705e8da06f35ecd6a5072fb0",
+            "config": "36ab2795d0c31131e9f61d757e951f681979e722f763e3fd90005e45f705e3e9",
+            "schema": "f228b8681a4d81a814aef51449569d5e36fc9cfcb487e0933bf456aedad44c8f"
+          },
+          "runtime": {
+            "python": "3.12.13",
+            "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+            "numpy": "2.0.2",
+            "pandas": "2.3.3",
+            "torch": "2.10.0+cu128",
+            "lightgbm": "4.6.0",
+            "scikit_learn": "1.6.1",
+            "optuna": "4.9.0"
+          },
+          "accelerator": {
+            "device": "cuda",
+            "cuda_available": true,
+            "visible_cuda_devices": 2,
+            "selected_cuda_devices": [
+              0,
+              1
+            ],
+            "data_parallel": true,
+            "devices": [
+              {
+                "index": 0,
+                "name": "Tesla T4",
+                "total_bytes": 15636037632,
+                "free_bytes": 15526068224,
+                "capability": [
+                  7,
+                  5
+                ]
+              },
+              {
+                "index": 1,
+                "name": "Tesla T4",
+                "total_bytes": 15636037632,
+                "free_bytes": 15526068224,
+                "capability": [
+                  7,
+                  5
+                ]
+              }
+            ],
+            "available": true,
+            "torch_cuda": "12.8",
+            "cudnn": 91002,
+            "cublas_workspace_config": ":4096:8"
+          },
+          "deterministic": true,
+          "early_stopping_metric": "auprc",
+          "threshold_policy": {
+            "recall_floor": 0.9,
+            "fallback_fbeta": 2.0
+          },
+          "search_budget": {
+            "trials": 40,
+            "ensemble": 1,
+            "epochs": 25,
+            "patience": 5
+          },
+          "final_budget": {
+            "ensemble": 3,
+            "epochs": 60,
+            "patience": 10
+          },
+          "lightgbm_nested_grid": [
+            {
+              "num_leaves": 15,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 15,
+              "min_child_samples": 90
+            },
+            {
+              "num_leaves": 31,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 31,
+              "min_child_samples": 90
+            },
+            {
+              "num_leaves": 63,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 63,
+              "min_child_samples": 90
+            }
+          ],
+          "reliability_residual_contract": {
+            "architecture": "reliability_residual",
+            "sequence_anchor": "esm_variant_score",
+            "anchor_direction": "lower_esm_log_likelihood_ratio_is_more_pathogenic",
+            "anchor_constraint": "positive_softplus_slope_on_negated_score",
+            "fusion_rule": "anchor_logit_plus_reliability_gate_times_bounded_residual",
+            "safe_fallback": "exact_sequence_anchor_when_no_reliable_structure_or_conservation",
+            "availability_features_are_gate_only": true,
+            "local_structure_encoder": "dedicated_lightweight_structural_expert_zeroed_when_structure_unreliable",
+            "evolution_encoder": "dedicated_conservation_expert_zeroed_when_conservation_unavailable",
+            "modality_dropout_training_only": true,
+            "mixup_disabled": true,
+            "required_gate_features": [
+              "HAS_STRUCTURE",
+              "LOW_CONFIDENCE_STRUCTURE"
+            ],
+            "conservation_missing_features": [
+              "GERP++_RS__missing",
+              "phyloP100way_vertebrate__missing",
+              "phastCons100way_vertebrate__missing"
+            ],
+            "optional_gate_features": [
+              "HAS_DOMAIN_ANNOTATION",
+              "HAS_ACTIVE_SITE_ANNOTATION",
+              "HAS_BINDING_SITE_ANNOTATION",
+              "HAS_TRANSMEMBRANE_ANNOTATION",
+              "PLDDT_SCORE",
+              "LOCAL_MEAN_PLDDT_8A",
+              "LOCAL_MIN_PLDDT_8A",
+              "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+              "LOCAL_CONTACT_COUNT_8A",
+              "LOCAL_CONTACT_COUNT_12A",
+              "LOCAL_LONG_RANGE_CONTACT_COUNT_8A"
+            ],
+            "available_gate_features": [],
+            "modality_dropout_probability": 0.25,
+            "maximum_absolute_residual_logit": 2.0
+          }
+        },
+        "gpu": {
+          "device": "cuda",
+          "cuda_available": true,
+          "visible_cuda_devices": 2,
+          "selected_cuda_devices": [
+            0,
+            1
+          ],
+          "data_parallel": true,
+          "devices": [
+            {
+              "index": 0,
+              "name": "Tesla T4",
+              "total_bytes": 15636037632,
+              "free_bytes": 15299575808,
+              "capability": [
+                7,
+                5
+              ]
+            },
+            {
+              "index": 1,
+              "name": "Tesla T4",
+              "total_bytes": 15636037632,
+              "free_bytes": 15299575808,
+              "capability": [
+                7,
+                5
+              ]
+            }
+          ],
+          "available": true
+        },
+        "input_sha256": "e5bf6ecddaea837dba4a3302074f80e1a1930c65e15d875f2df6c481adee0935",
+        "embedding_sha256": "a74e27574ff2d715b21c3203bda97dd52e94133e07b97bcea7a47183f753df2d",
+        "split_plan_path": "/kaggle/working/VariFuse_2/outputs/14_tuning/nested_inner_splits.json",
+        "split_plan_canonical_sha256": "eeb2283b3539c8a17f0f9b76e3b3431b3fb3a276458ce34d280bf8a261067487",
+        "split_plan_file_sha256": "9d07b64214691ed303303538479a0c303b9c0aa39b3bb435f7d3fac85e34b46a"
+      },
+      "fold_results": [
+        {
+          "architecture": "gated_fusion",
+          "outer_fold": 1,
+          "study_name": "gated_fusion_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_1",
+          "successful_trials": 28,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.907,
+          "best_parameters": {
+            "D_MODEL": 192,
+            "DROPOUT": 0.2948605197289993,
+            "DEEP_LR": 0.0012849752511553166,
+            "DEEP_WD": 0.0002021569266436487,
+            "WARMUP_EPOCHS": 8,
+            "EMA_DECAY": 0.995,
+            "MIXUP_ALPHA": 0.2950960052399401,
+            "LABEL_SMOOTH": 0.03297765151955466,
+            "BATCH_SIZE": 128
+          },
+          "outer_metrics": {
+            "threshold": 0.4575,
+            "mcc": 0.7351,
+            "auroc": 0.945,
+            "auprc": 0.9081,
+            "brier": 0.088864,
+            "precision": 0.8158,
+            "recall": 0.8463,
+            "f1": 0.8308,
+            "tp": 3039,
+            "fp": 686,
+            "fn": 552,
+            "tn": 5827,
+            "specificity": 0.8947,
+            "npv": 0.9135,
+            "calibration": {
+              "prevalence": 0.355404,
+              "prevalence_brier": 0.229092,
+              "brier_skill": 0.612101,
+              "log_loss": 0.29233,
+              "adaptive_ece": 0.023817,
+              "calibration_slope": 0.896271,
+              "calibration_intercept": -0.272292
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.023951,
+                "mcc": 0.9478
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.063088,
+                "mcc": 0.8606
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.08863,
+                "mcc": 0.8055
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.122526,
+                "mcc": 0.7351
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.063088,
+              "mcc": 0.8606
+            },
+            "partition_sizes": {
+              "fit": 25087,
+              "early_stopping": 3983,
+              "temperature": 4776,
+              "threshold": 4247,
+              "outer_validation": 10104
+            }
+          },
+          "outer_fold_plan_sha256": "40c628d14630f50d948df36f8b3386011718f2c38a92b1d0011963132c9b23eb",
+          "outer_validation_rows_sha256": "e40b29e739b0edc80f3b751698d454c25b76842c314ef79d15ca27a91c4ba6bc",
+          "outer_validation_row_count": 10104
+        },
+        {
+          "architecture": "gated_fusion",
+          "outer_fold": 2,
+          "study_name": "gated_fusion_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_2",
+          "successful_trials": 21,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.8993,
+          "best_parameters": {
+            "D_MODEL": 160,
+            "DROPOUT": 0.23438002441345618,
+            "DEEP_LR": 0.0011610543842082302,
+            "DEEP_WD": 0.0001825993527069817,
+            "WARMUP_EPOCHS": 3,
+            "EMA_DECAY": 0.995,
+            "MIXUP_ALPHA": 0.2380524917539456,
+            "LABEL_SMOOTH": 0.03329992007491314,
+            "BATCH_SIZE": 128
+          },
+          "outer_metrics": {
+            "threshold": 0.2494,
+            "mcc": 0.7745,
+            "auroc": 0.9641,
+            "auprc": 0.9345,
+            "brier": 0.068951,
+            "precision": 0.7854,
+            "recall": 0.9408,
+            "f1": 0.8561,
+            "tp": 3448,
+            "fp": 942,
+            "fn": 217,
+            "tn": 5777,
+            "specificity": 0.8598,
+            "npv": 0.9638,
+            "calibration": {
+              "prevalence": 0.352947,
+              "prevalence_brier": 0.228375,
+              "brier_skill": 0.698082,
+              "log_loss": 0.234639,
+              "adaptive_ece": 0.01187,
+              "calibration_slope": 1.09983,
+              "calibration_intercept": -0.133653
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.038521,
+                "mcc": 0.9252
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.058257,
+                "mcc": 0.8826
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.080034,
+                "mcc": 0.8378
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.111614,
+                "mcc": 0.7745
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.058257,
+              "mcc": 0.8826
+            },
+            "partition_sizes": {
+              "fit": 26045,
+              "early_stopping": 3446,
+              "temperature": 4264,
+              "threshold": 4058,
+              "outer_validation": 10384
+            }
+          },
+          "outer_fold_plan_sha256": "3d6a70b6051c5ed9350cbebbf14d6052baf3b94b85ad64cf965cd6c4bc1bbe0d",
+          "outer_validation_rows_sha256": "2e4a4cc0a68258357b7a466b36e477569afd55b2eb2a0754876166ee681c606c",
+          "outer_validation_row_count": 10384
+        },
+        {
+          "architecture": "gated_fusion",
+          "outer_fold": 3,
+          "study_name": "gated_fusion_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_3",
+          "successful_trials": 21,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.909,
+          "best_parameters": {
+            "D_MODEL": 192,
+            "DROPOUT": 0.27838505306958466,
+            "DEEP_LR": 0.0005686761686333432,
+            "DEEP_WD": 3.0409055149960276e-06,
+            "WARMUP_EPOCHS": 8,
+            "EMA_DECAY": 0.99,
+            "MIXUP_ALPHA": 0.3981542247484474,
+            "LABEL_SMOOTH": 0.012790841707931315,
+            "BATCH_SIZE": 128
+          },
+          "outer_metrics": {
+            "threshold": 0.3408,
+            "mcc": 0.7409,
+            "auroc": 0.9502,
+            "auprc": 0.9087,
+            "brier": 0.081714,
+            "precision": 0.7812,
+            "recall": 0.8879,
+            "f1": 0.8311,
+            "tp": 2850,
+            "fp": 798,
+            "fn": 360,
+            "tn": 5548,
+            "specificity": 0.8743,
+            "npv": 0.9391,
+            "calibration": {
+              "prevalence": 0.335915,
+              "prevalence_brier": 0.223076,
+              "brier_skill": 0.633695,
+              "log_loss": 0.269492,
+              "adaptive_ece": 0.01492,
+              "calibration_slope": 0.915048,
+              "calibration_intercept": -0.165904
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.021976,
+                "mcc": 0.9522
+              },
+              "coverage_80": {
+                "coverage": 0.8,
+                "risk": 0.06174,
+                "mcc": 0.866
+              },
+              "coverage_90": {
+                "coverage": 0.9001,
+                "risk": 0.089524,
+                "mcc": 0.8071
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.12118,
+                "mcc": 0.7409
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8,
+              "risk": 0.06174,
+              "mcc": 0.866
+            },
+            "partition_sizes": {
+              "fit": 24627,
+              "early_stopping": 5095,
+              "temperature": 4622,
+              "threshold": 4297,
+              "outer_validation": 9556
+            }
+          },
+          "outer_fold_plan_sha256": "5fde899369c4cca57a1ac107dad8f6064afd53d21e64c8e30efadee293573eb2",
+          "outer_validation_rows_sha256": "1319738b9968af2dfdce9342c0391682aac9e6e607b51e2e8378d615e569669e",
+          "outer_validation_row_count": 9556
+        },
+        {
+          "architecture": "gated_fusion",
+          "outer_fold": 4,
+          "study_name": "gated_fusion_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_4",
+          "successful_trials": 24,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.9106,
+          "best_parameters": {
+            "D_MODEL": 160,
+            "DROPOUT": 0.24913619893931652,
+            "DEEP_LR": 0.0013152362997346657,
+            "DEEP_WD": 2.1321789273022574e-06,
+            "WARMUP_EPOCHS": 2,
+            "EMA_DECAY": 0.995,
+            "MIXUP_ALPHA": 0.009993052689799886,
+            "LABEL_SMOOTH": 0.026137639598880002,
+            "BATCH_SIZE": 128
+          },
+          "outer_metrics": {
+            "threshold": 0.2532,
+            "mcc": 0.7473,
+            "auroc": 0.9541,
+            "auprc": 0.9197,
+            "brier": 0.079492,
+            "precision": 0.7856,
+            "recall": 0.8983,
+            "f1": 0.8382,
+            "tp": 2986,
+            "fp": 815,
+            "fn": 338,
+            "tn": 5445,
+            "specificity": 0.8698,
+            "npv": 0.9416,
+            "calibration": {
+              "prevalence": 0.346828,
+              "prevalence_brier": 0.226538,
+              "brier_skill": 0.649101,
+              "log_loss": 0.262323,
+              "adaptive_ece": 0.017309,
+              "calibration_slope": 0.941407,
+              "calibration_intercept": 0.081818
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.027755,
+                "mcc": 0.9445
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.060642,
+                "mcc": 0.8721
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.084744,
+                "mcc": 0.821
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.120305,
+                "mcc": 0.7473
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.060642,
+              "mcc": 0.8721
+            },
+            "partition_sizes": {
+              "fit": 26198,
+              "early_stopping": 4635,
+              "temperature": 3784,
+              "threshold": 3996,
+              "outer_validation": 9584
+            }
+          },
+          "outer_fold_plan_sha256": "9000ce1c3a07ad4275043cdb98ffb45a5ab9048d3f9a1810d466499535087e91",
+          "outer_validation_rows_sha256": "ade336e79563d9b41071f12688633f9bef5143402c59497d78823f540105e494",
+          "outer_validation_row_count": 9584
+        },
+        {
+          "architecture": "gated_fusion",
+          "outer_fold": 5,
+          "study_name": "gated_fusion_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_5",
+          "successful_trials": 23,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.9167,
+          "best_parameters": {
+            "D_MODEL": 192,
+            "DROPOUT": 0.2435476457759005,
+            "DEEP_LR": 0.0019730965130673158,
+            "DEEP_WD": 3.0812350605320244e-05,
+            "WARMUP_EPOCHS": 2,
+            "EMA_DECAY": 0.995,
+            "MIXUP_ALPHA": 0.07576297000466564,
+            "LABEL_SMOOTH": 0.04003806276166775,
+            "BATCH_SIZE": 128
+          },
+          "outer_metrics": {
+            "threshold": 0.2243,
+            "mcc": 0.7324,
+            "auroc": 0.9524,
+            "auprc": 0.9124,
+            "brier": 0.080324,
+            "precision": 0.7554,
+            "recall": 0.9159,
+            "f1": 0.8279,
+            "tp": 2702,
+            "fp": 875,
+            "fn": 248,
+            "tn": 4744,
+            "specificity": 0.8443,
+            "npv": 0.9503,
+            "calibration": {
+              "prevalence": 0.344264,
+              "prevalence_brier": 0.225746,
+              "brier_skill": 0.644184,
+              "log_loss": 0.266873,
+              "adaptive_ece": 0.017113,
+              "calibration_slope": 1.005244,
+              "calibration_intercept": -0.031712
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5001,
+                "risk": 0.047841,
+                "mcc": 0.9078
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.074533,
+                "mcc": 0.8489
+              },
+              "coverage_90": {
+                "coverage": 0.9001,
+                "risk": 0.096461,
+                "mcc": 0.8016
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.131054,
+                "mcc": 0.7324
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.074533,
+              "mcc": 0.8489
+            },
+            "partition_sizes": {
+              "fit": 26089,
+              "early_stopping": 4618,
+              "temperature": 4616,
+              "threshold": 4305,
+              "outer_validation": 8569
+            }
+          },
+          "outer_fold_plan_sha256": "aff190f4a235c95b5f389617ccd7b4c1d3e168308c309c7d90d33ca72b33c1ff",
+          "outer_validation_rows_sha256": "3996e9b39af7e05a08d94745905ee527cd5d1c157f50827ffe925bdc8a4799e9",
+          "outer_validation_row_count": 8569
+        }
+      ]
+    },
+    "cross_attention": {
+      "search": {
+        "trials_target_per_outer_fold": 40,
+        "outer_folds": 5,
+        "inner_folds": 3,
+        "search_ensemble": 1,
+        "search_epochs": 25,
+        "search_patience": 5,
+        "final_ensemble": 3,
+        "final_epochs": 60,
+        "final_patience": 10,
+        "objective": "auprc",
+        "storage": "sqlite:////kaggle/working/VariFuse_2/outputs/14_tuning/optuna.db",
+        "search_space": {
+          "N_HEADS": [
+            4,
+            8
+          ],
+          "HEAD_WIDTH": [
+            24,
+            32,
+            40
+          ],
+          "N_CROSS_BLOCKS": [
+            2,
+            5
+          ],
+          "N_FUSION_LAYERS": [
+            1,
+            3
+          ],
+          "N_ESM_SLOTS": [
+            8,
+            16,
+            24,
+            32
+          ],
+          "DROPOUT": [
+            0.05,
+            0.35
+          ],
+          "DEEP_LR": [
+            0.0001,
+            0.002
+          ],
+          "DEEP_WD": [
+            1e-06,
+            0.002
+          ],
+          "WARMUP_EPOCHS": [
+            2,
+            12
+          ],
+          "EMA_DECAY": [
+            0.99,
+            0.995,
+            0.999
+          ],
+          "MIXUP_ALPHA": [
+            0.0,
+            0.4
+          ],
+          "LABEL_SMOOTH": [
+            0.0,
+            0.05
+          ],
+          "BATCH_SIZE": [
+            128,
+            256,
+            512
+          ]
+        },
+        "feature_names": [
+          "GERP++_RS",
+          "phyloP100way_vertebrate",
+          "phastCons100way_vertebrate",
+          "SASA",
+          "RELATIVE_SASA",
+          "PLDDT_SCORE",
+          "LOCAL_CONTACT_COUNT_8A",
+          "LOCAL_CONTACT_COUNT_12A",
+          "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+          "LOCAL_MEAN_PLDDT_8A",
+          "LOCAL_MIN_PLDDT_8A",
+          "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+          "LOCAL_MEAN_DISTANCE_8A",
+          "LOCAL_HYDROPHOBIC_FRACTION_8A",
+          "LOCAL_CHARGED_FRACTION_8A",
+          "IS_IN_DOMAIN",
+          "DISTANCE_TO_ACTIVE_SITE",
+          "IS_ACTIVE_SITE",
+          "IS_BINDING_SITE",
+          "IS_TRANSMEMBRANE",
+          "esm_variant_score",
+          "aa_ref_is_A",
+          "aa_ref_is_C",
+          "aa_ref_is_D",
+          "aa_ref_is_E",
+          "aa_ref_is_F",
+          "aa_ref_is_G",
+          "aa_ref_is_H",
+          "aa_ref_is_I",
+          "aa_ref_is_K",
+          "aa_ref_is_L",
+          "aa_ref_is_M",
+          "aa_ref_is_N",
+          "aa_ref_is_P",
+          "aa_ref_is_Q",
+          "aa_ref_is_R",
+          "aa_ref_is_S",
+          "aa_ref_is_T",
+          "aa_ref_is_V",
+          "aa_ref_is_W",
+          "aa_ref_is_Y",
+          "aa_alt_is_A",
+          "aa_alt_is_C",
+          "aa_alt_is_D",
+          "aa_alt_is_E",
+          "aa_alt_is_F",
+          "aa_alt_is_G",
+          "aa_alt_is_H",
+          "aa_alt_is_I",
+          "aa_alt_is_K",
+          "aa_alt_is_L",
+          "aa_alt_is_M",
+          "aa_alt_is_N",
+          "aa_alt_is_P",
+          "aa_alt_is_Q",
+          "aa_alt_is_R",
+          "aa_alt_is_S",
+          "aa_alt_is_T",
+          "aa_alt_is_V",
+          "aa_alt_is_W",
+          "aa_alt_is_Y",
+          "aa_hydrophobicity_delta",
+          "aa_volume_delta",
+          "aa_charge_delta"
+        ]
+      },
+      "best_params_by_outer_fold": {
+        "1": {
+          "N_HEADS": 4,
+          "N_CROSS_BLOCKS": 4,
+          "N_FUSION_LAYERS": 1,
+          "N_ESM_SLOTS": 32,
+          "DROPOUT": 0.1525248666603655,
+          "DEEP_LR": 0.0010172477427318847,
+          "DEEP_WD": 2.009139820405966e-06,
+          "WARMUP_EPOCHS": 5,
+          "EMA_DECAY": 0.995,
+          "MIXUP_ALPHA": 0.26460336990110356,
+          "LABEL_SMOOTH": 0.04470411204755802,
+          "BATCH_SIZE": 128,
+          "D_MODEL": 160
+        },
+        "2": {
+          "N_HEADS": 8,
+          "N_CROSS_BLOCKS": 5,
+          "N_FUSION_LAYERS": 2,
+          "N_ESM_SLOTS": 24,
+          "DROPOUT": 0.1203629821715888,
+          "DEEP_LR": 0.0011941419407907649,
+          "DEEP_WD": 1.08602333637687e-06,
+          "WARMUP_EPOCHS": 8,
+          "EMA_DECAY": 0.995,
+          "MIXUP_ALPHA": 0.12241277687704864,
+          "LABEL_SMOOTH": 0.01976247151997411,
+          "BATCH_SIZE": 128,
+          "D_MODEL": 256
+        },
+        "3": {
+          "N_HEADS": 8,
+          "N_CROSS_BLOCKS": 3,
+          "N_FUSION_LAYERS": 2,
+          "N_ESM_SLOTS": 32,
+          "DROPOUT": 0.22298765047537347,
+          "DEEP_LR": 0.00021319310869844684,
+          "DEEP_WD": 3.8998358052025e-06,
+          "WARMUP_EPOCHS": 3,
+          "EMA_DECAY": 0.99,
+          "MIXUP_ALPHA": 0.26018022399956003,
+          "LABEL_SMOOTH": 0.0016209151863287793,
+          "BATCH_SIZE": 128,
+          "D_MODEL": 320
+        },
+        "4": {
+          "N_HEADS": 8,
+          "N_CROSS_BLOCKS": 3,
+          "N_FUSION_LAYERS": 2,
+          "N_ESM_SLOTS": 24,
+          "DROPOUT": 0.2738708317262279,
+          "DEEP_LR": 0.0006620081267528583,
+          "DEEP_WD": 3.45018644874404e-06,
+          "WARMUP_EPOCHS": 7,
+          "EMA_DECAY": 0.99,
+          "MIXUP_ALPHA": 0.3312316089727753,
+          "LABEL_SMOOTH": 0.00630400167994441,
+          "BATCH_SIZE": 128,
+          "D_MODEL": 320
+        },
+        "5": {
+          "N_HEADS": 8,
+          "N_CROSS_BLOCKS": 4,
+          "N_FUSION_LAYERS": 1,
+          "N_ESM_SLOTS": 32,
+          "DROPOUT": 0.31094131549842363,
+          "DEEP_LR": 0.0014469678423792494,
+          "DEEP_WD": 1.8786601698659224e-06,
+          "WARMUP_EPOCHS": 8,
+          "EMA_DECAY": 0.99,
+          "MIXUP_ALPHA": 0.35915639545668177,
+          "LABEL_SMOOTH": 0.01204076358182033,
+          "BATCH_SIZE": 128,
+          "D_MODEL": 256
+        }
+      },
+      "production_selection": {
+        "rule": "hyperparameter_medoid_of_outer_fold_inner_cv_winners",
+        "uses_outer_validation_metrics": false,
+        "source_outer_fold": 5,
+        "total_normalized_distance": 1.2765685777827422,
+        "candidate_parameter_sha256": [
+          "dd16455e05265204f1720f1ad49f14b0f7cce16e5722e78ef80bf5b0de80d741",
+          "dd823ff12f734d4aabd858b561431d75e4bb504879972be82ca38ae6bf62fb7b",
+          "a5a8798c62e76e7e875dc8b683d091628d1b8d004e7e6ce3f878c15e08aca7f0",
+          "d624e07af7de10b20dcb1c416f9e430b2d632d6f14883e560ce0a7af7aa977e4",
+          "d271b08985140a6b395f0db7df9acd02e9645b042f23bd61166c2371258537ea"
+        ],
+        "tie_break": "lexicographically_smallest_canonical_parameter_sha256",
+        "note": "This is a deployable consensus candidate. Nested OOF metrics estimate the tuning procedure, not this single production configuration."
+      },
+      "reproducibility": {
+        "legacy_seed": 42,
+        "split_seed": 42,
+        "training_seed": 42,
+        "sampler_seed": 42,
+        "deterministic": true,
+        "protocol_fingerprint": {
+          "source_sha256": {
+            "stage14": "31b008c1b5ec684ff67dd3147745e24fa0881c137fc9af8fb06e15e24cbc413c",
+            "common": "aaacf5e0ef46897b5416af3c61899fcbf24d6de7a39354fc2bbb8d44db8fb391",
+            "gpu_runtime": "204a283323082d7ebb6da3a4d671336b56019b70705e8da06f35ecd6a5072fb0",
+            "config": "36ab2795d0c31131e9f61d757e951f681979e722f763e3fd90005e45f705e3e9",
+            "schema": "f228b8681a4d81a814aef51449569d5e36fc9cfcb487e0933bf456aedad44c8f"
+          },
+          "runtime": {
+            "python": "3.12.13",
+            "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+            "numpy": "2.0.2",
+            "pandas": "2.3.3",
+            "torch": "2.10.0+cu128",
+            "lightgbm": "4.6.0",
+            "scikit_learn": "1.6.1",
+            "optuna": "4.9.0"
+          },
+          "accelerator": {
+            "device": "cuda",
+            "cuda_available": true,
+            "visible_cuda_devices": 2,
+            "selected_cuda_devices": [
+              0,
+              1
+            ],
+            "data_parallel": true,
+            "devices": [
+              {
+                "index": 0,
+                "name": "Tesla T4",
+                "total_bytes": 15636037632,
+                "free_bytes": 15526068224,
+                "capability": [
+                  7,
+                  5
+                ]
+              },
+              {
+                "index": 1,
+                "name": "Tesla T4",
+                "total_bytes": 15636037632,
+                "free_bytes": 15526068224,
+                "capability": [
+                  7,
+                  5
+                ]
+              }
+            ],
+            "available": true,
+            "torch_cuda": "12.8",
+            "cudnn": 91002,
+            "cublas_workspace_config": ":4096:8"
+          },
+          "deterministic": true,
+          "early_stopping_metric": "auprc",
+          "threshold_policy": {
+            "recall_floor": 0.9,
+            "fallback_fbeta": 2.0
+          },
+          "search_budget": {
+            "trials": 40,
+            "ensemble": 1,
+            "epochs": 25,
+            "patience": 5
+          },
+          "final_budget": {
+            "ensemble": 3,
+            "epochs": 60,
+            "patience": 10
+          },
+          "lightgbm_nested_grid": [
+            {
+              "num_leaves": 15,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 15,
+              "min_child_samples": 90
+            },
+            {
+              "num_leaves": 31,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 31,
+              "min_child_samples": 90
+            },
+            {
+              "num_leaves": 63,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 63,
+              "min_child_samples": 90
+            }
+          ],
+          "reliability_residual_contract": {
+            "architecture": "reliability_residual",
+            "sequence_anchor": "esm_variant_score",
+            "anchor_direction": "lower_esm_log_likelihood_ratio_is_more_pathogenic",
+            "anchor_constraint": "positive_softplus_slope_on_negated_score",
+            "fusion_rule": "anchor_logit_plus_reliability_gate_times_bounded_residual",
+            "safe_fallback": "exact_sequence_anchor_when_no_reliable_structure_or_conservation",
+            "availability_features_are_gate_only": true,
+            "local_structure_encoder": "dedicated_lightweight_structural_expert_zeroed_when_structure_unreliable",
+            "evolution_encoder": "dedicated_conservation_expert_zeroed_when_conservation_unavailable",
+            "modality_dropout_training_only": true,
+            "mixup_disabled": true,
+            "required_gate_features": [
+              "HAS_STRUCTURE",
+              "LOW_CONFIDENCE_STRUCTURE"
+            ],
+            "conservation_missing_features": [
+              "GERP++_RS__missing",
+              "phyloP100way_vertebrate__missing",
+              "phastCons100way_vertebrate__missing"
+            ],
+            "optional_gate_features": [
+              "HAS_DOMAIN_ANNOTATION",
+              "HAS_ACTIVE_SITE_ANNOTATION",
+              "HAS_BINDING_SITE_ANNOTATION",
+              "HAS_TRANSMEMBRANE_ANNOTATION",
+              "PLDDT_SCORE",
+              "LOCAL_MEAN_PLDDT_8A",
+              "LOCAL_MIN_PLDDT_8A",
+              "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+              "LOCAL_CONTACT_COUNT_8A",
+              "LOCAL_CONTACT_COUNT_12A",
+              "LOCAL_LONG_RANGE_CONTACT_COUNT_8A"
+            ],
+            "available_gate_features": [],
+            "modality_dropout_probability": 0.25,
+            "maximum_absolute_residual_logit": 2.0
+          }
+        },
+        "gpu": {
+          "device": "cuda",
+          "cuda_available": true,
+          "visible_cuda_devices": 2,
+          "selected_cuda_devices": [
+            0,
+            1
+          ],
+          "data_parallel": true,
+          "devices": [
+            {
+              "index": 0,
+              "name": "Tesla T4",
+              "total_bytes": 15636037632,
+              "free_bytes": 15226175488,
+              "capability": [
+                7,
+                5
+              ]
+            },
+            {
+              "index": 1,
+              "name": "Tesla T4",
+              "total_bytes": 15636037632,
+              "free_bytes": 15297478656,
+              "capability": [
+                7,
+                5
+              ]
+            }
+          ],
+          "available": true
+        },
+        "input_sha256": "e5bf6ecddaea837dba4a3302074f80e1a1930c65e15d875f2df6c481adee0935",
+        "embedding_sha256": "a74e27574ff2d715b21c3203bda97dd52e94133e07b97bcea7a47183f753df2d",
+        "split_plan_path": "/kaggle/working/VariFuse_2/outputs/14_tuning/nested_inner_splits.json",
+        "split_plan_canonical_sha256": "eeb2283b3539c8a17f0f9b76e3b3431b3fb3a276458ce34d280bf8a261067487",
+        "split_plan_file_sha256": "9d07b64214691ed303303538479a0c303b9c0aa39b3bb435f7d3fac85e34b46a"
+      },
+      "fold_results": [
+        {
+          "architecture": "cross_attention",
+          "outer_fold": 1,
+          "study_name": "cross_attention_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_1",
+          "successful_trials": 19,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.8989,
+          "best_parameters": {
+            "N_HEADS": 4,
+            "N_CROSS_BLOCKS": 4,
+            "N_FUSION_LAYERS": 1,
+            "N_ESM_SLOTS": 32,
+            "DROPOUT": 0.1525248666603655,
+            "DEEP_LR": 0.0010172477427318847,
+            "DEEP_WD": 2.009139820405966e-06,
+            "WARMUP_EPOCHS": 5,
+            "EMA_DECAY": 0.995,
+            "MIXUP_ALPHA": 0.26460336990110356,
+            "LABEL_SMOOTH": 0.04470411204755802,
+            "BATCH_SIZE": 128,
+            "D_MODEL": 160
+          },
+          "outer_metrics": {
+            "threshold": 0.3875,
+            "mcc": 0.7342,
+            "auroc": 0.9418,
+            "auprc": 0.9019,
+            "brier": 0.090828,
+            "precision": 0.8097,
+            "recall": 0.853,
+            "f1": 0.8308,
+            "tp": 3063,
+            "fp": 720,
+            "fn": 528,
+            "tn": 5793,
+            "specificity": 0.8895,
+            "npv": 0.9165,
+            "calibration": {
+              "prevalence": 0.355404,
+              "prevalence_brier": 0.229092,
+              "brier_skill": 0.603531,
+              "log_loss": 0.303701,
+              "adaptive_ece": 0.030063,
+              "calibration_slope": 0.92374,
+              "calibration_intercept": -0.225457
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.04038,
+                "mcc": 0.9196
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.067788,
+                "mcc": 0.8521
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.091709,
+                "mcc": 0.801
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.123515,
+                "mcc": 0.7342
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.067788,
+              "mcc": 0.8521
+            },
+            "partition_sizes": {
+              "fit": 25087,
+              "early_stopping": 3983,
+              "temperature": 4776,
+              "threshold": 4247,
+              "outer_validation": 10104
+            }
+          },
+          "outer_fold_plan_sha256": "40c628d14630f50d948df36f8b3386011718f2c38a92b1d0011963132c9b23eb",
+          "outer_validation_rows_sha256": "e40b29e739b0edc80f3b751698d454c25b76842c314ef79d15ca27a91c4ba6bc",
+          "outer_validation_row_count": 10104
+        },
+        {
+          "architecture": "cross_attention",
+          "outer_fold": 2,
+          "study_name": "cross_attention_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_2",
+          "successful_trials": 34,
+          "attempted_trials": 39,
+          "inner_best_objective": 0.8879,
+          "best_parameters": {
+            "N_HEADS": 8,
+            "N_CROSS_BLOCKS": 5,
+            "N_FUSION_LAYERS": 2,
+            "N_ESM_SLOTS": 24,
+            "DROPOUT": 0.1203629821715888,
+            "DEEP_LR": 0.0011941419407907649,
+            "DEEP_WD": 1.08602333637687e-06,
+            "WARMUP_EPOCHS": 8,
+            "EMA_DECAY": 0.995,
+            "MIXUP_ALPHA": 0.12241277687704864,
+            "LABEL_SMOOTH": 0.01976247151997411,
+            "BATCH_SIZE": 128,
+            "D_MODEL": 256
+          },
+          "outer_metrics": {
+            "threshold": 0.2234,
+            "mcc": 0.7566,
+            "auroc": 0.9608,
+            "auprc": 0.934,
+            "brier": 0.072427,
+            "precision": 0.7683,
+            "recall": 0.9383,
+            "f1": 0.8449,
+            "tp": 3439,
+            "fp": 1037,
+            "fn": 226,
+            "tn": 5682,
+            "specificity": 0.8457,
+            "npv": 0.9617,
+            "calibration": {
+              "prevalence": 0.352947,
+              "prevalence_brier": 0.228375,
+              "brier_skill": 0.68286,
+              "log_loss": 0.245052,
+              "adaptive_ece": 0.018643,
+              "calibration_slope": 1.085001,
+              "calibration_intercept": -0.166611
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.049114,
+                "mcc": 0.9043
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.072821,
+                "mcc": 0.8562
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.091162,
+                "mcc": 0.8178
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.121629,
+                "mcc": 0.7566
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.072821,
+              "mcc": 0.8562
+            },
+            "partition_sizes": {
+              "fit": 26045,
+              "early_stopping": 3446,
+              "temperature": 4264,
+              "threshold": 4058,
+              "outer_validation": 10384
+            }
+          },
+          "outer_fold_plan_sha256": "3d6a70b6051c5ed9350cbebbf14d6052baf3b94b85ad64cf965cd6c4bc1bbe0d",
+          "outer_validation_rows_sha256": "2e4a4cc0a68258357b7a466b36e477569afd55b2eb2a0754876166ee681c606c",
+          "outer_validation_row_count": 10384
+        },
+        {
+          "architecture": "cross_attention",
+          "outer_fold": 3,
+          "study_name": "cross_attention_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_3",
+          "successful_trials": 24,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.9027,
+          "best_parameters": {
+            "N_HEADS": 8,
+            "N_CROSS_BLOCKS": 3,
+            "N_FUSION_LAYERS": 2,
+            "N_ESM_SLOTS": 32,
+            "DROPOUT": 0.22298765047537347,
+            "DEEP_LR": 0.00021319310869844684,
+            "DEEP_WD": 3.8998358052025e-06,
+            "WARMUP_EPOCHS": 3,
+            "EMA_DECAY": 0.99,
+            "MIXUP_ALPHA": 0.26018022399956003,
+            "LABEL_SMOOTH": 0.0016209151863287793,
+            "BATCH_SIZE": 128,
+            "D_MODEL": 320
+          },
+          "outer_metrics": {
+            "threshold": 0.2925,
+            "mcc": 0.7281,
+            "auroc": 0.9479,
+            "auprc": 0.9078,
+            "brier": 0.083486,
+            "precision": 0.7646,
+            "recall": 0.8913,
+            "f1": 0.8231,
+            "tp": 2861,
+            "fp": 881,
+            "fn": 349,
+            "tn": 5465,
+            "specificity": 0.8612,
+            "npv": 0.94,
+            "calibration": {
+              "prevalence": 0.335915,
+              "prevalence_brier": 0.223076,
+              "brier_skill": 0.62575,
+              "log_loss": 0.275639,
+              "adaptive_ece": 0.017373,
+              "calibration_slope": 0.922472,
+              "calibration_intercept": -0.155411
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.034533,
+                "mcc": 0.9301
+              },
+              "coverage_80": {
+                "coverage": 0.8,
+                "risk": 0.06985,
+                "mcc": 0.8513
+              },
+              "coverage_90": {
+                "coverage": 0.9001,
+                "risk": 0.093478,
+                "mcc": 0.8012
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.128715,
+                "mcc": 0.7281
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8,
+              "risk": 0.06985,
+              "mcc": 0.8513
+            },
+            "partition_sizes": {
+              "fit": 24627,
+              "early_stopping": 5095,
+              "temperature": 4622,
+              "threshold": 4297,
+              "outer_validation": 9556
+            }
+          },
+          "outer_fold_plan_sha256": "5fde899369c4cca57a1ac107dad8f6064afd53d21e64c8e30efadee293573eb2",
+          "outer_validation_rows_sha256": "1319738b9968af2dfdce9342c0391682aac9e6e607b51e2e8378d615e569669e",
+          "outer_validation_row_count": 9556
+        },
+        {
+          "architecture": "cross_attention",
+          "outer_fold": 4,
+          "study_name": "cross_attention_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_4",
+          "successful_trials": 25,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.8993,
+          "best_parameters": {
+            "N_HEADS": 8,
+            "N_CROSS_BLOCKS": 3,
+            "N_FUSION_LAYERS": 2,
+            "N_ESM_SLOTS": 24,
+            "DROPOUT": 0.2738708317262279,
+            "DEEP_LR": 0.0006620081267528583,
+            "DEEP_WD": 3.45018644874404e-06,
+            "WARMUP_EPOCHS": 7,
+            "EMA_DECAY": 0.99,
+            "MIXUP_ALPHA": 0.3312316089727753,
+            "LABEL_SMOOTH": 0.00630400167994441,
+            "BATCH_SIZE": 128,
+            "D_MODEL": 320
+          },
+          "outer_metrics": {
+            "threshold": 0.2686,
+            "mcc": 0.7425,
+            "auroc": 0.9483,
+            "auprc": 0.9114,
+            "brier": 0.084494,
+            "precision": 0.795,
+            "recall": 0.8788,
+            "f1": 0.8348,
+            "tp": 2921,
+            "fp": 753,
+            "fn": 403,
+            "tn": 5507,
+            "specificity": 0.8797,
+            "npv": 0.9318,
+            "calibration": {
+              "prevalence": 0.346828,
+              "prevalence_brier": 0.226538,
+              "brier_skill": 0.627022,
+              "log_loss": 0.279434,
+              "adaptive_ece": 0.023266,
+              "calibration_slope": 0.93306,
+              "calibration_intercept": 0.136577
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.029424,
+                "mcc": 0.9405
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.066771,
+                "mcc": 0.8574
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.089613,
+                "mcc": 0.8076
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.120618,
+                "mcc": 0.7425
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.066771,
+              "mcc": 0.8574
+            },
+            "partition_sizes": {
+              "fit": 26198,
+              "early_stopping": 4635,
+              "temperature": 3784,
+              "threshold": 3996,
+              "outer_validation": 9584
+            }
+          },
+          "outer_fold_plan_sha256": "9000ce1c3a07ad4275043cdb98ffb45a5ab9048d3f9a1810d466499535087e91",
+          "outer_validation_rows_sha256": "ade336e79563d9b41071f12688633f9bef5143402c59497d78823f540105e494",
+          "outer_validation_row_count": 9584
+        },
+        {
+          "architecture": "cross_attention",
+          "outer_fold": 5,
+          "study_name": "cross_attention_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_5",
+          "successful_trials": 24,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.9051,
+          "best_parameters": {
+            "N_HEADS": 8,
+            "N_CROSS_BLOCKS": 4,
+            "N_FUSION_LAYERS": 1,
+            "N_ESM_SLOTS": 32,
+            "DROPOUT": 0.31094131549842363,
+            "DEEP_LR": 0.0014469678423792494,
+            "DEEP_WD": 1.8786601698659224e-06,
+            "WARMUP_EPOCHS": 8,
+            "EMA_DECAY": 0.99,
+            "MIXUP_ALPHA": 0.35915639545668177,
+            "LABEL_SMOOTH": 0.01204076358182033,
+            "BATCH_SIZE": 128,
+            "D_MODEL": 256
+          },
+          "outer_metrics": {
+            "threshold": 0.225,
+            "mcc": 0.7286,
+            "auroc": 0.9466,
+            "auprc": 0.902,
+            "brier": 0.08434,
+            "precision": 0.756,
+            "recall": 0.9095,
+            "f1": 0.8257,
+            "tp": 2683,
+            "fp": 866,
+            "fn": 267,
+            "tn": 4753,
+            "specificity": 0.8459,
+            "npv": 0.9468,
+            "calibration": {
+              "prevalence": 0.344264,
+              "prevalence_brier": 0.225746,
+              "brier_skill": 0.626393,
+              "log_loss": 0.281223,
+              "adaptive_ece": 0.016987,
+              "calibration_slope": 0.999501,
+              "calibration_intercept": -0.005094
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5001,
+                "risk": 0.054142,
+                "mcc": 0.8958
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.080222,
+                "mcc": 0.8361
+              },
+              "coverage_90": {
+                "coverage": 0.9001,
+                "risk": 0.101647,
+                "mcc": 0.7916
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.132221,
+                "mcc": 0.7286
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.080222,
+              "mcc": 0.8361
+            },
+            "partition_sizes": {
+              "fit": 26089,
+              "early_stopping": 4618,
+              "temperature": 4616,
+              "threshold": 4305,
+              "outer_validation": 8569
+            }
+          },
+          "outer_fold_plan_sha256": "aff190f4a235c95b5f389617ccd7b4c1d3e168308c309c7d90d33ca72b33c1ff",
+          "outer_validation_rows_sha256": "3996e9b39af7e05a08d94745905ee527cd5d1c157f50827ffe925bdc8a4799e9",
+          "outer_validation_row_count": 8569
+        }
+      ]
+    },
+    "reliability_residual": {
+      "search": {
+        "trials_target_per_outer_fold": 40,
+        "outer_folds": 5,
+        "inner_folds": 3,
+        "search_ensemble": 1,
+        "search_epochs": 25,
+        "search_patience": 5,
+        "final_ensemble": 3,
+        "final_epochs": 60,
+        "final_patience": 10,
+        "objective": "auprc",
+        "storage": "sqlite:////kaggle/working/VariFuse_2/outputs/14_tuning/optuna.db",
+        "search_space": {
+          "D_MODEL": [
+            64,
+            96,
+            128
+          ],
+          "DROPOUT": [
+            0.05,
+            0.35
+          ],
+          "DEEP_LR": [
+            0.0001,
+            0.002
+          ],
+          "DEEP_WD": [
+            1e-06,
+            0.002
+          ],
+          "WARMUP_EPOCHS": [
+            2,
+            12
+          ],
+          "EMA_DECAY": [
+            0.99,
+            0.995,
+            0.999
+          ],
+          "MIXUP_ALPHA": [
+            0.0,
+            0.0
+          ],
+          "LABEL_SMOOTH": [
+            0.0,
+            0.05
+          ],
+          "BATCH_SIZE": [
+            128,
+            256,
+            512
+          ],
+          "MODALITY_DROPOUT": [
+            0.1,
+            0.5
+          ],
+          "RELIABILITY_RESIDUAL_SCALE": [
+            0.5,
+            3.0
+          ]
+        },
+        "feature_names": [
+          "GERP++_RS",
+          "phyloP100way_vertebrate",
+          "phastCons100way_vertebrate",
+          "SASA",
+          "RELATIVE_SASA",
+          "PLDDT_SCORE",
+          "LOCAL_CONTACT_COUNT_8A",
+          "LOCAL_CONTACT_COUNT_12A",
+          "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+          "LOCAL_MEAN_PLDDT_8A",
+          "LOCAL_MIN_PLDDT_8A",
+          "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+          "LOCAL_MEAN_DISTANCE_8A",
+          "LOCAL_HYDROPHOBIC_FRACTION_8A",
+          "LOCAL_CHARGED_FRACTION_8A",
+          "IS_IN_DOMAIN",
+          "DISTANCE_TO_ACTIVE_SITE",
+          "IS_ACTIVE_SITE",
+          "IS_BINDING_SITE",
+          "IS_TRANSMEMBRANE",
+          "esm_variant_score",
+          "aa_ref_is_A",
+          "aa_ref_is_C",
+          "aa_ref_is_D",
+          "aa_ref_is_E",
+          "aa_ref_is_F",
+          "aa_ref_is_G",
+          "aa_ref_is_H",
+          "aa_ref_is_I",
+          "aa_ref_is_K",
+          "aa_ref_is_L",
+          "aa_ref_is_M",
+          "aa_ref_is_N",
+          "aa_ref_is_P",
+          "aa_ref_is_Q",
+          "aa_ref_is_R",
+          "aa_ref_is_S",
+          "aa_ref_is_T",
+          "aa_ref_is_V",
+          "aa_ref_is_W",
+          "aa_ref_is_Y",
+          "aa_alt_is_A",
+          "aa_alt_is_C",
+          "aa_alt_is_D",
+          "aa_alt_is_E",
+          "aa_alt_is_F",
+          "aa_alt_is_G",
+          "aa_alt_is_H",
+          "aa_alt_is_I",
+          "aa_alt_is_K",
+          "aa_alt_is_L",
+          "aa_alt_is_M",
+          "aa_alt_is_N",
+          "aa_alt_is_P",
+          "aa_alt_is_Q",
+          "aa_alt_is_R",
+          "aa_alt_is_S",
+          "aa_alt_is_T",
+          "aa_alt_is_V",
+          "aa_alt_is_W",
+          "aa_alt_is_Y",
+          "aa_hydrophobicity_delta",
+          "aa_volume_delta",
+          "aa_charge_delta",
+          "HAS_STRUCTURE",
+          "LOW_CONFIDENCE_STRUCTURE",
+          "GERP++_RS__missing",
+          "phyloP100way_vertebrate__missing",
+          "phastCons100way_vertebrate__missing",
+          "HAS_DOMAIN_ANNOTATION",
+          "HAS_ACTIVE_SITE_ANNOTATION",
+          "HAS_BINDING_SITE_ANNOTATION",
+          "HAS_TRANSMEMBRANE_ANNOTATION"
+        ]
+      },
+      "best_params_by_outer_fold": {
+        "1": {
+          "D_MODEL": 64,
+          "DROPOUT": 0.28034725487708106,
+          "DEEP_LR": 0.0016624141710435626,
+          "DEEP_WD": 6.137919567217822e-05,
+          "WARMUP_EPOCHS": 3,
+          "EMA_DECAY": 0.999,
+          "LABEL_SMOOTH": 0.01884169612272639,
+          "BATCH_SIZE": 128,
+          "MODALITY_DROPOUT": 0.10460189959115294,
+          "RELIABILITY_RESIDUAL_SCALE": 2.9913932709359443,
+          "MIXUP_ALPHA": 0.0
+        },
+        "2": {
+          "D_MODEL": 64,
+          "DROPOUT": 0.3244379558680435,
+          "DEEP_LR": 0.0016395940698161447,
+          "DEEP_WD": 0.0011433519381711024,
+          "WARMUP_EPOCHS": 2,
+          "EMA_DECAY": 0.999,
+          "LABEL_SMOOTH": 0.0031197780782008934,
+          "BATCH_SIZE": 128,
+          "MODALITY_DROPOUT": 0.4906702734315616,
+          "RELIABILITY_RESIDUAL_SCALE": 2.1786890753492525,
+          "MIXUP_ALPHA": 0.0
+        },
+        "3": {
+          "D_MODEL": 128,
+          "DROPOUT": 0.1004868628760825,
+          "DEEP_LR": 0.0014754350152301372,
+          "DEEP_WD": 1.992459316484926e-06,
+          "WARMUP_EPOCHS": 6,
+          "EMA_DECAY": 0.995,
+          "LABEL_SMOOTH": 0.007080238240140085,
+          "BATCH_SIZE": 128,
+          "MODALITY_DROPOUT": 0.175898035164373,
+          "RELIABILITY_RESIDUAL_SCALE": 1.542744257093468,
+          "MIXUP_ALPHA": 0.0
+        },
+        "4": {
+          "D_MODEL": 64,
+          "DROPOUT": 0.18772431248642163,
+          "DEEP_LR": 0.0019355171345110651,
+          "DEEP_WD": 1.394725895332902e-06,
+          "WARMUP_EPOCHS": 3,
+          "EMA_DECAY": 0.999,
+          "LABEL_SMOOTH": 0.03924364235425037,
+          "BATCH_SIZE": 128,
+          "MODALITY_DROPOUT": 0.2173663699397868,
+          "RELIABILITY_RESIDUAL_SCALE": 1.7183164720382502,
+          "MIXUP_ALPHA": 0.0
+        },
+        "5": {
+          "D_MODEL": 128,
+          "DROPOUT": 0.2627929143367849,
+          "DEEP_LR": 0.001935788541354626,
+          "DEEP_WD": 1.8022352610365566e-05,
+          "WARMUP_EPOCHS": 2,
+          "EMA_DECAY": 0.995,
+          "LABEL_SMOOTH": 0.004718746978179592,
+          "BATCH_SIZE": 128,
+          "MODALITY_DROPOUT": 0.201410838360319,
+          "RELIABILITY_RESIDUAL_SCALE": 2.1489430532305454,
+          "MIXUP_ALPHA": 0.0
+        }
+      },
+      "production_selection": {
+        "rule": "hyperparameter_medoid_of_outer_fold_inner_cv_winners",
+        "uses_outer_validation_metrics": false,
+        "source_outer_fold": 1,
+        "total_normalized_distance": 1.082991533692777,
+        "candidate_parameter_sha256": [
+          "3fb4797f9bf615e42da4a9f35763a13cfaedb6463e9bf8e1bfd1aaf35fe74639",
+          "c2aef2812e88d93b9538dec84df940cea34300d1400945d35ccc81042f501c25",
+          "e1cab0da77abaef2a62d562d1a3e5dc33710ad2953979b7ab483ea06da152449",
+          "6bafd308d4e0ab50f8af48c9e1009381ecd28606d3c94cc3a368cbc04f59b53e",
+          "b14fbb439ca5c035137b7f8500d944598ad85d569b0d3d440cf791b1caf5b010"
+        ],
+        "tie_break": "lexicographically_smallest_canonical_parameter_sha256",
+        "note": "This is a deployable consensus candidate. Nested OOF metrics estimate the tuning procedure, not this single production configuration."
+      },
+      "reproducibility": {
+        "legacy_seed": 42,
+        "split_seed": 42,
+        "training_seed": 42,
+        "sampler_seed": 42,
+        "deterministic": true,
+        "protocol_fingerprint": {
+          "source_sha256": {
+            "stage14": "31b008c1b5ec684ff67dd3147745e24fa0881c137fc9af8fb06e15e24cbc413c",
+            "common": "aaacf5e0ef46897b5416af3c61899fcbf24d6de7a39354fc2bbb8d44db8fb391",
+            "gpu_runtime": "204a283323082d7ebb6da3a4d671336b56019b70705e8da06f35ecd6a5072fb0",
+            "config": "36ab2795d0c31131e9f61d757e951f681979e722f763e3fd90005e45f705e3e9",
+            "schema": "f228b8681a4d81a814aef51449569d5e36fc9cfcb487e0933bf456aedad44c8f"
+          },
+          "runtime": {
+            "python": "3.12.13",
+            "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+            "numpy": "2.0.2",
+            "pandas": "2.3.3",
+            "torch": "2.10.0+cu128",
+            "lightgbm": "4.6.0",
+            "scikit_learn": "1.6.1",
+            "optuna": "4.9.0"
+          },
+          "accelerator": {
+            "device": "cuda",
+            "cuda_available": true,
+            "visible_cuda_devices": 2,
+            "selected_cuda_devices": [
+              0,
+              1
+            ],
+            "data_parallel": true,
+            "devices": [
+              {
+                "index": 0,
+                "name": "Tesla T4",
+                "total_bytes": 15636037632,
+                "free_bytes": 15526068224,
+                "capability": [
+                  7,
+                  5
+                ]
+              },
+              {
+                "index": 1,
+                "name": "Tesla T4",
+                "total_bytes": 15636037632,
+                "free_bytes": 15526068224,
+                "capability": [
+                  7,
+                  5
+                ]
+              }
+            ],
+            "available": true,
+            "torch_cuda": "12.8",
+            "cudnn": 91002,
+            "cublas_workspace_config": ":4096:8"
+          },
+          "deterministic": true,
+          "early_stopping_metric": "auprc",
+          "threshold_policy": {
+            "recall_floor": 0.9,
+            "fallback_fbeta": 2.0
+          },
+          "search_budget": {
+            "trials": 40,
+            "ensemble": 1,
+            "epochs": 25,
+            "patience": 5
+          },
+          "final_budget": {
+            "ensemble": 3,
+            "epochs": 60,
+            "patience": 10
+          },
+          "lightgbm_nested_grid": [
+            {
+              "num_leaves": 15,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 15,
+              "min_child_samples": 90
+            },
+            {
+              "num_leaves": 31,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 31,
+              "min_child_samples": 90
+            },
+            {
+              "num_leaves": 63,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 63,
+              "min_child_samples": 90
+            }
+          ],
+          "reliability_residual_contract": {
+            "architecture": "reliability_residual",
+            "sequence_anchor": "esm_variant_score",
+            "anchor_direction": "lower_esm_log_likelihood_ratio_is_more_pathogenic",
+            "anchor_constraint": "positive_softplus_slope_on_negated_score",
+            "fusion_rule": "anchor_logit_plus_reliability_gate_times_bounded_residual",
+            "safe_fallback": "exact_sequence_anchor_when_no_reliable_structure_or_conservation",
+            "availability_features_are_gate_only": true,
+            "local_structure_encoder": "dedicated_lightweight_structural_expert_zeroed_when_structure_unreliable",
+            "evolution_encoder": "dedicated_conservation_expert_zeroed_when_conservation_unavailable",
+            "modality_dropout_training_only": true,
+            "mixup_disabled": true,
+            "required_gate_features": [
+              "HAS_STRUCTURE",
+              "LOW_CONFIDENCE_STRUCTURE"
+            ],
+            "conservation_missing_features": [
+              "GERP++_RS__missing",
+              "phyloP100way_vertebrate__missing",
+              "phastCons100way_vertebrate__missing"
+            ],
+            "optional_gate_features": [
+              "HAS_DOMAIN_ANNOTATION",
+              "HAS_ACTIVE_SITE_ANNOTATION",
+              "HAS_BINDING_SITE_ANNOTATION",
+              "HAS_TRANSMEMBRANE_ANNOTATION",
+              "PLDDT_SCORE",
+              "LOCAL_MEAN_PLDDT_8A",
+              "LOCAL_MIN_PLDDT_8A",
+              "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+              "LOCAL_CONTACT_COUNT_8A",
+              "LOCAL_CONTACT_COUNT_12A",
+              "LOCAL_LONG_RANGE_CONTACT_COUNT_8A"
+            ],
+            "available_gate_features": [],
+            "modality_dropout_probability": 0.25,
+            "maximum_absolute_residual_logit": 2.0
+          }
+        },
+        "gpu": {
+          "device": "cuda",
+          "cuda_available": true,
+          "visible_cuda_devices": 2,
+          "selected_cuda_devices": [
+            0,
+            1
+          ],
+          "data_parallel": true,
+          "devices": [
+            {
+              "index": 0,
+              "name": "Tesla T4",
+              "total_bytes": 15636037632,
+              "free_bytes": 15228272640,
+              "capability": [
+                7,
+                5
+              ]
+            },
+            {
+              "index": 1,
+              "name": "Tesla T4",
+              "total_bytes": 15636037632,
+              "free_bytes": 15297478656,
+              "capability": [
+                7,
+                5
+              ]
+            }
+          ],
+          "available": true
+        },
+        "input_sha256": "e5bf6ecddaea837dba4a3302074f80e1a1930c65e15d875f2df6c481adee0935",
+        "embedding_sha256": "a74e27574ff2d715b21c3203bda97dd52e94133e07b97bcea7a47183f753df2d",
+        "split_plan_path": "/kaggle/working/VariFuse_2/outputs/14_tuning/nested_inner_splits.json",
+        "split_plan_canonical_sha256": "eeb2283b3539c8a17f0f9b76e3b3431b3fb3a276458ce34d280bf8a261067487",
+        "split_plan_file_sha256": "9d07b64214691ed303303538479a0c303b9c0aa39b3bb435f7d3fac85e34b46a"
+      },
+      "fold_results": [
+        {
+          "architecture": "reliability_residual",
+          "outer_fold": 1,
+          "study_name": "reliability_residual_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_1",
+          "successful_trials": 27,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.8929,
+          "best_parameters": {
+            "D_MODEL": 64,
+            "DROPOUT": 0.28034725487708106,
+            "DEEP_LR": 0.0016624141710435626,
+            "DEEP_WD": 6.137919567217822e-05,
+            "WARMUP_EPOCHS": 3,
+            "EMA_DECAY": 0.999,
+            "LABEL_SMOOTH": 0.01884169612272639,
+            "BATCH_SIZE": 128,
+            "MODALITY_DROPOUT": 0.10460189959115294,
+            "RELIABILITY_RESIDUAL_SCALE": 2.9913932709359443,
+            "MIXUP_ALPHA": 0.0
+          },
+          "outer_metrics": {
+            "threshold": 0.2998,
+            "mcc": 0.7145,
+            "auroc": 0.9315,
+            "auprc": 0.896,
+            "brier": 0.093526,
+            "precision": 0.7749,
+            "recall": 0.8705,
+            "f1": 0.8199,
+            "tp": 3126,
+            "fp": 908,
+            "fn": 465,
+            "tn": 5605,
+            "specificity": 0.8606,
+            "npv": 0.9234,
+            "calibration": {
+              "prevalence": 0.355404,
+              "prevalence_brier": 0.229092,
+              "brier_skill": 0.591751,
+              "log_loss": 0.315242,
+              "adaptive_ece": 0.022371,
+              "calibration_slope": 0.92695,
+              "calibration_intercept": -0.246654
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.06631,
+                "mcc": 0.8702
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.086714,
+                "mcc": 0.82
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.104574,
+                "mcc": 0.7799
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.135887,
+                "mcc": 0.7145
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.086714,
+              "mcc": 0.82
+            },
+            "partition_sizes": {
+              "fit": 25087,
+              "early_stopping": 3983,
+              "temperature": 4776,
+              "threshold": 4247,
+              "outer_validation": 10104
+            }
+          },
+          "outer_fold_plan_sha256": "40c628d14630f50d948df36f8b3386011718f2c38a92b1d0011963132c9b23eb",
+          "outer_validation_rows_sha256": "e40b29e739b0edc80f3b751698d454c25b76842c314ef79d15ca27a91c4ba6bc",
+          "outer_validation_row_count": 10104
+        },
+        {
+          "architecture": "reliability_residual",
+          "outer_fold": 2,
+          "study_name": "reliability_residual_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_2",
+          "successful_trials": 28,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.8855,
+          "best_parameters": {
+            "D_MODEL": 64,
+            "DROPOUT": 0.3244379558680435,
+            "DEEP_LR": 0.0016395940698161447,
+            "DEEP_WD": 0.0011433519381711024,
+            "WARMUP_EPOCHS": 2,
+            "EMA_DECAY": 0.999,
+            "LABEL_SMOOTH": 0.0031197780782008934,
+            "BATCH_SIZE": 128,
+            "MODALITY_DROPOUT": 0.4906702734315616,
+            "RELIABILITY_RESIDUAL_SCALE": 2.1786890753492525,
+            "MIXUP_ALPHA": 0.0
+          },
+          "outer_metrics": {
+            "threshold": 0.1475,
+            "mcc": 0.684,
+            "auroc": 0.9519,
+            "auprc": 0.9282,
+            "brier": 0.075084,
+            "precision": 0.6889,
+            "recall": 0.9492,
+            "f1": 0.7984,
+            "tp": 3479,
+            "fp": 1571,
+            "fn": 186,
+            "tn": 5148,
+            "specificity": 0.7662,
+            "npv": 0.9651,
+            "calibration": {
+              "prevalence": 0.352947,
+              "prevalence_brier": 0.228375,
+              "brier_skill": 0.671226,
+              "log_loss": 0.25948,
+              "adaptive_ece": 0.018591,
+              "calibration_slope": 1.063776,
+              "calibration_intercept": -0.199906
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.101502,
+                "mcc": 0.7942
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.126505,
+                "mcc": 0.7646
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.144875,
+                "mcc": 0.7301
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.169203,
+                "mcc": 0.684
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.126505,
+              "mcc": 0.7646
+            },
+            "partition_sizes": {
+              "fit": 26045,
+              "early_stopping": 3446,
+              "temperature": 4264,
+              "threshold": 4058,
+              "outer_validation": 10384
+            }
+          },
+          "outer_fold_plan_sha256": "3d6a70b6051c5ed9350cbebbf14d6052baf3b94b85ad64cf965cd6c4bc1bbe0d",
+          "outer_validation_rows_sha256": "2e4a4cc0a68258357b7a466b36e477569afd55b2eb2a0754876166ee681c606c",
+          "outer_validation_row_count": 10384
+        },
+        {
+          "architecture": "reliability_residual",
+          "outer_fold": 3,
+          "study_name": "reliability_residual_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_3",
+          "successful_trials": 26,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.8886,
+          "best_parameters": {
+            "D_MODEL": 128,
+            "DROPOUT": 0.1004868628760825,
+            "DEEP_LR": 0.0014754350152301372,
+            "DEEP_WD": 1.992459316484926e-06,
+            "WARMUP_EPOCHS": 6,
+            "EMA_DECAY": 0.995,
+            "LABEL_SMOOTH": 0.007080238240140085,
+            "BATCH_SIZE": 128,
+            "MODALITY_DROPOUT": 0.175898035164373,
+            "RELIABILITY_RESIDUAL_SCALE": 1.542744257093468,
+            "MIXUP_ALPHA": 0.0
+          },
+          "outer_metrics": {
+            "threshold": 0.3275,
+            "mcc": 0.7229,
+            "auroc": 0.9316,
+            "auprc": 0.8969,
+            "brier": 0.088945,
+            "precision": 0.7786,
+            "recall": 0.8645,
+            "f1": 0.8193,
+            "tp": 2775,
+            "fp": 789,
+            "fn": 435,
+            "tn": 5557,
+            "specificity": 0.8757,
+            "npv": 0.9274,
+            "calibration": {
+              "prevalence": 0.335915,
+              "prevalence_brier": 0.223076,
+              "brier_skill": 0.601281,
+              "log_loss": 0.302129,
+              "adaptive_ece": 0.021308,
+              "calibration_slope": 0.943121,
+              "calibration_intercept": -0.26729
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.055881,
+                "mcc": 0.8884
+              },
+              "coverage_80": {
+                "coverage": 0.8,
+                "risk": 0.077829,
+                "mcc": 0.8311
+              },
+              "coverage_90": {
+                "coverage": 0.9001,
+                "risk": 0.098128,
+                "mcc": 0.786
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.128087,
+                "mcc": 0.7229
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8,
+              "risk": 0.077829,
+              "mcc": 0.8311
+            },
+            "partition_sizes": {
+              "fit": 24627,
+              "early_stopping": 5095,
+              "temperature": 4622,
+              "threshold": 4297,
+              "outer_validation": 9556
+            }
+          },
+          "outer_fold_plan_sha256": "5fde899369c4cca57a1ac107dad8f6064afd53d21e64c8e30efadee293573eb2",
+          "outer_validation_rows_sha256": "1319738b9968af2dfdce9342c0391682aac9e6e607b51e2e8378d615e569669e",
+          "outer_validation_row_count": 9556
+        },
+        {
+          "architecture": "reliability_residual",
+          "outer_fold": 4,
+          "study_name": "reliability_residual_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_4",
+          "successful_trials": 33,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.8872,
+          "best_parameters": {
+            "D_MODEL": 64,
+            "DROPOUT": 0.18772431248642163,
+            "DEEP_LR": 0.0019355171345110651,
+            "DEEP_WD": 1.394725895332902e-06,
+            "WARMUP_EPOCHS": 3,
+            "EMA_DECAY": 0.999,
+            "LABEL_SMOOTH": 0.03924364235425037,
+            "BATCH_SIZE": 128,
+            "MODALITY_DROPOUT": 0.2173663699397868,
+            "RELIABILITY_RESIDUAL_SCALE": 1.7183164720382502,
+            "MIXUP_ALPHA": 0.0
+          },
+          "outer_metrics": {
+            "threshold": 0.1695,
+            "mcc": 0.6948,
+            "auroc": 0.9318,
+            "auprc": 0.8995,
+            "brier": 0.090473,
+            "precision": 0.7336,
+            "recall": 0.8932,
+            "f1": 0.8056,
+            "tp": 2969,
+            "fp": 1078,
+            "fn": 355,
+            "tn": 5182,
+            "specificity": 0.8278,
+            "npv": 0.9359,
+            "calibration": {
+              "prevalence": 0.346828,
+              "prevalence_brier": 0.226538,
+              "brier_skill": 0.600628,
+              "log_loss": 0.305228,
+              "adaptive_ece": 0.01817,
+              "calibration_slope": 0.913566,
+              "calibration_intercept": 0.075056
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.08076,
+                "mcc": 0.8423
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.101721,
+                "mcc": 0.7949
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.119986,
+                "mcc": 0.7548
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.14952,
+                "mcc": 0.6948
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.101721,
+              "mcc": 0.7949
+            },
+            "partition_sizes": {
+              "fit": 26198,
+              "early_stopping": 4635,
+              "temperature": 3784,
+              "threshold": 3996,
+              "outer_validation": 9584
+            }
+          },
+          "outer_fold_plan_sha256": "9000ce1c3a07ad4275043cdb98ffb45a5ab9048d3f9a1810d466499535087e91",
+          "outer_validation_rows_sha256": "ade336e79563d9b41071f12688633f9bef5143402c59497d78823f540105e494",
+          "outer_validation_row_count": 9584
+        },
+        {
+          "architecture": "reliability_residual",
+          "outer_fold": 5,
+          "study_name": "reliability_residual_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_5",
+          "successful_trials": 15,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.901,
+          "best_parameters": {
+            "D_MODEL": 128,
+            "DROPOUT": 0.2627929143367849,
+            "DEEP_LR": 0.001935788541354626,
+            "DEEP_WD": 1.8022352610365566e-05,
+            "WARMUP_EPOCHS": 2,
+            "EMA_DECAY": 0.995,
+            "LABEL_SMOOTH": 0.004718746978179592,
+            "BATCH_SIZE": 128,
+            "MODALITY_DROPOUT": 0.201410838360319,
+            "RELIABILITY_RESIDUAL_SCALE": 2.1489430532305454,
+            "MIXUP_ALPHA": 0.0
+          },
+          "outer_metrics": {
+            "threshold": 0.177,
+            "mcc": 0.6695,
+            "auroc": 0.9311,
+            "auprc": 0.8919,
+            "brier": 0.09141,
+            "precision": 0.7032,
+            "recall": 0.8986,
+            "f1": 0.789,
+            "tp": 2651,
+            "fp": 1119,
+            "fn": 299,
+            "tn": 4500,
+            "specificity": 0.8009,
+            "npv": 0.9377,
+            "calibration": {
+              "prevalence": 0.344264,
+              "prevalence_brier": 0.225746,
+              "brier_skill": 0.595078,
+              "log_loss": 0.307999,
+              "adaptive_ece": 0.013122,
+              "calibration_slope": 1.010975,
+              "calibration_intercept": 0.063624
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5001,
+                "risk": 0.094282,
+                "mcc": 0.8171
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.112748,
+                "mcc": 0.7782
+              },
+              "coverage_90": {
+                "coverage": 0.9001,
+                "risk": 0.134578,
+                "mcc": 0.7315
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.16548,
+                "mcc": 0.6695
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.112748,
+              "mcc": 0.7782
+            },
+            "partition_sizes": {
+              "fit": 26089,
+              "early_stopping": 4618,
+              "temperature": 4616,
+              "threshold": 4305,
+              "outer_validation": 8569
+            }
+          },
+          "outer_fold_plan_sha256": "aff190f4a235c95b5f389617ccd7b4c1d3e168308c309c7d90d33ca72b33c1ff",
+          "outer_validation_rows_sha256": "3996e9b39af7e05a08d94745905ee527cd5d1c157f50827ffe925bdc8a4799e9",
+          "outer_validation_row_count": 8569
+        }
+      ]
+    },
+    "evidential_residual": {
+      "search": {
+        "trials_target_per_outer_fold": 40,
+        "outer_folds": 5,
+        "inner_folds": 3,
+        "search_ensemble": 1,
+        "search_epochs": 25,
+        "search_patience": 5,
+        "final_ensemble": 3,
+        "final_epochs": 60,
+        "final_patience": 10,
+        "objective": "auprc",
+        "storage": "sqlite:///I:/VariFuse_2/outputs/14_tuning/optuna.db",
+        "search_space": {
+          "D_MODEL": [
+            64,
+            96,
+            128
+          ],
+          "DROPOUT": [
+            0.05,
+            0.35
+          ],
+          "DEEP_LR": [
+            0.0001,
+            0.002
+          ],
+          "DEEP_WD": [
+            1e-06,
+            0.002
+          ],
+          "WARMUP_EPOCHS": [
+            2,
+            12
+          ],
+          "EMA_DECAY": [
+            0.99,
+            0.995,
+            0.999
+          ],
+          "MIXUP_ALPHA": [
+            0.0,
+            0.0
+          ],
+          "LABEL_SMOOTH": [
+            0.0,
+            0.05
+          ],
+          "BATCH_SIZE": [
+            128,
+            256,
+            512
+          ],
+          "MODALITY_DROPOUT": [
+            0.1,
+            0.5
+          ],
+          "RELIABILITY_RESIDUAL_SCALE": [
+            0.5,
+            3.0
+          ],
+          "EVIDENTIAL_PRECISION_FLOOR": [
+            0.01,
+            0.25
+          ],
+          "EVIDENTIAL_GATE_TEMPERATURE": [
+            0.5,
+            4.0
+          ]
+        },
+        "feature_names": [
+          "GERP++_RS",
+          "phyloP100way_vertebrate",
+          "phastCons100way_vertebrate",
+          "SASA",
+          "RELATIVE_SASA",
+          "PLDDT_SCORE",
+          "LOCAL_CONTACT_COUNT_8A",
+          "LOCAL_CONTACT_COUNT_12A",
+          "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+          "LOCAL_MEAN_PLDDT_8A",
+          "LOCAL_MIN_PLDDT_8A",
+          "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+          "LOCAL_MEAN_DISTANCE_8A",
+          "LOCAL_HYDROPHOBIC_FRACTION_8A",
+          "LOCAL_CHARGED_FRACTION_8A",
+          "IS_IN_DOMAIN",
+          "DISTANCE_TO_ACTIVE_SITE",
+          "IS_ACTIVE_SITE",
+          "IS_BINDING_SITE",
+          "IS_TRANSMEMBRANE",
+          "esm_variant_score",
+          "aa_ref_is_A",
+          "aa_ref_is_C",
+          "aa_ref_is_D",
+          "aa_ref_is_E",
+          "aa_ref_is_F",
+          "aa_ref_is_G",
+          "aa_ref_is_H",
+          "aa_ref_is_I",
+          "aa_ref_is_K",
+          "aa_ref_is_L",
+          "aa_ref_is_M",
+          "aa_ref_is_N",
+          "aa_ref_is_P",
+          "aa_ref_is_Q",
+          "aa_ref_is_R",
+          "aa_ref_is_S",
+          "aa_ref_is_T",
+          "aa_ref_is_V",
+          "aa_ref_is_W",
+          "aa_ref_is_Y",
+          "aa_alt_is_A",
+          "aa_alt_is_C",
+          "aa_alt_is_D",
+          "aa_alt_is_E",
+          "aa_alt_is_F",
+          "aa_alt_is_G",
+          "aa_alt_is_H",
+          "aa_alt_is_I",
+          "aa_alt_is_K",
+          "aa_alt_is_L",
+          "aa_alt_is_M",
+          "aa_alt_is_N",
+          "aa_alt_is_P",
+          "aa_alt_is_Q",
+          "aa_alt_is_R",
+          "aa_alt_is_S",
+          "aa_alt_is_T",
+          "aa_alt_is_V",
+          "aa_alt_is_W",
+          "aa_alt_is_Y",
+          "aa_hydrophobicity_delta",
+          "aa_volume_delta",
+          "aa_charge_delta",
+          "HAS_STRUCTURE",
+          "LOW_CONFIDENCE_STRUCTURE",
+          "GERP++_RS__missing",
+          "phyloP100way_vertebrate__missing",
+          "phastCons100way_vertebrate__missing",
+          "HAS_DOMAIN_ANNOTATION",
+          "HAS_ACTIVE_SITE_ANNOTATION",
+          "HAS_BINDING_SITE_ANNOTATION",
+          "HAS_TRANSMEMBRANE_ANNOTATION"
+        ]
+      },
+      "best_params_by_outer_fold": {
+        "1": {
+          "BATCH_SIZE": 128,
+          "DEEP_LR": 0.0019875558448991565,
+          "DEEP_WD": 4.784132516309727e-06,
+          "DROPOUT": 0.29558910307560854,
+          "D_MODEL": 64,
+          "EMA_DECAY": 0.99,
+          "EVIDENTIAL_GATE_TEMPERATURE": 3.0301475591923417,
+          "EVIDENTIAL_PRECISION_FLOOR": 0.15753957773373398,
+          "LABEL_SMOOTH": 0.027804217831652187,
+          "MIXUP_ALPHA": 0.0,
+          "MODALITY_DROPOUT": 0.4355035973136268,
+          "RELIABILITY_RESIDUAL_SCALE": 2.963824060886177,
+          "WARMUP_EPOCHS": 9
+        },
+        "2": {
+          "D_MODEL": 128,
+          "DROPOUT": 0.30558897080023995,
+          "DEEP_LR": 0.0017656789172681823,
+          "DEEP_WD": 2.734811943551574e-06,
+          "WARMUP_EPOCHS": 12,
+          "EMA_DECAY": 0.995,
+          "LABEL_SMOOTH": 0.005134139608460527,
+          "BATCH_SIZE": 128,
+          "MODALITY_DROPOUT": 0.16663087670916565,
+          "RELIABILITY_RESIDUAL_SCALE": 2.6098182178441873,
+          "EVIDENTIAL_PRECISION_FLOOR": 0.15682970112384723,
+          "EVIDENTIAL_GATE_TEMPERATURE": 0.7545672015794818,
+          "MIXUP_ALPHA": 0.0
+        },
+        "3": {
+          "D_MODEL": 64,
+          "DROPOUT": 0.33419801745138533,
+          "DEEP_LR": 0.0019006873384773508,
+          "DEEP_WD": 1.0462862737759473e-06,
+          "WARMUP_EPOCHS": 2,
+          "EMA_DECAY": 0.999,
+          "LABEL_SMOOTH": 0.04842864614021704,
+          "BATCH_SIZE": 128,
+          "MODALITY_DROPOUT": 0.41581584079877665,
+          "RELIABILITY_RESIDUAL_SCALE": 2.994061048452185,
+          "EVIDENTIAL_PRECISION_FLOOR": 0.015198290784167123,
+          "EVIDENTIAL_GATE_TEMPERATURE": 3.9642229059368406,
+          "MIXUP_ALPHA": 0.0
+        },
+        "4": {
+          "D_MODEL": 128,
+          "DROPOUT": 0.25666954450100316,
+          "DEEP_LR": 0.001915397282125791,
+          "DEEP_WD": 1.174832370933586e-06,
+          "WARMUP_EPOCHS": 2,
+          "EMA_DECAY": 0.995,
+          "LABEL_SMOOTH": 0.03605218978411673,
+          "BATCH_SIZE": 128,
+          "MODALITY_DROPOUT": 0.22912892412624164,
+          "RELIABILITY_RESIDUAL_SCALE": 2.044091774145598,
+          "EVIDENTIAL_PRECISION_FLOOR": 0.1794578555561141,
+          "EVIDENTIAL_GATE_TEMPERATURE": 3.399044181989022,
+          "MIXUP_ALPHA": 0.0
+        },
+        "5": {
+          "D_MODEL": 96,
+          "DROPOUT": 0.211745763920876,
+          "DEEP_LR": 0.001956627838491808,
+          "DEEP_WD": 0.00032351813356092384,
+          "WARMUP_EPOCHS": 4,
+          "EMA_DECAY": 0.995,
+          "LABEL_SMOOTH": 0.011734634739558214,
+          "BATCH_SIZE": 128,
+          "MODALITY_DROPOUT": 0.25188527689560425,
+          "RELIABILITY_RESIDUAL_SCALE": 2.249717038944426,
+          "EVIDENTIAL_PRECISION_FLOOR": 0.09738830734528162,
+          "EVIDENTIAL_GATE_TEMPERATURE": 1.6958649730965505,
+          "MIXUP_ALPHA": 0.0
+        }
+      },
+      "production_selection": {
+        "rule": "hyperparameter_medoid_of_outer_fold_inner_cv_winners",
+        "uses_outer_validation_metrics": false,
+        "source_outer_fold": 4,
+        "total_normalized_distance": 1.1685317316686166,
+        "candidate_parameter_sha256": [
+          "5d47612dd7a37411f9e3c48673e2ff35dda8218871a6d55913d4c536ae71668c",
+          "dc3c00c074fd4aaf1ebc3958d06348c4ba4f63b16a491eaf494df16b5b0aa2a2",
+          "cce2fa42573373c29b4def1fb088437f72d343060ef10b6b463475dabf2697c0",
+          "2f9593e0fe6a7858540ca7854b3f6fa2046496eaf8419bd21d56701bab23a0a3",
+          "87c119c13de074ce526bf3481b1c664a7c73018117f43a6c738dc3c4ee7212ae"
+        ],
+        "tie_break": "lexicographically_smallest_canonical_parameter_sha256",
+        "note": "This is a deployable consensus candidate. Nested OOF metrics estimate the tuning procedure, not this single production configuration."
+      },
+      "reproducibility": {
+        "legacy_seed": 42,
+        "split_seed": 42,
+        "training_seed": 42,
+        "sampler_seed": 42,
+        "deterministic": true,
+        "protocol_fingerprint": {
+          "source_sha256": {
+            "stage14": "31b008c1b5ec684ff67dd3147745e24fa0881c137fc9af8fb06e15e24cbc413c",
+            "common": "aaacf5e0ef46897b5416af3c61899fcbf24d6de7a39354fc2bbb8d44db8fb391",
+            "gpu_runtime": "204a283323082d7ebb6da3a4d671336b56019b70705e8da06f35ecd6a5072fb0",
+            "config": "36ab2795d0c31131e9f61d757e951f681979e722f763e3fd90005e45f705e3e9",
+            "schema": "f228b8681a4d81a814aef51449569d5e36fc9cfcb487e0933bf456aedad44c8f"
+          },
+          "runtime": {
+            "python": "3.12.13",
+            "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+            "numpy": "2.0.2",
+            "pandas": "2.3.3",
+            "torch": "2.10.0+cu128",
+            "lightgbm": "4.6.0",
+            "scikit_learn": "1.6.1",
+            "optuna": "4.9.0"
+          },
+          "accelerator": {
+            "device": "cuda",
+            "cuda_available": true,
+            "visible_cuda_devices": 2,
+            "selected_cuda_devices": [
+              0,
+              1
+            ],
+            "data_parallel": true,
+            "devices": [
+              {
+                "index": 0,
+                "name": "Tesla T4",
+                "total_bytes": 15636037632,
+                "free_bytes": 15526068224,
+                "capability": [
+                  7,
+                  5
+                ]
+              },
+              {
+                "index": 1,
+                "name": "Tesla T4",
+                "total_bytes": 15636037632,
+                "free_bytes": 15526068224,
+                "capability": [
+                  7,
+                  5
+                ]
+              }
+            ],
+            "available": true,
+            "torch_cuda": "12.8",
+            "cudnn": 91002,
+            "cublas_workspace_config": ":4096:8"
+          },
+          "deterministic": true,
+          "early_stopping_metric": "auprc",
+          "threshold_policy": {
+            "recall_floor": 0.9,
+            "fallback_fbeta": 2.0
+          },
+          "search_budget": {
+            "trials": 40,
+            "ensemble": 1,
+            "epochs": 25,
+            "patience": 5
+          },
+          "final_budget": {
+            "ensemble": 3,
+            "epochs": 60,
+            "patience": 10
+          },
+          "lightgbm_nested_grid": [
+            {
+              "num_leaves": 15,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 15,
+              "min_child_samples": 90
+            },
+            {
+              "num_leaves": 31,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 31,
+              "min_child_samples": 90
+            },
+            {
+              "num_leaves": 63,
+              "min_child_samples": 30
+            },
+            {
+              "num_leaves": 63,
+              "min_child_samples": 90
+            }
+          ],
+          "reliability_residual_contract": {
+            "architecture": "reliability_residual",
+            "sequence_anchor": "esm_variant_score",
+            "anchor_direction": "lower_esm_log_likelihood_ratio_is_more_pathogenic",
+            "anchor_constraint": "positive_softplus_slope_on_negated_score",
+            "fusion_rule": "anchor_logit_plus_reliability_gate_times_bounded_residual",
+            "safe_fallback": "exact_sequence_anchor_when_no_reliable_structure_or_conservation",
+            "availability_features_are_gate_only": true,
+            "local_structure_encoder": "dedicated_lightweight_structural_expert_zeroed_when_structure_unreliable",
+            "evolution_encoder": "dedicated_conservation_expert_zeroed_when_conservation_unavailable",
+            "modality_dropout_training_only": true,
+            "mixup_disabled": true,
+            "required_gate_features": [
+              "HAS_STRUCTURE",
+              "LOW_CONFIDENCE_STRUCTURE"
+            ],
+            "conservation_missing_features": [
+              "GERP++_RS__missing",
+              "phyloP100way_vertebrate__missing",
+              "phastCons100way_vertebrate__missing"
+            ],
+            "optional_gate_features": [
+              "HAS_DOMAIN_ANNOTATION",
+              "HAS_ACTIVE_SITE_ANNOTATION",
+              "HAS_BINDING_SITE_ANNOTATION",
+              "HAS_TRANSMEMBRANE_ANNOTATION",
+              "PLDDT_SCORE",
+              "LOCAL_MEAN_PLDDT_8A",
+              "LOCAL_MIN_PLDDT_8A",
+              "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+              "LOCAL_CONTACT_COUNT_8A",
+              "LOCAL_CONTACT_COUNT_12A",
+              "LOCAL_LONG_RANGE_CONTACT_COUNT_8A"
+            ],
+            "available_gate_features": [],
+            "modality_dropout_probability": 0.25,
+            "maximum_absolute_residual_logit": 2.0
+          }
+        },
+        "gpu": {
+          "device": "cuda",
+          "cuda_available": true,
+          "visible_cuda_devices": 1,
+          "selected_cuda_devices": [
+            0
+          ],
+          "data_parallel": false,
+          "devices": [
+            {
+              "index": 0,
+              "name": "NVIDIA GeForce GTX 1660",
+              "total_bytes": 6442123264,
+              "free_bytes": 5236588544,
+              "capability": [
+                7,
+                5
+              ]
+            }
+          ],
+          "available": true
+        },
+        "input_sha256": "e5bf6ecddaea837dba4a3302074f80e1a1930c65e15d875f2df6c481adee0935",
+        "embedding_sha256": "a74e27574ff2d715b21c3203bda97dd52e94133e07b97bcea7a47183f753df2d",
+        "split_plan_path": "I:\\VariFuse_2\\outputs\\14_tuning\\nested_inner_splits.json",
+        "split_plan_canonical_sha256": "eeb2283b3539c8a17f0f9b76e3b3431b3fb3a276458ce34d280bf8a261067487",
+        "split_plan_file_sha256": "9d07b64214691ed303303538479a0c303b9c0aa39b3bb435f7d3fac85e34b46a"
+      },
+      "fold_results": [
+        {
+          "architecture": "evidential_residual",
+          "attempted_trials": 40,
+          "best_parameters": {
+            "BATCH_SIZE": 128,
+            "DEEP_LR": 0.0019875558448991565,
+            "DEEP_WD": 4.784132516309727e-06,
+            "DROPOUT": 0.29558910307560854,
+            "D_MODEL": 64,
+            "EMA_DECAY": 0.99,
+            "EVIDENTIAL_GATE_TEMPERATURE": 3.0301475591923417,
+            "EVIDENTIAL_PRECISION_FLOOR": 0.15753957773373398,
+            "LABEL_SMOOTH": 0.027804217831652187,
+            "MIXUP_ALPHA": 0.0,
+            "MODALITY_DROPOUT": 0.4355035973136268,
+            "RELIABILITY_RESIDUAL_SCALE": 2.963824060886177,
+            "WARMUP_EPOCHS": 9
+          },
+          "inner_best_objective": 0.9002,
+          "outer_fold": 1,
+          "outer_fold_plan_sha256": "40c628d14630f50d948df36f8b3386011718f2c38a92b1d0011963132c9b23eb",
+          "outer_metrics": {
+            "auprc": 0.8961,
+            "auroc": 0.932,
+            "brier": 0.094391,
+            "calibration": {
+              "adaptive_ece": 0.014928,
+              "brier_skill": 0.587977,
+              "calibration_intercept": -0.200998,
+              "calibration_slope": 0.92168,
+              "log_loss": 0.313738,
+              "prevalence": 0.355404,
+              "prevalence_brier": 0.229092
+            },
+            "f1": 0.8151,
+            "fn": 492,
+            "fp": 914,
+            "mcc": 0.7069,
+            "npv": 0.9192,
+            "partition_sizes": {
+              "early_stopping": 3983,
+              "fit": 25087,
+              "outer_validation": 10104,
+              "temperature": 4776,
+              "threshold": 4247
+            },
+            "precision": 0.7722,
+            "recall": 0.863,
+            "risk_coverage": {
+              "coverage_100": {
+                "coverage": 1.0,
+                "mcc": 0.7069,
+                "risk": 0.139153
+              },
+              "coverage_50": {
+                "coverage": 0.5,
+                "mcc": 0.9082,
+                "risk": 0.045922
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "mcc": 0.8241,
+                "risk": 0.083375
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "mcc": 0.7713,
+                "risk": 0.108313
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "mcc": 0.8241,
+              "risk": 0.083375
+            },
+            "specificity": 0.8597,
+            "threshold": 0.3321,
+            "tn": 5599,
+            "tp": 3099
+          },
+          "outer_validation_rows_sha256": "e40b29e739b0edc80f3b751698d454c25b76842c314ef79d15ca27a91c4ba6bc",
+          "study_name": "evidential_residual_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_1",
+          "successful_trials": 27,
+          "outer_validation_row_count": 10104
+        },
+        {
+          "architecture": "evidential_residual",
+          "outer_fold": 2,
+          "study_name": "evidential_residual_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_2",
+          "successful_trials": 27,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.8814,
+          "best_parameters": {
+            "D_MODEL": 128,
+            "DROPOUT": 0.30558897080023995,
+            "DEEP_LR": 0.0017656789172681823,
+            "DEEP_WD": 2.734811943551574e-06,
+            "WARMUP_EPOCHS": 12,
+            "EMA_DECAY": 0.995,
+            "LABEL_SMOOTH": 0.005134139608460527,
+            "BATCH_SIZE": 128,
+            "MODALITY_DROPOUT": 0.16663087670916565,
+            "RELIABILITY_RESIDUAL_SCALE": 2.6098182178441873,
+            "EVIDENTIAL_PRECISION_FLOOR": 0.15682970112384723,
+            "EVIDENTIAL_GATE_TEMPERATURE": 0.7545672015794818,
+            "MIXUP_ALPHA": 0.0
+          },
+          "outer_metrics": {
+            "threshold": 0.1379,
+            "mcc": 0.6637,
+            "auroc": 0.951,
+            "auprc": 0.9268,
+            "brier": 0.076195,
+            "precision": 0.6684,
+            "recall": 0.952,
+            "f1": 0.7854,
+            "tp": 3489,
+            "fp": 1731,
+            "fn": 176,
+            "tn": 4988,
+            "specificity": 0.7424,
+            "npv": 0.9659,
+            "calibration": {
+              "prevalence": 0.352947,
+              "prevalence_brier": 0.228375,
+              "brier_skill": 0.666362,
+              "log_loss": 0.262346,
+              "adaptive_ece": 0.019886,
+              "calibration_slope": 1.079336,
+              "calibration_intercept": -0.200613
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.115948,
+                "mcc": 0.7631
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.142032,
+                "mcc": 0.7401
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.157715,
+                "mcc": 0.7112
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.183648,
+                "mcc": 0.6637
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.142032,
+              "mcc": 0.7401
+            },
+            "partition_sizes": {
+              "fit": 26045,
+              "early_stopping": 3446,
+              "temperature": 4264,
+              "threshold": 4058,
+              "outer_validation": 10384
+            }
+          },
+          "outer_fold_plan_sha256": "3d6a70b6051c5ed9350cbebbf14d6052baf3b94b85ad64cf965cd6c4bc1bbe0d",
+          "outer_validation_rows_sha256": "2e4a4cc0a68258357b7a466b36e477569afd55b2eb2a0754876166ee681c606c",
+          "outer_validation_row_count": 10384
+        },
+        {
+          "architecture": "evidential_residual",
+          "outer_fold": 3,
+          "study_name": "evidential_residual_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_3",
+          "successful_trials": 22,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.9035,
+          "best_parameters": {
+            "D_MODEL": 64,
+            "DROPOUT": 0.33419801745138533,
+            "DEEP_LR": 0.0019006873384773508,
+            "DEEP_WD": 1.0462862737759473e-06,
+            "WARMUP_EPOCHS": 2,
+            "EMA_DECAY": 0.999,
+            "LABEL_SMOOTH": 0.04842864614021704,
+            "BATCH_SIZE": 128,
+            "MODALITY_DROPOUT": 0.41581584079877665,
+            "RELIABILITY_RESIDUAL_SCALE": 2.994061048452185,
+            "EVIDENTIAL_PRECISION_FLOOR": 0.015198290784167123,
+            "EVIDENTIAL_GATE_TEMPERATURE": 3.9642229059368406,
+            "MIXUP_ALPHA": 0.0
+          },
+          "outer_metrics": {
+            "threshold": 0.325,
+            "mcc": 0.7241,
+            "auroc": 0.9413,
+            "auprc": 0.9019,
+            "brier": 0.08668,
+            "precision": 0.7746,
+            "recall": 0.8717,
+            "f1": 0.8203,
+            "tp": 2798,
+            "fp": 814,
+            "fn": 412,
+            "tn": 5532,
+            "specificity": 0.8717,
+            "npv": 0.9307,
+            "calibration": {
+              "prevalence": 0.335915,
+              "prevalence_brier": 0.223076,
+              "brier_skill": 0.611431,
+              "log_loss": 0.289821,
+              "adaptive_ece": 0.018312,
+              "calibration_slope": 0.90368,
+              "calibration_intercept": -0.256888
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.038091,
+                "mcc": 0.9233
+              },
+              "coverage_80": {
+                "coverage": 0.8,
+                "risk": 0.074035,
+                "mcc": 0.8408
+              },
+              "coverage_90": {
+                "coverage": 0.9001,
+                "risk": 0.096849,
+                "mcc": 0.7911
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.128296,
+                "mcc": 0.7241
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8,
+              "risk": 0.074035,
+              "mcc": 0.8408
+            },
+            "partition_sizes": {
+              "fit": 24627,
+              "early_stopping": 5095,
+              "temperature": 4622,
+              "threshold": 4297,
+              "outer_validation": 9556
+            }
+          },
+          "outer_fold_plan_sha256": "5fde899369c4cca57a1ac107dad8f6064afd53d21e64c8e30efadee293573eb2",
+          "outer_validation_rows_sha256": "1319738b9968af2dfdce9342c0391682aac9e6e607b51e2e8378d615e569669e",
+          "outer_validation_row_count": 9556
+        },
+        {
+          "architecture": "evidential_residual",
+          "outer_fold": 4,
+          "study_name": "evidential_residual_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_4",
+          "successful_trials": 23,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.8938,
+          "best_parameters": {
+            "D_MODEL": 128,
+            "DROPOUT": 0.25666954450100316,
+            "DEEP_LR": 0.001915397282125791,
+            "DEEP_WD": 1.174832370933586e-06,
+            "WARMUP_EPOCHS": 2,
+            "EMA_DECAY": 0.995,
+            "LABEL_SMOOTH": 0.03605218978411673,
+            "BATCH_SIZE": 128,
+            "MODALITY_DROPOUT": 0.22912892412624164,
+            "RELIABILITY_RESIDUAL_SCALE": 2.044091774145598,
+            "EVIDENTIAL_PRECISION_FLOOR": 0.1794578555561141,
+            "EVIDENTIAL_GATE_TEMPERATURE": 3.399044181989022,
+            "MIXUP_ALPHA": 0.0
+          },
+          "outer_metrics": {
+            "threshold": 0.2204,
+            "mcc": 0.7116,
+            "auroc": 0.9362,
+            "auprc": 0.9049,
+            "brier": 0.088144,
+            "precision": 0.756,
+            "recall": 0.8863,
+            "f1": 0.816,
+            "tp": 2946,
+            "fp": 951,
+            "fn": 378,
+            "tn": 5309,
+            "specificity": 0.8481,
+            "npv": 0.9335,
+            "calibration": {
+              "prevalence": 0.346828,
+              "prevalence_brier": 0.226538,
+              "brier_skill": 0.610908,
+              "log_loss": 0.296134,
+              "adaptive_ece": 0.013153,
+              "calibration_slope": 0.932569,
+              "calibration_intercept": 0.074083
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5,
+                "risk": 0.054674,
+                "mcc": 0.8925
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.082681,
+                "mcc": 0.8277
+              },
+              "coverage_90": {
+                "coverage": 0.9,
+                "risk": 0.108045,
+                "mcc": 0.7744
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.138669,
+                "mcc": 0.7116
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.082681,
+              "mcc": 0.8277
+            },
+            "partition_sizes": {
+              "fit": 26198,
+              "early_stopping": 4635,
+              "temperature": 3784,
+              "threshold": 3996,
+              "outer_validation": 9584
+            }
+          },
+          "outer_fold_plan_sha256": "9000ce1c3a07ad4275043cdb98ffb45a5ab9048d3f9a1810d466499535087e91",
+          "outer_validation_rows_sha256": "ade336e79563d9b41071f12688633f9bef5143402c59497d78823f540105e494",
+          "outer_validation_row_count": 9584
+        },
+        {
+          "architecture": "evidential_residual",
+          "outer_fold": 5,
+          "study_name": "evidential_residual_predictor_free_fixed_nested_group_cv_v4_reliability_residual_outer_5",
+          "successful_trials": 25,
+          "attempted_trials": 40,
+          "inner_best_objective": 0.9,
+          "best_parameters": {
+            "D_MODEL": 96,
+            "DROPOUT": 0.211745763920876,
+            "DEEP_LR": 0.001956627838491808,
+            "DEEP_WD": 0.00032351813356092384,
+            "WARMUP_EPOCHS": 4,
+            "EMA_DECAY": 0.995,
+            "LABEL_SMOOTH": 0.011734634739558214,
+            "BATCH_SIZE": 128,
+            "MODALITY_DROPOUT": 0.25188527689560425,
+            "RELIABILITY_RESIDUAL_SCALE": 2.249717038944426,
+            "EVIDENTIAL_PRECISION_FLOOR": 0.09738830734528162,
+            "EVIDENTIAL_GATE_TEMPERATURE": 1.6958649730965505,
+            "MIXUP_ALPHA": 0.0
+          },
+          "outer_metrics": {
+            "threshold": 0.1825,
+            "mcc": 0.6742,
+            "auroc": 0.9349,
+            "auprc": 0.8959,
+            "brier": 0.08954,
+            "precision": 0.704,
+            "recall": 0.9044,
+            "f1": 0.7917,
+            "tp": 2668,
+            "fp": 1122,
+            "fn": 282,
+            "tn": 4497,
+            "specificity": 0.8003,
+            "npv": 0.941,
+            "calibration": {
+              "prevalence": 0.344264,
+              "prevalence_brier": 0.225746,
+              "brier_skill": 0.60336,
+              "log_loss": 0.301237,
+              "adaptive_ece": 0.018249,
+              "calibration_slope": 1.040847,
+              "calibration_intercept": 0.073334
+            },
+            "risk_coverage": {
+              "coverage_50": {
+                "coverage": 0.5001,
+                "risk": 0.083781,
+                "mcc": 0.8373
+              },
+              "coverage_80": {
+                "coverage": 0.8001,
+                "risk": 0.107789,
+                "mcc": 0.789
+              },
+              "coverage_90": {
+                "coverage": 0.9001,
+                "risk": 0.131855,
+                "mcc": 0.7382
+              },
+              "coverage_100": {
+                "coverage": 1.0,
+                "risk": 0.163846,
+                "mcc": 0.6742
+              }
+            },
+            "risk_coverage_confidence_source": "logit_distance_from_frozen_threshold",
+            "selective": {
+              "coverage": 0.8001,
+              "risk": 0.107789,
+              "mcc": 0.789
+            },
+            "partition_sizes": {
+              "fit": 26089,
+              "early_stopping": 4618,
+              "temperature": 4616,
+              "threshold": 4305,
+              "outer_validation": 8569
+            }
+          },
+          "outer_fold_plan_sha256": "aff190f4a235c95b5f389617ccd7b4c1d3e168308c309c7d90d33ca72b33c1ff",
+          "outer_validation_rows_sha256": "3996e9b39af7e05a08d94745905ee527cd5d1c157f50827ffe925bdc8a4799e9",
+          "outer_validation_row_count": 8569
+        }
+      ]
+    }
+  },
+  "row_identity_lists_included": false,
+  "source_sha256": "6228efd4a8c6303b560aa3368da7945686ade4f6e4431e00e773a6b12329e5ef"
+}

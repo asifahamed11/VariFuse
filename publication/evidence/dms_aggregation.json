@@ -1,0 +1,194 @@
+{
+  "role": "exploratory_post_result_analysis",
+  "rows": 696311,
+  "aggregation": "mean_assays_within_UniProt_and_coarse_selection_type_then_category_mean_then_equal_category_mean",
+  "reference": "https://github.com/OATML-Markslab/ProteinGym",
+  "cohort": "retained_single_substitutions_with_valid_existing_extraction",
+  "full_leaderboard_comparable": false,
+  "spearman": {
+    "concatenation": {
+      "score": 0.34808879880277255,
+      "assay_macro": 0.358625575769041,
+      "valid_assays": 217,
+      "excluded_undefined_assays": 0,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.400782473493722,
+        "Binding": 0.34983885959675093,
+        "Expression": 0.32092579783569186,
+        "OrganismalFitness": 0.3552293552149902,
+        "Stability": 0.3136675078727075
+      },
+      "full_leaderboard_comparable": false
+    },
+    "esm_conservation_logistic": {
+      "score": 0.41345131676174196,
+      "assay_macro": 0.4290771302649744,
+      "valid_assays": 217,
+      "excluded_undefined_assays": 0,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.4261146198262173,
+        "Binding": 0.37874936524234665,
+        "Expression": 0.4087433577104036,
+        "OrganismalFitness": 0.35739656245894746,
+        "Stability": 0.4962526785707947
+      },
+      "full_leaderboard_comparable": false
+    },
+    "gated_fusion": {
+      "score": 0.38600989022543486,
+      "assay_macro": 0.3981072782179729,
+      "valid_assays": 217,
+      "excluded_undefined_assays": 0,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.43974845445743266,
+        "Binding": 0.376722415488927,
+        "Expression": 0.3629742998642206,
+        "OrganismalFitness": 0.38885941174025895,
+        "Stability": 0.36174486957633545
+      },
+      "full_leaderboard_comparable": false
+    },
+    "lightgbm": {
+      "score": 0.20094589829601936,
+      "assay_macro": 0.19863709862648501,
+      "valid_assays": 217,
+      "excluded_undefined_assays": 0,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.2111466885548298,
+        "Binding": 0.18542174996391378,
+        "Expression": 0.2311638912813637,
+        "OrganismalFitness": 0.2108342437793536,
+        "Stability": 0.16616291790063592
+      },
+      "full_leaderboard_comparable": false
+    },
+    "raw_esm_zero_shot": {
+      "score": 0.4134511396548321,
+      "assay_macro": 0.4290769998052152,
+      "valid_assays": 217,
+      "excluded_undefined_assays": 0,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.42611446473804715,
+        "Binding": 0.37874933953293694,
+        "Expression": 0.40874284045368897,
+        "OrganismalFitness": 0.3573964906972337,
+        "Stability": 0.4962525628522538
+      },
+      "full_leaderboard_comparable": false
+    },
+    "reliability_residual": {
+      "score": 0.41345126559785805,
+      "assay_macro": 0.42907704487356196,
+      "valid_assays": 217,
+      "excluded_undefined_assays": 0,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.4261144573254175,
+        "Binding": 0.3787495699542031,
+        "Expression": 0.4087433647090568,
+        "OrganismalFitness": 0.3573962878672829,
+        "Stability": 0.4962526481333302
+      },
+      "full_leaderboard_comparable": false
+    }
+  },
+  "auroc": {
+    "concatenation": {
+      "score": 0.7026723731893895,
+      "assay_macro": 0.7103611393339002,
+      "valid_assays": 216,
+      "excluded_undefined_assays": 1,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.727265585521154,
+        "Binding": 0.7025828857940343,
+        "Expression": 0.6836779251250094,
+        "OrganismalFitness": 0.7069833171200242,
+        "Stability": 0.6928521523867257
+      },
+      "full_leaderboard_comparable": false
+    },
+    "esm_conservation_logistic": {
+      "score": 0.7333091412642417,
+      "assay_macro": 0.7423319168983561,
+      "valid_assays": 216,
+      "excluded_undefined_assays": 1,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.7324784334275447,
+        "Binding": 0.7259222177148273,
+        "Expression": 0.7241185897207268,
+        "OrganismalFitness": 0.7060231190205748,
+        "Stability": 0.778003346437535
+      },
+      "full_leaderboard_comparable": false
+    },
+    "gated_fusion": {
+      "score": 0.723795688837603,
+      "assay_macro": 0.7322392617878181,
+      "valid_assays": 216,
+      "excluded_undefined_assays": 1,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.7484341463465276,
+        "Binding": 0.7203659373470394,
+        "Expression": 0.7052523938515439,
+        "OrganismalFitness": 0.7250991679401427,
+        "Stability": 0.7198267987027612
+      },
+      "full_leaderboard_comparable": false
+    },
+    "lightgbm": {
+      "score": 0.6191842545638584,
+      "assay_macro": 0.6189334385180552,
+      "valid_assays": 216,
+      "excluded_undefined_assays": 1,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.6241969671494862,
+        "Binding": 0.6110202254565221,
+        "Expression": 0.6306875737463272,
+        "OrganismalFitness": 0.6263155527020571,
+        "Stability": 0.6037009537648995
+      },
+      "full_leaderboard_comparable": false
+    },
+    "raw_esm_zero_shot": {
+      "score": 0.733309112454293,
+      "assay_macro": 0.7423318696679296,
+      "valid_assays": 216,
+      "excluded_undefined_assays": 1,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.7324783524444356,
+        "Binding": 0.7259222402568629,
+        "Expression": 0.7241186268260106,
+        "OrganismalFitness": 0.7060230705674209,
+        "Stability": 0.7780032721767348
+      },
+      "full_leaderboard_comparable": false
+    },
+    "reliability_residual": {
+      "score": 0.7333091046318068,
+      "assay_macro": 0.7423318580453716,
+      "valid_assays": 216,
+      "excluded_undefined_assays": 1,
+      "proteins": 186,
+      "category_means": {
+        "Activity": 0.732478290606449,
+        "Binding": 0.7259223727077551,
+        "Expression": 0.7241186182852113,
+        "OrganismalFitness": 0.7060230511875103,
+        "Stability": 0.7780031903721076
+      },
+      "full_leaderboard_comparable": false
+    }
+  },
+  "public_comparators": {},
+  "public_score_status": "awaiting_per_variant_public_scores_not_fabricated"
+}

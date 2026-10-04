@@ -1,0 +1,1133 @@
+{
+  "date": "2026-10-04",
+  "scope": "saved_predictions_and_partition_verification_no_retraining",
+  "metrics": {
+    "internal": {
+      "concatenation": {
+        "auroc": 0.9482886445014983,
+        "auprc": 0.9095934437227254,
+        "mcc": 0.7288572111978695,
+        "brier": 0.08373520577191167
+      },
+      "gated_fusion": {
+        "auroc": 0.9528163485692043,
+        "auprc": 0.9163786255695023,
+        "mcc": 0.7460444935100885,
+        "brier": 0.07977422313800536
+      },
+      "cross_attention": {
+        "auroc": 0.948124789376057,
+        "auprc": 0.9104901599619079,
+        "mcc": 0.7377705172201519,
+        "brier": 0.08299481626210846
+      },
+      "reliability_residual": {
+        "auroc": 0.9353763338313676,
+        "auprc": 0.9027870335159721,
+        "mcc": 0.6957839971982037,
+        "brier": 0.08766108027625757
+      },
+      "evidential_residual": {
+        "auroc": 0.9388474515419183,
+        "auprc": 0.905097730751278,
+        "mcc": 0.693437729574006,
+        "brier": 0.0868372063334152
+      },
+      "raw_esm_zero_shot": {
+        "auroc": 0.8895900688843078,
+        "auprc": 0.8471159392777551,
+        "mcc": 0.510829034280943,
+        "brier": 0.11522335939602664
+      },
+      "esm_score_logistic": {
+        "auroc": 0.8895874795842186,
+        "auprc": 0.8471268397939165,
+        "mcc": 0.510829034280943,
+        "brier": 0.11522204160524493
+      },
+      "conservation_logistic": {
+        "auroc": 0.8467071480520202,
+        "auprc": 0.7191991224241279,
+        "mcc": 0.46870916404388596,
+        "brier": 0.1488523566174095
+      },
+      "esm_conservation_logistic": {
+        "auroc": 0.9257889275489337,
+        "auprc": 0.8752435493302728,
+        "mcc": 0.6527125958491472,
+        "brier": 0.10188345908708128
+      },
+      "mutation_logistic": {
+        "auroc": 0.6947808027867136,
+        "auprc": 0.5479342557382267,
+        "mcc": 0.21006332242670506,
+        "brier": 0.20210383188625558
+      },
+      "availability_logistic": {
+        "auroc": 0.7309840652554516,
+        "auprc": 0.5249215124169729,
+        "mcc": 0.20031638936593535,
+        "brier": 0.19272957512244066
+      },
+      "esm_embedding_mutation": {
+        "auroc": 0.9319631720059801,
+        "auprc": 0.8898064277166436,
+        "mcc": 0.6628903015036912,
+        "brier": 0.09454008584747345
+      },
+      "lightgbm": {
+        "auroc": 0.9339347687797749,
+        "auprc": 0.8804721324694543,
+        "mcc": 0.6842234473191456,
+        "brier": 0.0975282839939159
+      }
+    },
+    "clinvar_exact_variant_disjoint": {
+      "lightgbm": {
+        "auroc": 0.9406979000392148,
+        "auprc": 0.9381709479298345,
+        "mcc": 0.731075642006693,
+        "brier": 0.10179046185965365
+      },
+      "raw_esm_zero_shot": {
+        "auroc": 0.8999609565603575,
+        "auprc": 0.9138867956623646,
+        "mcc": 0.5965700156740423,
+        "brier": 0.1257436843218994
+      },
+      "esm_score_logistic": {
+        "auroc": 0.8999609006482284,
+        "auprc": 0.9138867176263632,
+        "mcc": 0.5965700156740423,
+        "brier": 0.12574993024376457
+      },
+      "conservation_logistic": {
+        "auroc": 0.8496901750517434,
+        "auprc": 0.8294047174106313,
+        "mcc": 0.5046599679271977,
+        "brier": 0.1664854788903635
+      },
+      "esm_conservation_logistic": {
+        "auroc": 0.9307247883683987,
+        "auprc": 0.9310533256571761,
+        "mcc": 0.7095282652563382,
+        "brier": 0.10885295769701706
+      },
+      "mutation_logistic": {
+        "auroc": 0.6914943170632579,
+        "auprc": 0.6805891700101402,
+        "mcc": 0.21433685163805657,
+        "brier": 0.2376877248658534
+      },
+      "availability_logistic": {
+        "auroc": 0.7505358665031571,
+        "auprc": 0.713073454147749,
+        "mcc": 0.28077001958608927,
+        "brier": 0.2193552948820603
+      },
+      "esm_embedding_mutation": {
+        "auroc": 0.9456698767870007,
+        "auprc": 0.9462502996330253,
+        "mcc": 0.7276034796787029,
+        "brier": 0.0946766874747916
+      },
+      "concatenation": {
+        "auroc": 0.9605515142579376,
+        "auprc": 0.9596040627086186,
+        "mcc": 0.7957730135179342,
+        "brier": 0.07826797034319097
+      },
+      "gated_fusion": {
+        "auroc": 0.9640936314948252,
+        "auprc": 0.9624535433034884,
+        "mcc": 0.8098701533018211,
+        "brier": 0.0743841496475286
+      },
+      "reliability_residual": {
+        "auroc": 0.9549452423633304,
+        "auprc": 0.9573761770494673,
+        "mcc": 0.7676919186469693,
+        "brier": 0.08167864968145414
+      },
+      "evidential_residual": {
+        "auroc": 0.9498555146719857,
+        "auprc": 0.9539300446092451,
+        "mcc": 0.760136558816179,
+        "brier": 0.08767363936109666
+      },
+      "cross_attention": {
+        "auroc": 0.9608903324406589,
+        "auprc": 0.9605855909563215,
+        "mcc": 0.7938922951279582,
+        "brier": 0.07835088401953351
+      }
+    },
+    "clinvar_gene_disjoint": {
+      "lightgbm": {
+        "auroc": 0.8858024691358025,
+        "auprc": 0.6168083368853329,
+        "mcc": 0.49882880026168847,
+        "brier": 0.10343228297640324
+      },
+      "raw_esm_zero_shot": {
+        "auroc": 0.8968096497858402,
+        "auprc": 0.7230009415553887,
+        "mcc": 0.38788526714860044,
+        "brier": 0.09552062018879902
+      },
+      "esm_score_logistic": {
+        "auroc": 0.8968096497858402,
+        "auprc": 0.7230009415553887,
+        "mcc": 0.38788526714860044,
+        "brier": 0.09551419047152865
+      },
+      "conservation_logistic": {
+        "auroc": 0.8192318594104308,
+        "auprc": 0.504546643142848,
+        "mcc": 0.3066594230901601,
+        "brier": 0.13069196623467938
+      },
+      "esm_conservation_logistic": {
+        "auroc": 0.9279257999496094,
+        "auprc": 0.7423001474573153,
+        "mcc": 0.5455173790909935,
+        "brier": 0.08736922827332258
+      },
+      "mutation_logistic": {
+        "auroc": 0.7047508818342151,
+        "auprc": 0.31081052379542873,
+        "mcc": 0.16143701907791894,
+        "brier": 0.16304697642370958
+      },
+      "availability_logistic": {
+        "auroc": 0.6203152557319224,
+        "auprc": 0.25347753965510067,
+        "mcc": 0.10975357849582547,
+        "brier": 0.16203282679126582
+      },
+      "esm_embedding_mutation": {
+        "auroc": 0.9146195515243135,
+        "auprc": 0.7632860534042959,
+        "mcc": 0.4648602477887184,
+        "brier": 0.09314395387025223
+      },
+      "concatenation": {
+        "auroc": 0.9315948601662888,
+        "auprc": 0.7898092837313998,
+        "mcc": 0.5633102157128491,
+        "brier": 0.0893682186368303
+      },
+      "gated_fusion": {
+        "auroc": 0.9344450743260266,
+        "auprc": 0.8059086083164808,
+        "mcc": 0.570966799752624,
+        "brier": 0.0842730497164366
+      },
+      "reliability_residual": {
+        "auroc": 0.9243984630889392,
+        "auprc": 0.7988971522690175,
+        "mcc": 0.5171658330534065,
+        "brier": 0.0902673929846008
+      },
+      "evidential_residual": {
+        "auroc": 0.9287131519274376,
+        "auprc": 0.8070002897704366,
+        "mcc": 0.5396777597634047,
+        "brier": 0.08299426529439041
+      },
+      "cross_attention": {
+        "auroc": 0.9326184177374653,
+        "auprc": 0.8046797354102047,
+        "mcc": 0.5916673221768705,
+        "brier": 0.086067384372036
+      }
+    }
+  },
+  "metric_checks": [
+    {
+      "comparison": "internal/concatenation",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/gated_fusion",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/cross_attention",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/reliability_residual",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/evidential_residual",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/raw_esm_zero_shot",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/esm_score_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/conservation_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/esm_conservation_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/mutation_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/availability_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/esm_embedding_mutation",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "internal/lightgbm",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/lightgbm",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/raw_esm_zero_shot",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/esm_score_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/conservation_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/esm_conservation_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/mutation_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/availability_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/esm_embedding_mutation",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/concatenation",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/gated_fusion",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/reliability_residual",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/evidential_residual",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_exact_variant_disjoint/cross_attention",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/lightgbm",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/raw_esm_zero_shot",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/esm_score_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/conservation_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/esm_conservation_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/mutation_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/availability_logistic",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/esm_embedding_mutation",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/concatenation",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/gated_fusion",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/reliability_residual",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/evidential_residual",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    },
+    {
+      "comparison": "clinvar_gene_disjoint/cross_attention",
+      "passed": true,
+      "checks": {
+        "auroc": true,
+        "auprc": true,
+        "mcc": true,
+        "brier": true
+      }
+    }
+  ],
+  "internal": {
+    "n": 48197,
+    "positives": 16740,
+    "split_groups": 3718,
+    "duplicate_row_ids": 0,
+    "folds": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "partition_checks": [
+    {
+      "outer_fold": 1,
+      "kind": "outer",
+      "passed": true
+    },
+    {
+      "outer_fold": 1,
+      "kind": "final",
+      "passed": true
+    },
+    {
+      "outer_fold": 1,
+      "kind": "inner_1",
+      "passed": true
+    },
+    {
+      "outer_fold": 1,
+      "kind": "inner_2",
+      "passed": true
+    },
+    {
+      "outer_fold": 1,
+      "kind": "inner_3",
+      "passed": true
+    },
+    {
+      "outer_fold": 2,
+      "kind": "outer",
+      "passed": true
+    },
+    {
+      "outer_fold": 2,
+      "kind": "final",
+      "passed": true
+    },
+    {
+      "outer_fold": 2,
+      "kind": "inner_1",
+      "passed": true
+    },
+    {
+      "outer_fold": 2,
+      "kind": "inner_2",
+      "passed": true
+    },
+    {
+      "outer_fold": 2,
+      "kind": "inner_3",
+      "passed": true
+    },
+    {
+      "outer_fold": 3,
+      "kind": "outer",
+      "passed": true
+    },
+    {
+      "outer_fold": 3,
+      "kind": "final",
+      "passed": true
+    },
+    {
+      "outer_fold": 3,
+      "kind": "inner_1",
+      "passed": true
+    },
+    {
+      "outer_fold": 3,
+      "kind": "inner_2",
+      "passed": true
+    },
+    {
+      "outer_fold": 3,
+      "kind": "inner_3",
+      "passed": true
+    },
+    {
+      "outer_fold": 4,
+      "kind": "outer",
+      "passed": true
+    },
+    {
+      "outer_fold": 4,
+      "kind": "final",
+      "passed": true
+    },
+    {
+      "outer_fold": 4,
+      "kind": "inner_1",
+      "passed": true
+    },
+    {
+      "outer_fold": 4,
+      "kind": "inner_2",
+      "passed": true
+    },
+    {
+      "outer_fold": 4,
+      "kind": "inner_3",
+      "passed": true
+    },
+    {
+      "outer_fold": 5,
+      "kind": "outer",
+      "passed": true
+    },
+    {
+      "outer_fold": 5,
+      "kind": "final",
+      "passed": true
+    },
+    {
+      "outer_fold": 5,
+      "kind": "inner_1",
+      "passed": true
+    },
+    {
+      "outer_fold": 5,
+      "kind": "inner_2",
+      "passed": true
+    },
+    {
+      "outer_fold": 5,
+      "kind": "inner_3",
+      "passed": true
+    }
+  ],
+  "internal_table_columns": [
+    "chr",
+    "pos",
+    "ref",
+    "alt",
+    "variant_id",
+    "transcript_variant_id",
+    "row_id",
+    "CLINVAR_VARIATION_ID",
+    "CLINVAR_SOURCE_GENE",
+    "CLINVAR_SOURCE_NAME",
+    "CLINVAR_REVIEW_STATUS",
+    "genename",
+    "Ensembl_transcriptid",
+    "HGVSp_snpEff",
+    "HGVSc_snpEff",
+    "aa_pos",
+    "aa_ref",
+    "aa_alt",
+    "variant_type",
+    "GERP++_RS",
+    "phyloP100way_vertebrate",
+    "phastCons100way_vertebrate",
+    "LABEL_PATHOGENIC",
+    "uniprot_id",
+    "PROTEIN_MAPPING_STATUS",
+    "HAS_PROTEIN_MAPPING",
+    "MAPPING_TRANSCRIPT_MATCH",
+    "PRIMARY_MAPPING_ELIGIBLE",
+    "MAPPING_CONFIDENCE",
+    "IS_IN_DOMAIN",
+    "HAS_DOMAIN_ANNOTATION",
+    "DISTANCE_TO_ACTIVE_SITE",
+    "HAS_ACTIVE_SITE_ANNOTATION",
+    "IS_ACTIVE_SITE",
+    "HAS_BINDING_SITE_ANNOTATION",
+    "IS_BINDING_SITE",
+    "HAS_TRANSMEMBRANE_ANNOTATION",
+    "IS_TRANSMEMBRANE",
+    "SASA",
+    "RELATIVE_SASA",
+    "PLDDT_SCORE",
+    "LOCAL_CONTACT_COUNT_8A",
+    "LOCAL_CONTACT_COUNT_12A",
+    "LOCAL_LONG_RANGE_CONTACT_COUNT_8A",
+    "LOCAL_MEAN_PLDDT_8A",
+    "LOCAL_MIN_PLDDT_8A",
+    "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+    "LOCAL_MEAN_DISTANCE_8A",
+    "LOCAL_HYDROPHOBIC_FRACTION_8A",
+    "LOCAL_CHARGED_FRACTION_8A",
+    "STRUCTURE_FILE_AVAILABLE",
+    "HAS_STRUCTURE",
+    "LOW_CONFIDENCE_STRUCTURE",
+    "STRUCTURE_MAPPING_STATUS",
+    "TRANSCRIPT_CANDIDATE_COUNT",
+    "SOURCE_GENE_CONCORDANT_MAPPED_CANDIDATE_COUNT",
+    "TRANSCRIPT_MAPPED_CANDIDATE_COUNT",
+    "CLINVAR_SOURCE_GENE_MATCH",
+    "PRIMARY_CONSEQUENCE_RANK",
+    "PRIMARY_CONSEQUENCE_SELECTED",
+    "CONSEQUENCE_SELECTION_POLICY",
+    "GERP++_RS__missing",
+    "phyloP100way_vertebrate__missing",
+    "phastCons100way_vertebrate__missing",
+    "SASA__missing",
+    "RELATIVE_SASA__missing",
+    "PLDDT_SCORE__missing",
+    "LOCAL_CONTACT_COUNT_8A__missing",
+    "LOCAL_CONTACT_COUNT_12A__missing",
+    "LOCAL_LONG_RANGE_CONTACT_COUNT_8A__missing",
+    "LOCAL_MEAN_PLDDT_8A__missing",
+    "LOCAL_MIN_PLDDT_8A__missing",
+    "LOCAL_CONFIDENT_CONTACT_FRACTION_8A__missing",
+    "LOCAL_MEAN_DISTANCE_8A__missing",
+    "LOCAL_HYDROPHOBIC_FRACTION_8A__missing",
+    "LOCAL_CHARGED_FRACTION_8A__missing",
+    "IS_IN_DOMAIN__missing",
+    "DISTANCE_TO_ACTIVE_SITE__missing",
+    "IS_ACTIVE_SITE__missing",
+    "IS_BINDING_SITE__missing",
+    "IS_TRANSMEMBRANE__missing",
+    "HAS_PROTEIN_MAPPING__missing",
+    "STRUCTURE_FILE_AVAILABLE__missing",
+    "HAS_STRUCTURE__missing",
+    "LOW_CONFIDENCE_STRUCTURE__missing",
+    "HAS_DOMAIN_ANNOTATION__missing",
+    "HAS_ACTIVE_SITE_ANNOTATION__missing",
+    "HAS_BINDING_SITE_ANNOTATION__missing",
+    "HAS_TRANSMEMBRANE_ANNOTATION__missing",
+    "sequence_hash",
+    "aa_ref_is_A",
+    "aa_alt_is_A",
+    "aa_ref_is_C",
+    "aa_alt_is_C",
+    "aa_ref_is_D",
+    "aa_alt_is_D",
+    "aa_ref_is_E",
+    "aa_alt_is_E",
+    "aa_ref_is_F",
+    "aa_alt_is_F",
+    "aa_ref_is_G",
+    "aa_alt_is_G",
+    "aa_ref_is_H",
+    "aa_alt_is_H",
+    "aa_ref_is_I",
+    "aa_alt_is_I",
+    "aa_ref_is_K",
+    "aa_alt_is_K",
+    "aa_ref_is_L",
+    "aa_alt_is_L",
+    "aa_ref_is_M",
+    "aa_alt_is_M",
+    "aa_ref_is_N",
+    "aa_alt_is_N",
+    "aa_ref_is_P",
+    "aa_alt_is_P",
+    "aa_ref_is_Q",
+    "aa_alt_is_Q",
+    "aa_ref_is_R",
+    "aa_alt_is_R",
+    "aa_ref_is_S",
+    "aa_alt_is_S",
+    "aa_ref_is_T",
+    "aa_alt_is_T",
+    "aa_ref_is_V",
+    "aa_alt_is_V",
+    "aa_ref_is_W",
+    "aa_alt_is_W",
+    "aa_ref_is_Y",
+    "aa_alt_is_Y",
+    "aa_hydrophobicity_delta",
+    "aa_volume_delta",
+    "aa_charge_delta",
+    "homology_cluster",
+    "split_group"
+  ],
+  "clinvar_exact_variant_disjoint": {
+    "n": 14650,
+    "positives": 7323,
+    "genes": 3059,
+    "duplicate_variant_ids": 0,
+    "training_variant_id_overlap": 0,
+    "gate_quantiles": [
+      0.9639974236488342,
+      0.9915690422058105,
+      0.9967122673988342
+    ]
+  },
+  "clinvar_gene_disjoint": {
+    "n": 679,
+    "positives": 112,
+    "genes": 432,
+    "duplicate_variant_ids": 0,
+    "training_variant_id_overlap": 0,
+    "gate_quantiles": [
+      0.0,
+      0.9872070550918579,
+      0.9959733366966248
+    ]
+  },
+  "dms": {
+    "n": 696311,
+    "assays": 217,
+    "maximum_gate": 0.0,
+    "fallback_fraction": 1.0,
+    "max_absolute_prediction_anchor_difference": 1.1920928955078125e-07
+  },
+  "controls": {
+    "role": "exploratory_component_and_same_input_controls",
+    "models": {
+      "reliability_control": {
+        "status": "incomplete",
+        "missing_folds": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "fixed_quality_gate": {
+        "status": "incomplete",
+        "missing_folds": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "hard_switch": {
+        "status": "incomplete",
+        "missing_folds": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "no_modality_dropout": {
+        "status": "incomplete",
+        "missing_folds": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "unbounded_residual": {
+        "status": "incomplete",
+        "missing_folds": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "same_input_mlp": {
+        "status": "incomplete",
+        "missing_folds": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "same_input_logistic": {
+        "status": "incomplete",
+        "missing_folds": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "same_input_lightgbm": {
+        "status": "incomplete",
+        "missing_folds": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    "all_complete": false
+  },
+  "full_control_results_present": [],
+  "extension_code_hash_checks": {
+    "src/research_models.py": true,
+    "src/research_evidence.py": true,
+    "tools/run_research_controls.py": true,
+    "src/common.py": true,
+    "src/config.py": true,
+    "src/schema.py": true,
+    "src/gpu_runtime.py": true,
+    "src/14_tune_cross_attention.py": true
+  },
+  "functional_sensitivity": {
+    "untouched": false,
+    "rows": 19,
+    "assays": 1,
+    "genes": 1,
+    "adequate_for_independent_validation_claim": false,
+    "reason": "only 19 availability-selected variants from one previously evaluated assay"
+  },
+  "full_mask_clinvar": {
+    "lightgbm": {
+      "auroc": 0.664,
+      "auprc": 0.6317,
+      "mcc": 0.0,
+      "brier": 0.492076
+    },
+    "raw_esm_zero_shot": {
+      "auroc": 0.9,
+      "auprc": 0.9139,
+      "mcc": 0.5966,
+      "brier": 0.125744
+    },
+    "esm_score_logistic": {
+      "auroc": 0.9,
+      "auprc": 0.9139,
+      "mcc": 0.5966,
+      "brier": 0.12575
+    },
+    "conservation_logistic": {
+      "auroc": 0.5,
+      "auprc": 0.4999,
+      "mcc": 0.0,
+      "brier": 0.293553
+    },
+    "esm_conservation_logistic": {
+      "auroc": 0.9,
+      "auprc": 0.9139,
+      "mcc": 0.6654,
+      "brier": 0.136344
+    },
+    "mutation_logistic": {
+      "auroc": 0.6915,
+      "auprc": 0.6806,
+      "mcc": 0.2143,
+      "brier": 0.237688
+    },
+    "availability_logistic": {
+      "auroc": 0.6321,
+      "auprc": 0.6127,
+      "mcc": 0.0,
+      "brier": 0.485908
+    },
+    "esm_embedding_mutation": {
+      "auroc": 0.9457,
+      "auprc": 0.9463,
+      "mcc": 0.7276,
+      "brier": 0.094677
+    },
+    "concatenation": {
+      "auroc": 0.9428,
+      "auprc": 0.9441,
+      "mcc": 0.7424,
+      "brier": 0.102384
+    },
+    "gated_fusion": {
+      "auroc": 0.9492,
+      "auprc": 0.9493,
+      "mcc": 0.7606,
+      "brier": 0.099062
+    },
+    "reliability_residual": {
+      "auroc": 0.9,
+      "auprc": 0.9139,
+      "mcc": 0.333,
+      "brier": 0.134873
+    },
+    "evidential_residual": {
+      "auroc": 0.9,
+      "auprc": 0.9139,
+      "mcc": 0.5649,
+      "brier": 0.121047
+    },
+    "cross_attention": {
+      "auroc": 0.9507,
+      "auprc": 0.9527,
+      "mcc": 0.7652,
+      "brier": 0.091459
+    }
+  },
+  "all_metric_checks_passed": true,
+  "metric_combinations_checked": 39
+}

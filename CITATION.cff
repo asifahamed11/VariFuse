@@ -1,44 +1,34 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it using the metadata below."
+message: "Please cite the code snapshot and commit used for your analysis."
 type: software
-title: "VariFuse: ESM-2 Cross-Attention Fusion for Evidence-Aware Somatic Variant Pathogenicity Classification"
-version: 3.0.1
-date-released: 2026-07-09
+title: "VariFuse predictor free multimodal missense variant evaluation"
+version: "4.0.0"
+date-released: 2026-10-04
 url: "https://github.com/asifahamed11/VariFuse"
 repository-code: "https://github.com/asifahamed11/VariFuse"
-doi: "10.5281/zenodo.21278850"
 license: MIT
 authors:
   - given-names: "Asif"
     family-names: "Ahamed"
     orcid: "https://orcid.org/0009-0008-9980-8806"
-    email: asifahamedstudent@gmail.com
-    affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
-  - given-names: "Md. Tanvir"
-    family-names: "Hasan"
-    email: info.tanvirhasan01@gmail.com
-    affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
-  - given-names: "Most. Alisa"
-    family-names: "Tabassum"
-    email: alisatabassum101@gmail.com
     affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
   - given-names: "Ahammad"
     family-names: "Hossain"
     orcid: "https://orcid.org/0000-0001-9081-5905"
-    email: ahammadstatru@gmail.com
     affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
-  # Corresponding author
+  - given-names: "Md. Tanvir"
+    family-names: "Hasan"
+    affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
+  - given-names: "Most. Alisa"
+    family-names: "Tabassum"
+    affiliation: "Department of Computer Science & Engineering, Varendra University, Rajshahi, Bangladesh"
   - given-names: "A.H.M. Rahmatullah"
     family-names: "Imon"
     orcid: "https://orcid.org/0000-0003-2767-2037"
-    email: director.cir@vu.edu.bd
     affiliation: "Center for Interdisciplinary Research (CIR), Varendra University, Rajshahi, Bangladesh"
 keywords:
-  - bioinformatics
-  - cancer-genomics
-  - somatic-variants
-  - variant-classification
-  - protein-language-model
-  - esm2
-  - cross-attention
-  - machine-learning
+  - missense variants
+  - protein language models
+  - multimodal fusion
+  - homology aware validation
+  - missing modalities

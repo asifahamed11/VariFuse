@@ -1,0 +1,19 @@
+{
+  "rows": 48197,
+  "genes": 4692,
+  "unique_sequences": 5531,
+  "homology_clusters": 4168,
+  "connected_split_groups": 3718,
+  "min_sequence_identity": 0.3,
+  "minimum_coverage": 0.8,
+  "coverage_mode": 0,
+  "cluster_mode": 2,
+  "cluster_tsv": "I:\\VariFuse_2\\publication_runs\\full_stepwise_v1\\outputs\\08_prepare_esm\\mmseqs_cluster.tsv",
+  "cluster_tsv_sha256": "76a9482f737bf3ffd803a32f9b9410d8c265b04c174d8933584c4308224265e1",
+  "cluster_provenance": "I:\\VariFuse_2\\publication_runs\\full_stepwise_v1\\outputs\\08_prepare_esm\\mmseqs_cluster.provenance.json",
+  "sequence_set_sha256": "80cb40e5c5dac9821a800b0cb57cb1de67d4be92f0cfa2ad49503f7b7ed7cad4",
+  "member_universe_validation": "exact",
+  "mmseqs_version": "8cc5ce367b5638c4306c2d7cfc652dd099a4643f",
+  "mmseqs_threads": 1,
+  "upstream_validation": "passed"
+}

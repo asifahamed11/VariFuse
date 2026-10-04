@@ -1,0 +1,106 @@
+{
+  "same_input_lightgbm_minus_reliability_control": {
+    "direction": "second_minus_first",
+    "groups": 3059,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": 0.007199327129895794,
+        "valid_replicates": 1000,
+        "ci95": [
+          0.005149910874517385,
+          0.009539238846116965
+        ]
+      },
+      "auroc": {
+        "difference": 0.010953195379101,
+        "valid_replicates": 1000,
+        "ci95": [
+          0.008602782369544277,
+          0.013593957040494356
+        ]
+      }
+    }
+  },
+  "same_input_lightgbm_minus_gated_fusion": {
+    "direction": "second_minus_first",
+    "groups": 3059,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": 0.0014980434956524125,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.00024513443164300426,
+          0.0032594084709737237
+        ]
+      },
+      "auroc": {
+        "difference": 0.0003248028757322219,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.0011536055916384984,
+          0.0017417710430106508
+        ]
+      }
+    }
+  },
+  "same_input_mlp_minus_reliability_control": {
+    "direction": "second_minus_first",
+    "groups": 3059,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": 0.002579279006446611,
+        "valid_replicates": 1000,
+        "ci95": [
+          0.0006310968839994186,
+          0.004631127688989697
+        ]
+      },
+      "auroc": {
+        "difference": 0.006826265229508577,
+        "valid_replicates": 1000,
+        "ci95": [
+          0.004746192014728634,
+          0.008873162802220967
+        ]
+      }
+    }
+  },
+  "same_input_mlp_minus_gated_fusion": {
+    "direction": "second_minus_first",
+    "groups": 3059,
+    "requested_replicates": 1000,
+    "inference": "exploratory_paired_cluster_percentile_interval_fixed_predictions",
+    "training_uncertainty_included": false,
+    "multiplicity_adjusted": false,
+    "metrics": {
+      "auprc": {
+        "difference": -0.0031220046277967706,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.004800823272127211,
+          -0.0015002007586271322
+        ]
+      },
+      "auroc": {
+        "difference": -0.0038021272738602008,
+        "valid_replicates": 1000,
+        "ci95": [
+          -0.004765378302512668,
+          -0.0028465770190603153
+        ]
+      }
+    }
+  }
+}

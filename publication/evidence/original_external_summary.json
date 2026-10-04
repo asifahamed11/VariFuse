@@ -1,0 +1,5333 @@
+{
+  "primary_evaluation_policy": {
+    "clinvar": {
+      "set": "clinvar_exact_variant_disjoint",
+      "analysis_unit": "unique_genomic_variant",
+      "annotation_aggregation": "mean_model_output",
+      "bootstrap": "gene_then_variant_hierarchical"
+    },
+    "dms": {
+      "set": "dms_exact_variant_disjoint",
+      "analysis_unit": "assay",
+      "endpoints": [
+        "macro_functional_spearman",
+        "macro_auroc"
+      ],
+      "bootstrap": "paired_assay_resampling"
+    }
+  },
+  "sets": {
+    "clinvar_exact_variant_disjoint": {
+      "n": 14650,
+      "row_n": 14650,
+      "positives": 7323,
+      "prevalence": 0.499863,
+      "genes": 3059,
+      "assays": null,
+      "modality_coverage": {
+        "esm_masked_marginal": {
+          "n": 14650,
+          "row_coverage": 1.0
+        },
+        "structure": {
+          "n": 13480,
+          "row_coverage": 0.920137,
+          "feature_coverage": {
+            "SASA": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "RELATIVE_SASA": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "PLDDT_SCORE": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "LOCAL_CONTACT_COUNT_8A": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "LOCAL_CONTACT_COUNT_12A": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "LOCAL_LONG_RANGE_CONTACT_COUNT_8A": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "LOCAL_MEAN_PLDDT_8A": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "LOCAL_MIN_PLDDT_8A": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "LOCAL_CONFIDENT_CONTACT_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "LOCAL_MEAN_DISTANCE_8A": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "LOCAL_HYDROPHOBIC_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            },
+            "LOCAL_CHARGED_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 13480,
+              "row_coverage": 0.920137
+            }
+          }
+        },
+        "conservation": {
+          "n": 14436,
+          "row_coverage": 0.985392,
+          "feature_coverage": {
+            "GERP++_RS": {
+              "available_column": true,
+              "finite_n": 14432,
+              "row_coverage": 0.985119
+            },
+            "phyloP100way_vertebrate": {
+              "available_column": true,
+              "finite_n": 14436,
+              "row_coverage": 0.985392
+            },
+            "phastCons100way_vertebrate": {
+              "available_column": true,
+              "finite_n": 14436,
+              "row_coverage": 0.985392
+            }
+          }
+        },
+        "complete_sequence_structure_conservation": {
+          "n": 13274,
+          "row_coverage": 0.906075
+        },
+        "missing_modalities": [],
+        "full_multimodal_validation": false,
+        "interpretation": "models are evaluated with one or more missing/imputed modalities"
+      },
+      "validation_scope": "clinical_pathogenicity_at_unique_genomic_variant_level",
+      "models": {
+        "lightgbm": {
+          "threshold": 0.2785,
+          "mcc": 0.7311,
+          "auroc": 0.9407,
+          "auprc": 0.9382,
+          "brier": 0.10179,
+          "precision": 0.8417,
+          "recall": 0.8983,
+          "f1": 0.8691,
+          "tp": 6578,
+          "fp": 1237,
+          "fn": 745,
+          "tn": 6090,
+          "specificity": 0.8312,
+          "npv": 0.891,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.592838,
+            "log_loss": 0.331622,
+            "adaptive_ece": 0.063083,
+            "calibration_slope": 1.017309,
+            "calibration_intercept": 0.647434
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.096928,
+              "mcc": 0.807
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.107423,
+              "mcc": 0.7871
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.106864,
+              "mcc": 0.7882
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.13529,
+              "mcc": 0.7311
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.107423,
+            "mcc": 0.7871
+          },
+          "ci95": {
+            "mcc": [
+              0.7091,
+              0.7508
+            ],
+            "auroc": [
+              0.933,
+              0.9475
+            ],
+            "auprc": [
+              0.9275,
+              0.948
+            ],
+            "brier": [
+              0.0944,
+              0.1108
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "raw_esm_zero_shot": {
+          "threshold": 0.1568,
+          "mcc": 0.5966,
+          "auroc": 0.9,
+          "auprc": 0.9139,
+          "brier": 0.125744,
+          "precision": 0.7378,
+          "recall": 0.9021,
+          "f1": 0.8117,
+          "tp": 6606,
+          "fp": 2348,
+          "fn": 717,
+          "tn": 4979,
+          "specificity": 0.6795,
+          "npv": 0.8741,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.497025,
+            "log_loss": 0.406928,
+            "adaptive_ece": 0.065131,
+            "calibration_slope": 1.050079,
+            "calibration_intercept": 0.565988
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.203686,
+              "mcc": 0.5964
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.198123,
+              "mcc": 0.6128
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.199697,
+              "mcc": 0.6104
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.209215,
+              "mcc": 0.5966
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.198123,
+            "mcc": 0.6128
+          },
+          "ci95": {
+            "mcc": [
+              0.5729,
+              0.6188
+            ],
+            "auroc": [
+              0.8894,
+              0.9104
+            ],
+            "auprc": [
+              0.8999,
+              0.9271
+            ],
+            "brier": [
+              0.1173,
+              0.134
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "esm_score_logistic": {
+          "threshold": 0.1568,
+          "mcc": 0.5966,
+          "auroc": 0.9,
+          "auprc": 0.9139,
+          "brier": 0.12575,
+          "precision": 0.7378,
+          "recall": 0.9021,
+          "f1": 0.8117,
+          "tp": 6606,
+          "fp": 2348,
+          "fn": 717,
+          "tn": 4979,
+          "specificity": 0.6795,
+          "npv": 0.8741,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.497,
+            "log_loss": 0.406938,
+            "adaptive_ece": 0.065152,
+            "calibration_slope": 1.050589,
+            "calibration_intercept": 0.566333
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.203686,
+              "mcc": 0.5964
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.198123,
+              "mcc": 0.6128
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.199697,
+              "mcc": 0.6104
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.209215,
+              "mcc": 0.5966
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.198123,
+            "mcc": 0.6128
+          },
+          "ci95": {
+            "mcc": [
+              0.5729,
+              0.6188
+            ],
+            "auroc": [
+              0.8894,
+              0.9104
+            ],
+            "auprc": [
+              0.8999,
+              0.9271
+            ],
+            "brier": [
+              0.1173,
+              0.1341
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "conservation_logistic": {
+          "threshold": 0.2122,
+          "mcc": 0.5047,
+          "auroc": 0.8497,
+          "auprc": 0.8294,
+          "brier": 0.166485,
+          "precision": 0.6776,
+          "recall": 0.906,
+          "f1": 0.7753,
+          "tp": 6635,
+          "fp": 3157,
+          "fn": 688,
+          "tn": 4170,
+          "specificity": 0.5691,
+          "npv": 0.8584,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.334058,
+            "log_loss": 0.50951,
+            "adaptive_ece": 0.09254,
+            "calibration_slope": 1.030549,
+            "calibration_intercept": 0.581496
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.238225,
+              "mcc": 0.5419
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.247952,
+              "mcc": 0.5281
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.251119,
+              "mcc": 0.5233
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.262457,
+              "mcc": 0.5047
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.247952,
+            "mcc": 0.5281
+          },
+          "ci95": {
+            "mcc": [
+              0.4802,
+              0.5278
+            ],
+            "auroc": [
+              0.8377,
+              0.8605
+            ],
+            "auprc": [
+              0.805,
+              0.8523
+            ],
+            "brier": [
+              0.1597,
+              0.1736
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "esm_conservation_logistic": {
+          "threshold": 0.2439,
+          "mcc": 0.7095,
+          "auroc": 0.9307,
+          "auprc": 0.9311,
+          "brier": 0.108853,
+          "precision": 0.8214,
+          "recall": 0.9022,
+          "f1": 0.8599,
+          "tp": 6607,
+          "fp": 1437,
+          "fn": 716,
+          "tn": 5890,
+          "specificity": 0.8039,
+          "npv": 0.8916,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.564588,
+            "log_loss": 0.351714,
+            "adaptive_ece": 0.057619,
+            "calibration_slope": 1.042241,
+            "calibration_intercept": 0.568187
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.119317,
+              "mcc": 0.763
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.123805,
+              "mcc": 0.7558
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.126204,
+              "mcc": 0.7513
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.146962,
+              "mcc": 0.7095
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.123805,
+            "mcc": 0.7558
+          },
+          "ci95": {
+            "mcc": [
+              0.6901,
+              0.727
+            ],
+            "auroc": [
+              0.9227,
+              0.9377
+            ],
+            "auprc": [
+              0.9187,
+              0.9417
+            ],
+            "brier": [
+              0.1019,
+              0.1163
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "mutation_logistic": {
+          "threshold": 0.2117,
+          "mcc": 0.2143,
+          "auroc": 0.6915,
+          "auprc": 0.6806,
+          "brier": 0.237688,
+          "precision": 0.5503,
+          "recall": 0.9011,
+          "f1": 0.6833,
+          "tp": 6599,
+          "fp": 5392,
+          "fn": 724,
+          "tn": 1935,
+          "specificity": 0.2641,
+          "npv": 0.7277,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.049249,
+            "log_loss": 0.670698,
+            "adaptive_ece": 0.121903,
+            "calibration_slope": 0.966685,
+            "calibration_intercept": 0.543896
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.406143,
+              "mcc": 0.2042
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.408106,
+              "mcc": 0.2108
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.408798,
+              "mcc": 0.2061
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.417474,
+              "mcc": 0.2143
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.408106,
+            "mcc": 0.2108
+          },
+          "ci95": {
+            "mcc": [
+              0.1919,
+              0.2369
+            ],
+            "auroc": [
+              0.6742,
+              0.7081
+            ],
+            "auprc": [
+              0.6421,
+              0.716
+            ],
+            "brier": [
+              0.2291,
+              0.2462
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "availability_logistic": {
+          "threshold": 0.1575,
+          "mcc": 0.2808,
+          "auroc": 0.7505,
+          "auprc": 0.7131,
+          "brier": 0.219355,
+          "precision": 0.5699,
+          "recall": 0.9129,
+          "f1": 0.7017,
+          "tp": 6685,
+          "fp": 5045,
+          "fn": 638,
+          "tn": 2282,
+          "specificity": 0.3115,
+          "npv": 0.7815,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.122579,
+            "log_loss": 0.638991,
+            "adaptive_ece": 0.136704,
+            "calibration_slope": 1.028372,
+            "calibration_intercept": 0.691645
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.313584,
+              "mcc": 0.1195
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.420222,
+              "mcc": 0.0674
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.39689,
+              "mcc": 0.265
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.387918,
+              "mcc": 0.2808
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.420222,
+            "mcc": 0.0674
+          },
+          "ci95": {
+            "mcc": [
+              0.2209,
+              0.3328
+            ],
+            "auroc": [
+              0.7192,
+              0.7806
+            ],
+            "auprc": [
+              0.6775,
+              0.7479
+            ],
+            "brier": [
+              0.2063,
+              0.2339
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "diagnostic_missingness_availability_negative_control",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "esm_embedding_mutation": {
+          "threshold": 0.2269,
+          "mcc": 0.7276,
+          "auroc": 0.9457,
+          "auprc": 0.9463,
+          "brier": 0.094677,
+          "precision": 0.815,
+          "recall": 0.9314,
+          "f1": 0.8694,
+          "tp": 6821,
+          "fp": 1548,
+          "fn": 502,
+          "tn": 5779,
+          "specificity": 0.7887,
+          "npv": 0.9201,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.621293,
+            "log_loss": 0.312601,
+            "adaptive_ece": 0.048909,
+            "calibration_slope": 1.209619,
+            "calibration_intercept": 0.54764
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.084232,
+              "mcc": 0.8314
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.085751,
+              "mcc": 0.8294
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.114297,
+              "mcc": 0.7764
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.139932,
+              "mcc": 0.7276
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.085751,
+            "mcc": 0.8294
+          },
+          "ci95": {
+            "mcc": [
+              0.7084,
+              0.7459
+            ],
+            "auroc": [
+              0.939,
+              0.9517
+            ],
+            "auprc": [
+              0.9363,
+              0.955
+            ],
+            "brier": [
+              0.0892,
+              0.1008
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "concatenation": {
+          "threshold": 0.2893,
+          "mcc": 0.7958,
+          "auroc": 0.9606,
+          "auprc": 0.9596,
+          "brier": 0.078268,
+          "precision": 0.8731,
+          "recall": 0.9291,
+          "f1": 0.9002,
+          "tp": 6804,
+          "fp": 989,
+          "fn": 519,
+          "tn": 6338,
+          "specificity": 0.865,
+          "npv": 0.9243,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.686928,
+            "log_loss": 0.262952,
+            "adaptive_ece": 0.037833,
+            "calibration_slope": 1.139942,
+            "calibration_intercept": 0.491874
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.067031,
+              "mcc": 0.8664
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.068345,
+              "mcc": 0.8643
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.074706,
+              "mcc": 0.852
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.102935,
+              "mcc": 0.7958
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.068345,
+            "mcc": 0.8643
+          },
+          "ci95": {
+            "mcc": [
+              0.7794,
+              0.8115
+            ],
+            "auroc": [
+              0.9552,
+              0.965
+            ],
+            "auprc": [
+              0.952,
+              0.9667
+            ],
+            "brier": [
+              0.0732,
+              0.0837
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_fusion_model",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "gated_fusion": {
+          "threshold": 0.3006,
+          "mcc": 0.8099,
+          "auroc": 0.9641,
+          "auprc": 0.9625,
+          "brier": 0.074384,
+          "precision": 0.8867,
+          "recall": 0.9275,
+          "f1": 0.9066,
+          "tp": 6792,
+          "fp": 868,
+          "fn": 531,
+          "tn": 6459,
+          "specificity": 0.8815,
+          "npv": 0.924,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.702463,
+            "log_loss": 0.250925,
+            "adaptive_ece": 0.037792,
+            "calibration_slope": 1.12578,
+            "calibration_intercept": 0.494892
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.064983,
+              "mcc": 0.8703
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.066894,
+              "mcc": 0.8669
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.067273,
+              "mcc": 0.8662
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.095495,
+              "mcc": 0.8099
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.066894,
+            "mcc": 0.8669
+          },
+          "ci95": {
+            "mcc": [
+              0.7948,
+              0.8246
+            ],
+            "auroc": [
+              0.9591,
+              0.9684
+            ],
+            "auprc": [
+              0.9552,
+              0.9691
+            ],
+            "brier": [
+              0.0693,
+              0.0797
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_fusion_model",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "reliability_residual": {
+          "threshold": 0.231,
+          "mcc": 0.7677,
+          "auroc": 0.9549,
+          "auprc": 0.9574,
+          "brier": 0.081679,
+          "precision": 0.8518,
+          "recall": 0.9259,
+          "f1": 0.8873,
+          "tp": 6780,
+          "fp": 1180,
+          "fn": 543,
+          "tn": 6147,
+          "specificity": 0.839,
+          "npv": 0.9188,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.673285,
+            "log_loss": 0.278009,
+            "adaptive_ece": 0.040708,
+            "calibration_slope": 1.205012,
+            "calibration_intercept": 0.503519
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.074403,
+              "mcc": 0.8515
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.073805,
+              "mcc": 0.8533
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.092681,
+              "mcc": 0.8178
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.117611,
+              "mcc": 0.7677
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.073805,
+            "mcc": 0.8533
+          },
+          "ci95": {
+            "mcc": [
+              0.7507,
+              0.7832
+            ],
+            "auroc": [
+              0.9495,
+              0.9603
+            ],
+            "auprc": [
+              0.9498,
+              0.9645
+            ],
+            "brier": [
+              0.0763,
+              0.0871
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_reliability_conditioned_residual_fusion_model",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "evidential_residual": {
+          "threshold": 0.238,
+          "mcc": 0.7601,
+          "auroc": 0.9499,
+          "auprc": 0.9539,
+          "brier": 0.087674,
+          "precision": 0.8499,
+          "recall": 0.92,
+          "f1": 0.8835,
+          "tp": 6737,
+          "fp": 1190,
+          "fn": 586,
+          "tn": 6137,
+          "specificity": 0.8376,
+          "npv": 0.9128,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.649305,
+            "log_loss": 0.293209,
+            "adaptive_ece": 0.042794,
+            "calibration_slope": 1.121984,
+            "calibration_intercept": 0.540875
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.085051,
+              "mcc": 0.8301
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.083703,
+              "mcc": 0.8337
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.095336,
+              "mcc": 0.8115
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.121229,
+              "mcc": 0.7601
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.083703,
+            "mcc": 0.8337
+          },
+          "ci95": {
+            "mcc": [
+              0.7432,
+              0.7774
+            ],
+            "auroc": [
+              0.9438,
+              0.9554
+            ],
+            "auprc": [
+              0.9458,
+              0.9611
+            ],
+            "brier": [
+              0.082,
+              0.0937
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_availability_weighted_expert_residual_fusion_model",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "cross_attention": {
+          "threshold": 0.299,
+          "mcc": 0.7939,
+          "auroc": 0.9609,
+          "auprc": 0.9606,
+          "brier": 0.078351,
+          "precision": 0.8804,
+          "recall": 0.9178,
+          "f1": 0.8987,
+          "tp": 6721,
+          "fp": 913,
+          "fn": 602,
+          "tn": 6414,
+          "specificity": 0.8754,
+          "npv": 0.9142,
+          "calibration": {
+            "prevalence": 0.499863,
+            "prevalence_brier": 0.25,
+            "brier_skill": 0.686596,
+            "log_loss": 0.264246,
+            "adaptive_ece": 0.041868,
+            "calibration_slope": 1.101375,
+            "calibration_intercept": 0.532957
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.068259,
+              "mcc": 0.8636
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.069369,
+              "mcc": 0.8617
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.070459,
+              "mcc": 0.8595
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.103413,
+              "mcc": 0.7939
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.069369,
+            "mcc": 0.8617
+          },
+          "ci95": {
+            "mcc": [
+              0.7765,
+              0.8086
+            ],
+            "auroc": [
+              0.9558,
+              0.9652
+            ],
+            "auprc": [
+              0.9533,
+              0.9674
+            ],
+            "brier": [
+              0.0729,
+              0.0839
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "legacy_pooled_vector_pseudo_slot_comparator",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "esm_zero_shot": {
+          "output_scale": "raw_ranking_score",
+          "score_orientation": "higher_is_more_deleterious",
+          "threshold": null,
+          "mcc": null,
+          "auroc": 0.9,
+          "auprc": 0.9139,
+          "brier": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "model_role": "prespecified_reference_baseline",
+          "ci95": {
+            "auroc": [
+              0.8894,
+              0.9104
+            ],
+            "auprc": [
+              0.8999,
+              0.9271
+            ]
+          }
+        }
+      },
+      "primary_endpoints": null,
+      "reliability_diagnostics": {
+        "status": "descriptive_post_selection_not_primary",
+        "model": "reliability_residual",
+        "n": 14650,
+        "stratification": {
+          "uses_labels": false,
+          "prespecified_from": "positive natural structure/conservation reliability before outcome evaluation",
+          "code_mapping": {
+            "0": "anchor_only",
+            "1": "structure_only",
+            "2": "conservation_only",
+            "3": "structure_and_conservation"
+          }
+        },
+        "selection_or_refitting": {
+          "used_for_model_selection": false,
+          "used_for_threshold_selection": false,
+          "external_labels_used_for_refitting": false,
+          "inference_claim_allowed": false
+        },
+        "component_semantics": {
+          "anchor_logit": "mean_uncalibrated_sequence_anchor_logit",
+          "anchor_probability": "same_frozen_affine_logit_calibration_as_deployed_model",
+          "gate": "mean_learned_gate_after_natural_evidence_quality",
+          "bounded_residual": "mean_pre_gate_bounded_residual_logit",
+          "hard_availability": "label_independent_any_trustworthy_structure_or_conservation",
+          "structure_reliability": "label_independent_natural_structure_quality",
+          "conservation_reliability": "label_independent_observed_conservation_fraction",
+          "interpretation_limit": "mechanistic_model_diagnostics_not_causal_feature_attributions"
+        },
+        "gate_behavior": {
+          "mean": 0.981113,
+          "median": 0.991569,
+          "p05": 0.963997,
+          "p95": 0.996712,
+          "active_rate": 0.993515,
+          "exact_fallback_rate": 0.006485,
+          "hard_unavailable_rate": 0.006485,
+          "maximum_anchor_identity_error_on_hard_fallback": 6e-08
+        },
+        "bounded_residual_behavior": {
+          "mean": -1.175993,
+          "mean_absolute": 1.958051,
+          "maximum_absolute_observed": 2.991797,
+          "p05": -2.985156,
+          "p95": 2.21646
+        },
+        "strata": {
+          "anchor_only": {
+            "code": 0,
+            "definition": {
+              "structure_reliability_positive": false,
+              "conservation_reliability_positive": false
+            },
+            "n": 95,
+            "coverage": 0.006485,
+            "positives": 15,
+            "prevalence": 0.157895,
+            "mean_gate": 0.0,
+            "exact_fallback_rate": 1.0,
+            "proposed_model": {
+              "mcc": 0.0524,
+              "auroc": 0.7479,
+              "auprc": 0.6732,
+              "brier": 0.163435,
+              "precision": 0.169,
+              "recall": 0.8,
+              "f1": 0.2791,
+              "specificity": 0.2625
+            },
+            "anchor_ablation_same_frozen_threshold_vote": {
+              "mcc": 0.0524,
+              "auroc": 0.7479,
+              "auprc": 0.6732,
+              "brier": 0.163435,
+              "precision": 0.169,
+              "recall": 0.8,
+              "f1": 0.2791,
+              "specificity": 0.2625
+            },
+            "proposed_minus_anchor": {
+              "mcc": 0.0,
+              "auroc": 0.0,
+              "auprc": 0.0,
+              "brier": 0.0
+            }
+          },
+          "structure_only": {
+            "code": 1,
+            "definition": {
+              "structure_reliability_positive": true,
+              "conservation_reliability_positive": false
+            },
+            "n": 119,
+            "coverage": 0.008123,
+            "positives": 62,
+            "prevalence": 0.521008,
+            "mean_gate": 0.901462,
+            "exact_fallback_rate": 0.0,
+            "proposed_model": {
+              "mcc": 0.5792,
+              "auroc": 0.9044,
+              "auprc": 0.9071,
+              "brier": 0.121915,
+              "precision": 0.7308,
+              "recall": 0.9194,
+              "f1": 0.8143,
+              "specificity": 0.6316
+            },
+            "anchor_ablation_same_frozen_threshold_vote": {
+              "mcc": 0.3168,
+              "auroc": 0.8271,
+              "auprc": 0.8576,
+              "brier": 0.187747,
+              "precision": 0.59,
+              "recall": 0.9516,
+              "f1": 0.7284,
+              "specificity": 0.2807
+            },
+            "proposed_minus_anchor": {
+              "mcc": 0.2624,
+              "auroc": 0.0773,
+              "auprc": 0.0495,
+              "brier": -0.065832
+            }
+          },
+          "conservation_only": {
+            "code": 2,
+            "definition": {
+              "structure_reliability_positive": false,
+              "conservation_reliability_positive": true
+            },
+            "n": 5570,
+            "coverage": 0.380205,
+            "positives": 1243,
+            "prevalence": 0.22316,
+            "mean_gate": 0.980073,
+            "exact_fallback_rate": 0.0,
+            "proposed_model": {
+              "mcc": 0.7677,
+              "auroc": 0.9456,
+              "auprc": 0.9086,
+              "brier": 0.053582,
+              "precision": 0.7925,
+              "recall": 0.8512,
+              "f1": 0.8208,
+              "specificity": 0.936
+            },
+            "anchor_ablation_same_frozen_threshold_vote": {
+              "mcc": 0.2323,
+              "auroc": 0.8829,
+              "auprc": 0.8231,
+              "brier": 0.132488,
+              "precision": 0.2788,
+              "recall": 0.9389,
+              "f1": 0.4299,
+              "specificity": 0.3023
+            },
+            "proposed_minus_anchor": {
+              "mcc": 0.5354,
+              "auroc": 0.0627,
+              "auprc": 0.0855,
+              "brier": -0.078906
+            }
+          },
+          "structure_and_conservation": {
+            "code": 3,
+            "definition": {
+              "structure_reliability_positive": true,
+              "conservation_reliability_positive": true
+            },
+            "n": 8866,
+            "coverage": 0.605188,
+            "positives": 6003,
+            "prevalence": 0.677081,
+            "mean_gate": 0.993349,
+            "exact_fallback_rate": 0.0,
+            "proposed_model": {
+              "mcc": 0.6894,
+              "auroc": 0.9358,
+              "auprc": 0.9664,
+              "brier": 0.097914,
+              "precision": 0.8729,
+              "recall": 0.9417,
+              "f1": 0.906,
+              "specificity": 0.7125
+            },
+            "anchor_ablation_same_frozen_threshold_vote": {
+              "mcc": 0.3296,
+              "auroc": 0.8721,
+              "auprc": 0.9356,
+              "brier": 0.135355,
+              "precision": 0.727,
+              "recall": 0.9717,
+              "f1": 0.8317,
+              "specificity": 0.2351
+            },
+            "proposed_minus_anchor": {
+              "mcc": 0.3598,
+              "auroc": 0.0637,
+              "auprc": 0.0308,
+              "brier": -0.037441
+            }
+          }
+        },
+        "metric_interpretation": {
+          "all_metrics": "descriptive_post_selection_without_uncertainty_claims",
+          "anchor_ablation": "same frozen deployment calibration and fold thresholds; no label-based refit",
+          "brier_delta_orientation": "proposed_minus_anchor_lower_is_better",
+          "other_delta_orientation": "proposed_minus_anchor_higher_is_better"
+        },
+        "evaluation_scope": "external_frozen_deployment_folds_descriptive_only",
+        "fold_aggregation": "arithmetic_mean_component_and_calibrated_probability_across_five_frozen_internal_deployment_folds",
+        "analysis_unit_aggregation": "mean_across_retained_annotation_rows_after_fold_prediction"
+      }
+    },
+    "clinvar_gene_disjoint": {
+      "n": 679,
+      "row_n": 679,
+      "positives": 112,
+      "prevalence": 0.164948,
+      "genes": 432,
+      "assays": null,
+      "modality_coverage": {
+        "esm_masked_marginal": {
+          "n": 679,
+          "row_coverage": 1.0
+        },
+        "structure": {
+          "n": 647,
+          "row_coverage": 0.952872,
+          "feature_coverage": {
+            "SASA": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "RELATIVE_SASA": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "PLDDT_SCORE": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "LOCAL_CONTACT_COUNT_8A": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "LOCAL_CONTACT_COUNT_12A": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "LOCAL_LONG_RANGE_CONTACT_COUNT_8A": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "LOCAL_MEAN_PLDDT_8A": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "LOCAL_MIN_PLDDT_8A": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "LOCAL_CONFIDENT_CONTACT_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "LOCAL_MEAN_DISTANCE_8A": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "LOCAL_HYDROPHOBIC_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            },
+            "LOCAL_CHARGED_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 647,
+              "row_coverage": 0.952872
+            }
+          }
+        },
+        "conservation": {
+          "n": 583,
+          "row_coverage": 0.858616,
+          "feature_coverage": {
+            "GERP++_RS": {
+              "available_column": true,
+              "finite_n": 581,
+              "row_coverage": 0.85567
+            },
+            "phyloP100way_vertebrate": {
+              "available_column": true,
+              "finite_n": 583,
+              "row_coverage": 0.858616
+            },
+            "phastCons100way_vertebrate": {
+              "available_column": true,
+              "finite_n": 583,
+              "row_coverage": 0.858616
+            }
+          }
+        },
+        "complete_sequence_structure_conservation": {
+          "n": 552,
+          "row_coverage": 0.81296
+        },
+        "missing_modalities": [],
+        "full_multimodal_validation": false,
+        "interpretation": "models are evaluated with one or more missing/imputed modalities"
+      },
+      "validation_scope": "clinical_pathogenicity_at_unique_genomic_variant_level",
+      "models": {
+        "lightgbm": {
+          "threshold": 0.2785,
+          "mcc": 0.4988,
+          "auroc": 0.8858,
+          "auprc": 0.6168,
+          "brier": 0.103432,
+          "precision": 0.4652,
+          "recall": 0.7768,
+          "f1": 0.5819,
+          "tp": 87,
+          "fp": 100,
+          "fn": 25,
+          "tn": 467,
+          "specificity": 0.8236,
+          "npv": 0.9492,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.249078,
+            "log_loss": 0.325619,
+            "adaptive_ece": 0.068503,
+            "calibration_slope": 0.756404,
+            "calibration_intercept": -0.801702
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.152941,
+              "mcc": 0.5657
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.159926,
+              "mcc": 0.5542
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.166667,
+              "mcc": 0.5502
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.184094,
+              "mcc": 0.4988
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.159926,
+            "mcc": 0.5542
+          },
+          "ci95": {
+            "mcc": [
+              0.3911,
+              0.5981
+            ],
+            "auroc": [
+              0.8367,
+              0.9312
+            ],
+            "auprc": [
+              0.5164,
+              0.736
+            ],
+            "brier": [
+              0.08,
+              0.1282
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "raw_esm_zero_shot": {
+          "threshold": 0.1568,
+          "mcc": 0.3879,
+          "auroc": 0.8968,
+          "auprc": 0.723,
+          "brier": 0.095521,
+          "precision": 0.3215,
+          "recall": 0.8929,
+          "f1": 0.4728,
+          "tp": 100,
+          "fp": 211,
+          "fn": 12,
+          "tn": 356,
+          "specificity": 0.6279,
+          "npv": 0.9674,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.306517,
+            "log_loss": 0.322682,
+            "adaptive_ece": 0.113698,
+            "calibration_slope": 1.133829,
+            "calibration_intercept": -1.089023
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.335294,
+              "mcc": 0.4236
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.345588,
+              "mcc": 0.416
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.318627,
+              "mcc": 0.4279
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.328424,
+              "mcc": 0.3879
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.345588,
+            "mcc": 0.416
+          },
+          "ci95": {
+            "mcc": [
+              0.3113,
+              0.457
+            ],
+            "auroc": [
+              0.8513,
+              0.9364
+            ],
+            "auprc": [
+              0.6139,
+              0.8253
+            ],
+            "brier": [
+              0.0783,
+              0.1128
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "esm_score_logistic": {
+          "threshold": 0.1568,
+          "mcc": 0.3879,
+          "auroc": 0.8968,
+          "auprc": 0.723,
+          "brier": 0.095514,
+          "precision": 0.3215,
+          "recall": 0.8929,
+          "f1": 0.4728,
+          "tp": 100,
+          "fp": 211,
+          "fn": 12,
+          "tn": 356,
+          "specificity": 0.6279,
+          "npv": 0.9674,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.306564,
+            "log_loss": 0.322679,
+            "adaptive_ece": 0.113706,
+            "calibration_slope": 1.134355,
+            "calibration_intercept": -1.088652
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.335294,
+              "mcc": 0.4236
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.345588,
+              "mcc": 0.416
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.318627,
+              "mcc": 0.4279
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.328424,
+              "mcc": 0.3879
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.345588,
+            "mcc": 0.416
+          },
+          "ci95": {
+            "mcc": [
+              0.3113,
+              0.457
+            ],
+            "auroc": [
+              0.8513,
+              0.9364
+            ],
+            "auprc": [
+              0.6139,
+              0.8253
+            ],
+            "brier": [
+              0.0783,
+              0.1128
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "conservation_logistic": {
+          "threshold": 0.2122,
+          "mcc": 0.3067,
+          "auroc": 0.8192,
+          "auprc": 0.5045,
+          "brier": 0.130692,
+          "precision": 0.26,
+          "recall": 0.9286,
+          "f1": 0.4062,
+          "tp": 104,
+          "fp": 296,
+          "fn": 8,
+          "tn": 271,
+          "specificity": 0.478,
+          "npv": 0.9713,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.051172,
+            "log_loss": 0.406256,
+            "adaptive_ece": 0.130971,
+            "calibration_slope": 1.050062,
+            "calibration_intercept": -0.981569
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.479412,
+              "mcc": 0.289
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.446691,
+              "mcc": 0.3179
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.455882,
+              "mcc": 0.3081
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.447717,
+              "mcc": 0.3067
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.446691,
+            "mcc": 0.3179
+          },
+          "ci95": {
+            "mcc": [
+              0.2301,
+              0.3817
+            ],
+            "auroc": [
+              0.7643,
+              0.8724
+            ],
+            "auprc": [
+              0.4036,
+              0.6178
+            ],
+            "brier": [
+              0.1127,
+              0.1496
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "esm_conservation_logistic": {
+          "threshold": 0.2439,
+          "mcc": 0.5455,
+          "auroc": 0.9279,
+          "auprc": 0.7423,
+          "brier": 0.087369,
+          "precision": 0.4478,
+          "recall": 0.9196,
+          "f1": 0.6023,
+          "tp": 103,
+          "fp": 127,
+          "fn": 9,
+          "tn": 440,
+          "specificity": 0.776,
+          "npv": 0.98,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.365697,
+            "log_loss": 0.289541,
+            "adaptive_ece": 0.096106,
+            "calibration_slope": 1.097112,
+            "calibration_intercept": -1.059284
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.185294,
+              "mcc": 0.5863
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.191176,
+              "mcc": 0.5635
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.199346,
+              "mcc": 0.5578
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.200295,
+              "mcc": 0.5455
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.191176,
+            "mcc": 0.5635
+          },
+          "ci95": {
+            "mcc": [
+              0.4721,
+              0.6162
+            ],
+            "auroc": [
+              0.8953,
+              0.9566
+            ],
+            "auprc": [
+              0.65,
+              0.836
+            ],
+            "brier": [
+              0.0705,
+              0.1054
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "mutation_logistic": {
+          "threshold": 0.2117,
+          "mcc": 0.1614,
+          "auroc": 0.7048,
+          "auprc": 0.3108,
+          "brier": 0.163047,
+          "precision": 0.1959,
+          "recall": 0.9375,
+          "f1": 0.3241,
+          "tp": 105,
+          "fp": 431,
+          "fn": 7,
+          "tn": 136,
+          "specificity": 0.2399,
+          "npv": 0.951,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": -0.183726,
+            "log_loss": 0.504452,
+            "adaptive_ece": 0.182697,
+            "calibration_slope": 1.031359,
+            "calibration_intercept": -1.073735
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.620588,
+              "mcc": 0.2054
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.647059,
+              "mcc": 0.1761
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.660131,
+              "mcc": 0.1609
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.645066,
+              "mcc": 0.1614
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.647059,
+            "mcc": 0.1761
+          },
+          "ci95": {
+            "mcc": [
+              0.0997,
+              0.2141
+            ],
+            "auroc": [
+              0.6429,
+              0.7603
+            ],
+            "auprc": [
+              0.2248,
+              0.4277
+            ],
+            "brier": [
+              0.1506,
+              0.1766
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "availability_logistic": {
+          "threshold": 0.1575,
+          "mcc": 0.1098,
+          "auroc": 0.6203,
+          "auprc": 0.2535,
+          "brier": 0.162033,
+          "precision": 0.198,
+          "recall": 0.7232,
+          "f1": 0.3109,
+          "tp": 81,
+          "fp": 328,
+          "fn": 31,
+          "tn": 239,
+          "specificity": 0.4215,
+          "npv": 0.8852,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": -0.176363,
+            "log_loss": 0.522996,
+            "adaptive_ece": 0.165179,
+            "calibration_slope": 0.272671,
+            "calibration_intercept": -1.30129
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.670588,
+              "mcc": 0.1705
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.637868,
+              "mcc": 0.0322
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.583333,
+              "mcc": 0.0677
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.528719,
+              "mcc": 0.1098
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.637868,
+            "mcc": 0.0322
+          },
+          "ci95": {
+            "mcc": [
+              -0.0099,
+              0.2265
+            ],
+            "auroc": [
+              0.5067,
+              0.7398
+            ],
+            "auprc": [
+              0.1967,
+              0.339
+            ],
+            "brier": [
+              0.1341,
+              0.1921
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "diagnostic_missingness_availability_negative_control",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "esm_embedding_mutation": {
+          "threshold": 0.2269,
+          "mcc": 0.4649,
+          "auroc": 0.9146,
+          "auprc": 0.7633,
+          "brier": 0.093144,
+          "precision": 0.3867,
+          "recall": 0.8839,
+          "f1": 0.538,
+          "tp": 99,
+          "fp": 157,
+          "fn": 13,
+          "tn": 410,
+          "specificity": 0.7231,
+          "npv": 0.9693,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.323772,
+            "log_loss": 0.314498,
+            "adaptive_ece": 0.118388,
+            "calibration_slope": 1.03161,
+            "calibration_intercept": -1.270998
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.161765,
+              "mcc": 0.6539
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.231618,
+              "mcc": 0.5353
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.22549,
+              "mcc": 0.521
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.250368,
+              "mcc": 0.4649
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.231618,
+            "mcc": 0.5353
+          },
+          "ci95": {
+            "mcc": [
+              0.3769,
+              0.5433
+            ],
+            "auroc": [
+              0.8706,
+              0.9519
+            ],
+            "auprc": [
+              0.668,
+              0.8475
+            ],
+            "brier": [
+              0.0746,
+              0.1124
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "concatenation": {
+          "threshold": 0.2893,
+          "mcc": 0.5633,
+          "auroc": 0.9316,
+          "auprc": 0.7898,
+          "brier": 0.089368,
+          "precision": 0.4742,
+          "recall": 0.9018,
+          "f1": 0.6215,
+          "tp": 101,
+          "fp": 112,
+          "fn": 11,
+          "tn": 455,
+          "specificity": 0.8025,
+          "npv": 0.9764,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.351184,
+            "log_loss": 0.29608,
+            "adaptive_ece": 0.106359,
+            "calibration_slope": 0.94658,
+            "calibration_intercept": -1.355351
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.123529,
+              "mcc": 0.6965
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.132353,
+              "mcc": 0.6658
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.158497,
+              "mcc": 0.6126
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.181149,
+              "mcc": 0.5633
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.132353,
+            "mcc": 0.6658
+          },
+          "ci95": {
+            "mcc": [
+              0.473,
+              0.6467
+            ],
+            "auroc": [
+              0.8952,
+              0.9617
+            ],
+            "auprc": [
+              0.6952,
+              0.8648
+            ],
+            "brier": [
+              0.0704,
+              0.1093
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_fusion_model",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "gated_fusion": {
+          "threshold": 0.3006,
+          "mcc": 0.571,
+          "auroc": 0.9344,
+          "auprc": 0.8059,
+          "brier": 0.084273,
+          "precision": 0.5,
+          "recall": 0.8661,
+          "f1": 0.634,
+          "tp": 97,
+          "fp": 97,
+          "fn": 15,
+          "tn": 470,
+          "specificity": 0.8289,
+          "npv": 0.9691,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.388175,
+            "log_loss": 0.280864,
+            "adaptive_ece": 0.096482,
+            "calibration_slope": 0.923828,
+            "calibration_intercept": -1.326036
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.1,
+              "mcc": 0.7441
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.106618,
+              "mcc": 0.7086
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.143791,
+              "mcc": 0.6387
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.164948,
+              "mcc": 0.571
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.106618,
+            "mcc": 0.7086
+          },
+          "ci95": {
+            "mcc": [
+              0.4719,
+              0.658
+            ],
+            "auroc": [
+              0.8959,
+              0.9646
+            ],
+            "auprc": [
+              0.7203,
+              0.8743
+            ],
+            "brier": [
+              0.0656,
+              0.1041
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_fusion_model",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "reliability_residual": {
+          "threshold": 0.231,
+          "mcc": 0.5172,
+          "auroc": 0.9244,
+          "auprc": 0.7989,
+          "brier": 0.090267,
+          "precision": 0.4204,
+          "recall": 0.9196,
+          "f1": 0.577,
+          "tp": 103,
+          "fp": 142,
+          "fn": 9,
+          "tn": 425,
+          "specificity": 0.7496,
+          "npv": 0.9793,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.344656,
+            "log_loss": 0.304978,
+            "adaptive_ece": 0.120539,
+            "calibration_slope": 1.032554,
+            "calibration_intercept": -1.435856
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.179412,
+              "mcc": 0.6199
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.194853,
+              "mcc": 0.578
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.21732,
+              "mcc": 0.5391
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.222386,
+              "mcc": 0.5172
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.194853,
+            "mcc": 0.578
+          },
+          "ci95": {
+            "mcc": [
+              0.4199,
+              0.6017
+            ],
+            "auroc": [
+              0.8849,
+              0.9589
+            ],
+            "auprc": [
+              0.713,
+              0.8736
+            ],
+            "brier": [
+              0.0728,
+              0.1085
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_reliability_conditioned_residual_fusion_model",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "evidential_residual": {
+          "threshold": 0.238,
+          "mcc": 0.5397,
+          "auroc": 0.9287,
+          "auprc": 0.807,
+          "brier": 0.082994,
+          "precision": 0.4421,
+          "recall": 0.9196,
+          "f1": 0.5971,
+          "tp": 103,
+          "fp": 130,
+          "fn": 9,
+          "tn": 437,
+          "specificity": 0.7707,
+          "npv": 0.9798,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.397459,
+            "log_loss": 0.284223,
+            "adaptive_ece": 0.105593,
+            "calibration_slope": 1.028758,
+            "calibration_intercept": -1.305366
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.161765,
+              "mcc": 0.6439
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.15625,
+              "mcc": 0.6317
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.19281,
+              "mcc": 0.5742
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.204713,
+              "mcc": 0.5397
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.15625,
+            "mcc": 0.6317
+          },
+          "ci95": {
+            "mcc": [
+              0.4517,
+              0.614
+            ],
+            "auroc": [
+              0.8883,
+              0.9615
+            ],
+            "auprc": [
+              0.7253,
+              0.8784
+            ],
+            "brier": [
+              0.066,
+              0.1002
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_availability_weighted_expert_residual_fusion_model",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "cross_attention": {
+          "threshold": 0.299,
+          "mcc": 0.5917,
+          "auroc": 0.9326,
+          "auprc": 0.8047,
+          "brier": 0.086067,
+          "precision": 0.5185,
+          "recall": 0.875,
+          "f1": 0.6512,
+          "tp": 98,
+          "fp": 91,
+          "fn": 14,
+          "tn": 476,
+          "specificity": 0.8395,
+          "npv": 0.9714,
+          "calibration": {
+            "prevalence": 0.164948,
+            "prevalence_brier": 0.13774,
+            "brier_skill": 0.375148,
+            "log_loss": 0.28441,
+            "adaptive_ece": 0.094658,
+            "calibration_slope": 0.934209,
+            "calibration_intercept": -1.290382
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5007,
+              "risk": 0.105882,
+              "mcc": 0.7252
+            },
+            "coverage_80": {
+              "coverage": 0.8012,
+              "risk": 0.110294,
+              "mcc": 0.6968
+            },
+            "coverage_90": {
+              "coverage": 0.9013,
+              "risk": 0.143791,
+              "mcc": 0.6318
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.154639,
+              "mcc": 0.5917
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8012,
+            "risk": 0.110294,
+            "mcc": 0.6968
+          },
+          "ci95": {
+            "mcc": [
+              0.5009,
+              0.676
+            ],
+            "auroc": [
+              0.8943,
+              0.9631
+            ],
+            "auprc": [
+              0.7273,
+              0.8738
+            ],
+            "brier": [
+              0.0664,
+              0.1065
+            ]
+          },
+          "output_scale": "calibrated_probability",
+          "model_role": "legacy_pooled_vector_pseudo_slot_comparator",
+          "uncertainty_interpretation": "group_resampled_interval_conditional_on_frozen_predictions",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "descriptive_external_calibration_assessment",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": true
+          }
+        },
+        "esm_zero_shot": {
+          "output_scale": "raw_ranking_score",
+          "score_orientation": "higher_is_more_deleterious",
+          "threshold": null,
+          "mcc": null,
+          "auroc": 0.8968,
+          "auprc": 0.723,
+          "brier": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "model_role": "prespecified_reference_baseline",
+          "ci95": {
+            "auroc": [
+              0.8513,
+              0.9364
+            ],
+            "auprc": [
+              0.6139,
+              0.8253
+            ]
+          }
+        }
+      },
+      "primary_endpoints": null,
+      "reliability_diagnostics": {
+        "status": "descriptive_post_selection_not_primary",
+        "model": "reliability_residual",
+        "n": 679,
+        "stratification": {
+          "uses_labels": false,
+          "prespecified_from": "positive natural structure/conservation reliability before outcome evaluation",
+          "code_mapping": {
+            "0": "anchor_only",
+            "1": "structure_only",
+            "2": "conservation_only",
+            "3": "structure_and_conservation"
+          }
+        },
+        "selection_or_refitting": {
+          "used_for_model_selection": false,
+          "used_for_threshold_selection": false,
+          "external_labels_used_for_refitting": false,
+          "inference_claim_allowed": false
+        },
+        "component_semantics": {
+          "anchor_logit": "mean_uncalibrated_sequence_anchor_logit",
+          "anchor_probability": "same_frozen_affine_logit_calibration_as_deployed_model",
+          "gate": "mean_learned_gate_after_natural_evidence_quality",
+          "bounded_residual": "mean_pre_gate_bounded_residual_logit",
+          "hard_availability": "label_independent_any_trustworthy_structure_or_conservation",
+          "structure_reliability": "label_independent_natural_structure_quality",
+          "conservation_reliability": "label_independent_observed_conservation_fraction",
+          "interpretation_limit": "mechanistic_model_diagnostics_not_causal_feature_attributions"
+        },
+        "gate_behavior": {
+          "mean": 0.917261,
+          "median": 0.987207,
+          "p05": 0.0,
+          "p95": 0.995973,
+          "active_rate": 0.938144,
+          "exact_fallback_rate": 0.061856,
+          "hard_unavailable_rate": 0.061856,
+          "maximum_anchor_identity_error_on_hard_fallback": 6e-08
+        },
+        "bounded_residual_behavior": {
+          "mean": -1.88118,
+          "mean_absolute": 2.27934,
+          "maximum_absolute_observed": 2.990234,
+          "p05": -2.985547,
+          "p95": 1.770107
+        },
+        "strata": {
+          "anchor_only": {
+            "code": 0,
+            "definition": {
+              "structure_reliability_positive": false,
+              "conservation_reliability_positive": false
+            },
+            "n": 42,
+            "coverage": 0.061856,
+            "positives": 1,
+            "prevalence": 0.02381,
+            "mean_gate": 0.0,
+            "exact_fallback_rate": 1.0,
+            "proposed_model": {
+              "mcc": 0.1046,
+              "auroc": 0.9756,
+              "auprc": 0.5,
+              "brier": 0.144425,
+              "precision": 0.0345,
+              "recall": 1.0,
+              "f1": 0.0667,
+              "specificity": 0.3171
+            },
+            "anchor_ablation_same_frozen_threshold_vote": {
+              "mcc": 0.1046,
+              "auroc": 0.9756,
+              "auprc": 0.5,
+              "brier": 0.144425,
+              "precision": 0.0345,
+              "recall": 1.0,
+              "f1": 0.0667,
+              "specificity": 0.3171
+            },
+            "proposed_minus_anchor": {
+              "mcc": 0.0,
+              "auroc": 0.0,
+              "auprc": 0.0,
+              "brier": 0.0
+            }
+          },
+          "structure_only": {
+            "code": 1,
+            "definition": {
+              "structure_reliability_positive": true,
+              "conservation_reliability_positive": false
+            },
+            "n": 54,
+            "coverage": 0.079529,
+            "positives": 20,
+            "prevalence": 0.37037,
+            "mean_gate": 0.901879,
+            "exact_fallback_rate": 0.0,
+            "proposed_model": {
+              "mcc": 0.5423,
+              "auroc": 0.9338,
+              "auprc": 0.8815,
+              "brier": 0.113848,
+              "precision": 0.5556,
+              "recall": 1.0,
+              "f1": 0.7143,
+              "specificity": 0.5294
+            },
+            "anchor_ablation_same_frozen_threshold_vote": {
+              "mcc": 0.2712,
+              "auroc": 0.8338,
+              "auprc": 0.7717,
+              "brier": 0.218049,
+              "precision": 0.4167,
+              "recall": 1.0,
+              "f1": 0.5882,
+              "specificity": 0.1765
+            },
+            "proposed_minus_anchor": {
+              "mcc": 0.2711,
+              "auroc": 0.1,
+              "auprc": 0.1098,
+              "brier": -0.104201
+            }
+          },
+          "conservation_only": {
+            "code": 2,
+            "definition": {
+              "structure_reliability_positive": false,
+              "conservation_reliability_positive": true
+            },
+            "n": 256,
+            "coverage": 0.377025,
+            "positives": 12,
+            "prevalence": 0.046875,
+            "mean_gate": 0.975741,
+            "exact_fallback_rate": 0.0,
+            "proposed_model": {
+              "mcc": 0.4251,
+              "auroc": 0.8306,
+              "auprc": 0.548,
+              "brier": 0.042556,
+              "precision": 0.32,
+              "recall": 0.6667,
+              "f1": 0.4324,
+              "specificity": 0.9303
+            },
+            "anchor_ablation_same_frozen_threshold_vote": {
+              "mcc": 0.1021,
+              "auroc": 0.8381,
+              "auprc": 0.385,
+              "brier": 0.129571,
+              "precision": 0.0608,
+              "recall": 0.9167,
+              "f1": 0.114,
+              "specificity": 0.3033
+            },
+            "proposed_minus_anchor": {
+              "mcc": 0.323,
+              "auroc": -0.0075,
+              "auprc": 0.163,
+              "brier": -0.087015
+            }
+          },
+          "structure_and_conservation": {
+            "code": 3,
+            "definition": {
+              "structure_reliability_positive": true,
+              "conservation_reliability_positive": true
+            },
+            "n": 327,
+            "coverage": 0.481591,
+            "positives": 79,
+            "prevalence": 0.24159,
+            "mean_gate": 0.991831,
+            "exact_fallback_rate": 0.0,
+            "proposed_model": {
+              "mcc": 0.523,
+              "auroc": 0.916,
+              "auprc": 0.8256,
+              "brier": 0.11677,
+              "precision": 0.4774,
+              "recall": 0.9367,
+              "f1": 0.6325,
+              "specificity": 0.6734
+            },
+            "anchor_ablation_same_frozen_threshold_vote": {
+              "mcc": 0.2347,
+              "auroc": 0.8839,
+              "auprc": 0.7849,
+              "brier": 0.227226,
+              "precision": 0.2868,
+              "recall": 0.9873,
+              "f1": 0.4444,
+              "specificity": 0.2177
+            },
+            "proposed_minus_anchor": {
+              "mcc": 0.2883,
+              "auroc": 0.0321,
+              "auprc": 0.0407,
+              "brier": -0.110456
+            }
+          }
+        },
+        "metric_interpretation": {
+          "all_metrics": "descriptive_post_selection_without_uncertainty_claims",
+          "anchor_ablation": "same frozen deployment calibration and fold thresholds; no label-based refit",
+          "brier_delta_orientation": "proposed_minus_anchor_lower_is_better",
+          "other_delta_orientation": "proposed_minus_anchor_higher_is_better"
+        },
+        "evaluation_scope": "external_frozen_deployment_folds_descriptive_only",
+        "fold_aggregation": "arithmetic_mean_component_and_calibrated_probability_across_five_frozen_internal_deployment_folds",
+        "analysis_unit_aggregation": "mean_across_retained_annotation_rows_after_fold_prediction"
+      }
+    },
+    "dms_exact_variant_disjoint": {
+      "n": 696311,
+      "row_n": 696311,
+      "positives": 297072,
+      "prevalence": 0.426637,
+      "genes": 178,
+      "assays": 217,
+      "modality_coverage": {
+        "esm_masked_marginal": {
+          "n": 696311,
+          "row_coverage": 1.0
+        },
+        "structure": {
+          "n": 0,
+          "row_coverage": 0.0,
+          "feature_coverage": {
+            "SASA": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "RELATIVE_SASA": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "PLDDT_SCORE": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_CONTACT_COUNT_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_CONTACT_COUNT_12A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_LONG_RANGE_CONTACT_COUNT_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_MEAN_PLDDT_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_MIN_PLDDT_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_CONFIDENT_CONTACT_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_MEAN_DISTANCE_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_HYDROPHOBIC_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_CHARGED_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            }
+          }
+        },
+        "conservation": {
+          "n": 0,
+          "row_coverage": 0.0,
+          "feature_coverage": {
+            "GERP++_RS": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "phyloP100way_vertebrate": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "phastCons100way_vertebrate": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            }
+          }
+        },
+        "complete_sequence_structure_conservation": {
+          "n": 0,
+          "row_coverage": 0.0
+        },
+        "missing_modalities": [
+          "structure",
+          "conservation"
+        ],
+        "full_multimodal_validation": false,
+        "interpretation": "models are evaluated with one or more missing/imputed modalities"
+      },
+      "validation_scope": "functional_transfer_with_missing_or_imputed_modalities",
+      "models": {
+        "lightgbm": {
+          "threshold": 0.2785,
+          "mcc": 0.0,
+          "auroc": 0.6064,
+          "auprc": 0.5148,
+          "brier": 0.419244,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 297072,
+          "tn": 399239,
+          "specificity": 1.0,
+          "npv": 0.5734,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.713875,
+            "log_loss": 2.0851,
+            "adaptive_ece": 0.418744,
+            "calibration_slope": 0.715186,
+            "calibration_intercept": 3.255031
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.443657,
+              "mcc": 0.0
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.42376,
+              "mcc": 0.0
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.42743,
+              "mcc": 0.0
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.426637,
+              "mcc": 0.0
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.42376,
+            "mcc": 0.0
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "raw_esm_zero_shot": {
+          "threshold": 0.1568,
+          "mcc": 0.1767,
+          "auroc": 0.6633,
+          "auprc": 0.6065,
+          "brier": 0.2613,
+          "precision": 0.4908,
+          "recall": 0.7474,
+          "f1": 0.5925,
+          "tp": 222046,
+          "fp": 230385,
+          "fn": 75026,
+          "tn": 168854,
+          "specificity": 0.4229,
+          "npv": 0.6924,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.068197,
+            "log_loss": 0.810583,
+            "adaptive_ece": 0.183972,
+            "calibration_slope": 0.292229,
+            "calibration_intercept": -0.237407
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.455664,
+              "mcc": 0.1465
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.445575,
+              "mcc": 0.1717
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.445625,
+              "mcc": 0.1703
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.438613,
+              "mcc": 0.1767
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.445575,
+            "mcc": 0.1717
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "esm_score_logistic": {
+          "threshold": 0.1568,
+          "mcc": 0.1767,
+          "auroc": 0.6633,
+          "auprc": 0.6065,
+          "brier": 0.261269,
+          "precision": 0.4908,
+          "recall": 0.7475,
+          "f1": 0.5925,
+          "tp": 222052,
+          "fp": 230394,
+          "fn": 75020,
+          "tn": 168845,
+          "specificity": 0.4229,
+          "npv": 0.6924,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.068071,
+            "log_loss": 0.810392,
+            "adaptive_ece": 0.183895,
+            "calibration_slope": 0.292364,
+            "calibration_intercept": -0.237327
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.455666,
+              "mcc": 0.1465
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.445577,
+              "mcc": 0.1717
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.445626,
+              "mcc": 0.1703
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.438617,
+              "mcc": 0.1767
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.445577,
+            "mcc": 0.1717
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "conservation_logistic": {
+          "threshold": 0.2122,
+          "mcc": 0.0,
+          "auroc": 0.5,
+          "auprc": 0.4266,
+          "brier": 0.262969,
+          "precision": 0.4266,
+          "recall": 1.0,
+          "f1": 0.5981,
+          "tp": 297072,
+          "fp": 399239,
+          "fn": 0,
+          "tn": 0,
+          "specificity": 0.0,
+          "npv": 0.0,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.07502,
+            "log_loss": 0.723722,
+            "adaptive_ece": 0.135466,
+            "calibration_slope": 0.146745,
+            "calibration_intercept": -0.164937
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.556343,
+              "mcc": 0.0
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.57624,
+              "mcc": 0.0
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.57257,
+              "mcc": 0.0
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.573363,
+              "mcc": 0.0
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.57624,
+            "mcc": 0.0
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "esm_conservation_logistic": {
+          "threshold": 0.2439,
+          "mcc": 0.2308,
+          "auroc": 0.6633,
+          "auprc": 0.6065,
+          "brier": 0.248976,
+          "precision": 0.5333,
+          "recall": 0.6675,
+          "f1": 0.5929,
+          "tp": 198286,
+          "fp": 173555,
+          "fn": 98786,
+          "tn": 225684,
+          "specificity": 0.5653,
+          "npv": 0.6955,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.017817,
+            "log_loss": 0.747329,
+            "adaptive_ece": 0.148751,
+            "calibration_slope": 0.353513,
+            "calibration_intercept": -0.120067
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.402515,
+              "mcc": 0.2124
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.387149,
+              "mcc": 0.2427
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.393065,
+              "mcc": 0.2351
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.39112,
+              "mcc": 0.2308
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.387149,
+            "mcc": 0.2427
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "mutation_logistic": {
+          "threshold": 0.2117,
+          "mcc": 0.1245,
+          "auroc": 0.6023,
+          "auprc": 0.52,
+          "brier": 0.246902,
+          "precision": 0.4552,
+          "recall": 0.8782,
+          "f1": 0.5996,
+          "tp": 260889,
+          "fp": 312251,
+          "fn": 36183,
+          "tn": 86988,
+          "specificity": 0.2179,
+          "npv": 0.7062,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.009339,
+            "log_loss": 0.692102,
+            "adaptive_ece": 0.092246,
+            "calibration_slope": 0.522511,
+            "calibration_intercept": 0.048295
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.487908,
+              "mcc": 0.1208
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.495709,
+              "mcc": 0.1235
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.497249,
+              "mcc": 0.1229
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.5004,
+              "mcc": 0.1245
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.495709,
+            "mcc": 0.1235
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "availability_logistic": {
+          "threshold": 0.1575,
+          "mcc": 0.0,
+          "auroc": 0.5,
+          "auprc": 0.4266,
+          "brier": 0.418395,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 297072,
+          "tn": 399239,
+          "specificity": 1.0,
+          "npv": 0.5734,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.710401,
+            "log_loss": 1.980231,
+            "adaptive_ece": 0.416866,
+            "calibration_slope": 0.061135,
+            "calibration_intercept": -0.013237
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.443657,
+              "mcc": 0.0
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.42376,
+              "mcc": 0.0
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.42743,
+              "mcc": 0.0
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.426637,
+              "mcc": 0.0
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.42376,
+            "mcc": 0.0
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "diagnostic_missingness_availability_negative_control",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "esm_embedding_mutation": {
+          "threshold": 0.2269,
+          "mcc": 0.2099,
+          "auroc": 0.6922,
+          "auprc": 0.6213,
+          "brier": 0.252612,
+          "precision": 0.4821,
+          "recall": 0.8793,
+          "f1": 0.6227,
+          "tp": 261219,
+          "fp": 280658,
+          "fn": 35853,
+          "tn": 118581,
+          "specificity": 0.297,
+          "npv": 0.7678,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.032679,
+            "log_loss": 0.779696,
+            "adaptive_ece": 0.161857,
+            "calibration_slope": 0.355282,
+            "calibration_intercept": -0.462957
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.442322,
+              "mcc": 0.2151
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.454924,
+              "mcc": 0.2111
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.449234,
+              "mcc": 0.2187
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.454554,
+              "mcc": 0.2099
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.454924,
+            "mcc": 0.2111
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "concatenation": {
+          "threshold": 0.2893,
+          "mcc": 0.2412,
+          "auroc": 0.6825,
+          "auprc": 0.6037,
+          "brier": 0.240345,
+          "precision": 0.5147,
+          "recall": 0.7807,
+          "f1": 0.6204,
+          "tp": 231937,
+          "fp": 218668,
+          "fn": 65135,
+          "tn": 180571,
+          "specificity": 0.4523,
+          "npv": 0.7349,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": 0.017467,
+            "log_loss": 0.709304,
+            "adaptive_ece": 0.120975,
+            "calibration_slope": 0.409927,
+            "calibration_intercept": -0.280177
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.377526,
+              "mcc": 0.3003
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.399739,
+              "mcc": 0.2677
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.398393,
+              "mcc": 0.2583
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.407581,
+              "mcc": 0.2412
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.399739,
+            "mcc": 0.2677
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_fusion_model",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "gated_fusion": {
+          "threshold": 0.3006,
+          "mcc": 0.2766,
+          "auroc": 0.7006,
+          "auprc": 0.6241,
+          "brier": 0.231604,
+          "precision": 0.5386,
+          "recall": 0.7561,
+          "f1": 0.6291,
+          "tp": 224620,
+          "fp": 192453,
+          "fn": 72452,
+          "tn": 206786,
+          "specificity": 0.518,
+          "npv": 0.7405,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": 0.053202,
+            "log_loss": 0.686082,
+            "adaptive_ece": 0.110948,
+            "calibration_slope": 0.447834,
+            "calibration_intercept": -0.236704
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.346017,
+              "mcc": 0.347
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.370287,
+              "mcc": 0.3098
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.369271,
+              "mcc": 0.2987
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.380441,
+              "mcc": 0.2766
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.370287,
+            "mcc": 0.3098
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_fusion_model",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "reliability_residual": {
+          "threshold": 0.231,
+          "mcc": 0.0955,
+          "auroc": 0.6633,
+          "auprc": 0.6065,
+          "brier": 0.280511,
+          "precision": 0.4445,
+          "recall": 0.9117,
+          "f1": 0.5976,
+          "tp": 270855,
+          "fp": 338533,
+          "fn": 26217,
+          "tn": 60706,
+          "specificity": 0.1521,
+          "npv": 0.6984,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.146731,
+            "log_loss": 0.847412,
+            "adaptive_ece": 0.212392,
+            "calibration_slope": 0.349695,
+            "calibration_intercept": -0.592657
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.532738,
+              "mcc": 0.0552
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.534296,
+              "mcc": 0.0528
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.539805,
+              "mcc": 0.0678
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.523832,
+              "mcc": 0.0955
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.534296,
+            "mcc": 0.0528
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_reliability_conditioned_residual_fusion_model",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "evidential_residual": {
+          "threshold": 0.238,
+          "mcc": 0.1634,
+          "auroc": 0.6633,
+          "auprc": 0.6065,
+          "brier": 0.268287,
+          "precision": 0.4821,
+          "recall": 0.7681,
+          "f1": 0.5924,
+          "tp": 228195,
+          "fp": 245140,
+          "fn": 68877,
+          "tn": 154099,
+          "specificity": 0.386,
+          "npv": 0.6911,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.096761,
+            "log_loss": 0.825985,
+            "adaptive_ece": 0.196346,
+            "calibration_slope": 0.301804,
+            "calibration_intercept": -0.409025
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.457367,
+              "mcc": 0.1541
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.449837,
+              "mcc": 0.1684
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.450851,
+              "mcc": 0.1652
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.450972,
+              "mcc": 0.1634
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.449837,
+            "mcc": 0.1684
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_availability_weighted_expert_residual_fusion_model",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "cross_attention": {
+          "threshold": 0.299,
+          "mcc": 0.2683,
+          "auroc": 0.7021,
+          "auprc": 0.6327,
+          "brier": 0.253346,
+          "precision": 0.532,
+          "recall": 0.7649,
+          "f1": 0.6275,
+          "tp": 227218,
+          "fp": 199885,
+          "fn": 69854,
+          "tn": 199354,
+          "specificity": 0.4993,
+          "npv": 0.7405,
+          "calibration": {
+            "prevalence": 0.426637,
+            "prevalence_brier": 0.244618,
+            "brier_skill": -0.035679,
+            "log_loss": 0.771346,
+            "adaptive_ece": 0.175532,
+            "calibration_slope": 0.362386,
+            "calibration_intercept": -0.369898
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.368389,
+              "mcc": 0.3057
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.376608,
+              "mcc": 0.3043
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.376419,
+              "mcc": 0.2905
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.387383,
+              "mcc": 0.2683
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.376608,
+            "mcc": 0.3043
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "legacy_pooled_vector_pseudo_slot_comparator",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "esm_zero_shot": {
+          "output_scale": "raw_ranking_score",
+          "score_orientation": "higher_is_more_deleterious",
+          "threshold": null,
+          "mcc": null,
+          "auroc": 0.6633,
+          "auprc": 0.6065,
+          "brier": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "model_role": "prespecified_reference_baseline",
+          "ci95": null
+        }
+      },
+      "primary_endpoints": [
+        "equal_weight_assay_macro_functional_spearman",
+        "equal_weight_assay_macro_auroc"
+      ],
+      "reliability_diagnostics": {
+        "status": "descriptive_post_selection_not_primary",
+        "model": "reliability_residual",
+        "n": 696311,
+        "stratification": {
+          "uses_labels": false,
+          "prespecified_from": "positive natural structure/conservation reliability before outcome evaluation",
+          "code_mapping": {
+            "0": "anchor_only",
+            "1": "structure_only",
+            "2": "conservation_only",
+            "3": "structure_and_conservation"
+          }
+        },
+        "selection_or_refitting": {
+          "used_for_model_selection": false,
+          "used_for_threshold_selection": false,
+          "external_labels_used_for_refitting": false,
+          "inference_claim_allowed": false
+        },
+        "component_semantics": {
+          "anchor_logit": "mean_uncalibrated_sequence_anchor_logit",
+          "anchor_probability": "same_frozen_affine_logit_calibration_as_deployed_model",
+          "gate": "mean_learned_gate_after_natural_evidence_quality",
+          "bounded_residual": "mean_pre_gate_bounded_residual_logit",
+          "hard_availability": "label_independent_any_trustworthy_structure_or_conservation",
+          "structure_reliability": "label_independent_natural_structure_quality",
+          "conservation_reliability": "label_independent_observed_conservation_fraction",
+          "interpretation_limit": "mechanistic_model_diagnostics_not_causal_feature_attributions"
+        },
+        "gate_behavior": {
+          "mean": 0.0,
+          "median": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "active_rate": 0.0,
+          "exact_fallback_rate": 1.0,
+          "hard_unavailable_rate": 1.0,
+          "maximum_anchor_identity_error_on_hard_fallback": 1.2e-07
+        },
+        "bounded_residual_behavior": {
+          "mean": -0.274645,
+          "mean_absolute": 1.55025,
+          "maximum_absolute_observed": 2.989453,
+          "p05": -2.882422,
+          "p95": 2.529102
+        },
+        "strata": {
+          "anchor_only": {
+            "code": 0,
+            "definition": {
+              "structure_reliability_positive": false,
+              "conservation_reliability_positive": false
+            },
+            "n": 696311,
+            "coverage": 1.0,
+            "positives": 297072,
+            "prevalence": 0.426637,
+            "mean_gate": 0.0,
+            "exact_fallback_rate": 1.0,
+            "proposed_model": {
+              "mcc": 0.0955,
+              "auroc": 0.6633,
+              "auprc": 0.6065,
+              "brier": 0.280511,
+              "precision": 0.4445,
+              "recall": 0.9117,
+              "f1": 0.5976,
+              "specificity": 0.1521
+            },
+            "anchor_ablation_same_frozen_threshold_vote": {
+              "mcc": 0.0955,
+              "auroc": 0.6633,
+              "auprc": 0.6065,
+              "brier": 0.280511,
+              "precision": 0.4445,
+              "recall": 0.9117,
+              "f1": 0.5976,
+              "specificity": 0.1521
+            },
+            "proposed_minus_anchor": {
+              "mcc": 0.0,
+              "auroc": 0.0,
+              "auprc": 0.0,
+              "brier": 0.0
+            }
+          },
+          "structure_only": {
+            "code": 1,
+            "definition": {
+              "structure_reliability_positive": true,
+              "conservation_reliability_positive": false
+            },
+            "n": 0,
+            "coverage": 0.0,
+            "positives": 0,
+            "prevalence": null,
+            "mean_gate": null,
+            "exact_fallback_rate": null,
+            "proposed_model": null,
+            "anchor_ablation_same_frozen_threshold_vote": null,
+            "proposed_minus_anchor": null
+          },
+          "conservation_only": {
+            "code": 2,
+            "definition": {
+              "structure_reliability_positive": false,
+              "conservation_reliability_positive": true
+            },
+            "n": 0,
+            "coverage": 0.0,
+            "positives": 0,
+            "prevalence": null,
+            "mean_gate": null,
+            "exact_fallback_rate": null,
+            "proposed_model": null,
+            "anchor_ablation_same_frozen_threshold_vote": null,
+            "proposed_minus_anchor": null
+          },
+          "structure_and_conservation": {
+            "code": 3,
+            "definition": {
+              "structure_reliability_positive": true,
+              "conservation_reliability_positive": true
+            },
+            "n": 0,
+            "coverage": 0.0,
+            "positives": 0,
+            "prevalence": null,
+            "mean_gate": null,
+            "exact_fallback_rate": null,
+            "proposed_model": null,
+            "anchor_ablation_same_frozen_threshold_vote": null,
+            "proposed_minus_anchor": null
+          }
+        },
+        "metric_interpretation": {
+          "all_metrics": "descriptive_post_selection_without_uncertainty_claims",
+          "anchor_ablation": "same frozen deployment calibration and fold thresholds; no label-based refit",
+          "brier_delta_orientation": "proposed_minus_anchor_lower_is_better",
+          "other_delta_orientation": "proposed_minus_anchor_higher_is_better"
+        },
+        "evaluation_scope": "external_frozen_deployment_folds_descriptive_only",
+        "fold_aggregation": "arithmetic_mean_component_and_calibrated_probability_across_five_frozen_internal_deployment_folds",
+        "analysis_unit_aggregation": "none_assay_variant_row"
+      }
+    },
+    "dms_gene_disjoint": {
+      "n": 527058,
+      "row_n": 527058,
+      "positives": 227707,
+      "prevalence": 0.432034,
+      "genes": 147,
+      "assays": 176,
+      "modality_coverage": {
+        "esm_masked_marginal": {
+          "n": 527058,
+          "row_coverage": 1.0
+        },
+        "structure": {
+          "n": 0,
+          "row_coverage": 0.0,
+          "feature_coverage": {
+            "SASA": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "RELATIVE_SASA": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "PLDDT_SCORE": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_CONTACT_COUNT_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_CONTACT_COUNT_12A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_LONG_RANGE_CONTACT_COUNT_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_MEAN_PLDDT_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_MIN_PLDDT_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_CONFIDENT_CONTACT_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_MEAN_DISTANCE_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_HYDROPHOBIC_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "LOCAL_CHARGED_FRACTION_8A": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            }
+          }
+        },
+        "conservation": {
+          "n": 0,
+          "row_coverage": 0.0,
+          "feature_coverage": {
+            "GERP++_RS": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "phyloP100way_vertebrate": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            },
+            "phastCons100way_vertebrate": {
+              "available_column": true,
+              "finite_n": 0,
+              "row_coverage": 0.0
+            }
+          }
+        },
+        "complete_sequence_structure_conservation": {
+          "n": 0,
+          "row_coverage": 0.0
+        },
+        "missing_modalities": [
+          "structure",
+          "conservation"
+        ],
+        "full_multimodal_validation": false,
+        "interpretation": "models are evaluated with one or more missing/imputed modalities"
+      },
+      "validation_scope": "functional_transfer_with_missing_or_imputed_modalities",
+      "models": {
+        "lightgbm": {
+          "threshold": 0.2785,
+          "mcc": 0.0,
+          "auroc": 0.6063,
+          "auprc": 0.52,
+          "brier": 0.424567,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 227707,
+          "tn": 299351,
+          "specificity": 1.0,
+          "npv": 0.568,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": -0.730238,
+            "log_loss": 2.112643,
+            "adaptive_ece": 0.424154,
+            "calibration_slope": 0.714096,
+            "calibration_intercept": 3.273794
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.455062,
+              "mcc": 0.0
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.429824,
+              "mcc": 0.0
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.432846,
+              "mcc": 0.0
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.432034,
+              "mcc": 0.0
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.429824,
+            "mcc": 0.0
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "raw_esm_zero_shot": {
+          "threshold": 0.1568,
+          "mcc": 0.1842,
+          "auroc": 0.6722,
+          "auprc": 0.6308,
+          "brier": 0.252534,
+          "precision": 0.5005,
+          "recall": 0.7409,
+          "f1": 0.5975,
+          "tp": 168712,
+          "fp": 168349,
+          "fn": 58995,
+          "tn": 131002,
+          "specificity": 0.4376,
+          "npv": 0.6895,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": -0.029151,
+            "log_loss": 0.776482,
+            "adaptive_ece": 0.170215,
+            "calibration_slope": 0.326215,
+            "calibration_intercept": -0.172457
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.42944,
+              "mcc": 0.1792
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.439263,
+              "mcc": 0.1771
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.437448,
+              "mcc": 0.1779
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.431345,
+              "mcc": 0.1842
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.439263,
+            "mcc": 0.1771
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "esm_score_logistic": {
+          "threshold": 0.1568,
+          "mcc": 0.1842,
+          "auroc": 0.6722,
+          "auprc": 0.6308,
+          "brier": 0.252505,
+          "precision": 0.5005,
+          "recall": 0.7409,
+          "f1": 0.5975,
+          "tp": 168716,
+          "fp": 168356,
+          "fn": 58991,
+          "tn": 130995,
+          "specificity": 0.4376,
+          "npv": 0.6895,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": -0.029035,
+            "log_loss": 0.776314,
+            "adaptive_ece": 0.170138,
+            "calibration_slope": 0.326368,
+            "calibration_intercept": -0.172366
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.42944,
+              "mcc": 0.1792
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.439263,
+              "mcc": 0.1771
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.437453,
+              "mcc": 0.1779
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.431351,
+              "mcc": 0.1842
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.439263,
+            "mcc": 0.1771
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "conservation_logistic": {
+          "threshold": 0.2122,
+          "mcc": 0.0,
+          "auroc": 0.5,
+          "auprc": 0.432,
+          "brier": 0.265223,
+          "precision": 0.432,
+          "recall": 1.0,
+          "f1": 0.6034,
+          "tp": 227707,
+          "fp": 299351,
+          "fn": 0,
+          "tn": 0,
+          "specificity": 0.0,
+          "npv": 0.0,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": -0.080864,
+            "log_loss": 0.728523,
+            "adaptive_ece": 0.140863,
+            "calibration_slope": 0.135812,
+            "calibration_intercept": -0.152648
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.544938,
+              "mcc": 0.0
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.570176,
+              "mcc": 0.0
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.567154,
+              "mcc": 0.0
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.567966,
+              "mcc": 0.0
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.570176,
+            "mcc": 0.0
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "esm_conservation_logistic": {
+          "threshold": 0.2439,
+          "mcc": 0.2449,
+          "auroc": 0.6722,
+          "auprc": 0.6308,
+          "brier": 0.24219,
+          "precision": 0.5482,
+          "recall": 0.6617,
+          "f1": 0.5996,
+          "tp": 150668,
+          "fp": 124153,
+          "fn": 77039,
+          "tn": 175198,
+          "specificity": 0.5853,
+          "npv": 0.6946,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": 0.013004,
+            "log_loss": 0.726275,
+            "adaptive_ece": 0.136468,
+            "calibration_slope": 0.394736,
+            "calibration_intercept": -0.041308
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.375245,
+              "mcc": 0.2576
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.377076,
+              "mcc": 0.2589
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.384058,
+              "mcc": 0.2479
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.381726,
+              "mcc": 0.2449
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.377076,
+            "mcc": 0.2589
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "mutation_logistic": {
+          "threshold": 0.2117,
+          "mcc": 0.1253,
+          "auroc": 0.6017,
+          "auprc": 0.525,
+          "brier": 0.248574,
+          "precision": 0.4608,
+          "recall": 0.8778,
+          "f1": 0.6044,
+          "tp": 199880,
+          "fp": 233871,
+          "fn": 27827,
+          "tn": 65480,
+          "specificity": 0.2187,
+          "npv": 0.7018,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": -0.013012,
+            "log_loss": 0.695862,
+            "adaptive_ece": 0.096853,
+            "calibration_slope": 0.522716,
+            "calibration_intercept": 0.072597
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.475196,
+              "mcc": 0.127
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.492305,
+              "mcc": 0.1232
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.49359,
+              "mcc": 0.1231
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.496526,
+              "mcc": 0.1253
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.492305,
+            "mcc": 0.1232
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "availability_logistic": {
+          "threshold": 0.1575,
+          "mcc": 0.0,
+          "auroc": 0.5,
+          "auprc": 0.432,
+          "brier": 0.423686,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 227707,
+          "tn": 299351,
+          "specificity": 1.0,
+          "npv": 0.568,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": -0.72665,
+            "log_loss": 2.005157,
+            "adaptive_ece": 0.422263,
+            "calibration_slope": 0.056579,
+            "calibration_intercept": -0.01225
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.455062,
+              "mcc": 0.0
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.429824,
+              "mcc": 0.0
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.432846,
+              "mcc": 0.0
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.432034,
+              "mcc": 0.0
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.429824,
+            "mcc": 0.0
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "diagnostic_missingness_availability_negative_control",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "esm_embedding_mutation": {
+          "threshold": 0.2269,
+          "mcc": 0.2059,
+          "auroc": 0.6889,
+          "auprc": 0.6215,
+          "brier": 0.24983,
+          "precision": 0.4859,
+          "recall": 0.8792,
+          "f1": 0.6259,
+          "tp": 200191,
+          "fp": 211774,
+          "fn": 27516,
+          "tn": 87577,
+          "specificity": 0.2926,
+          "npv": 0.7609,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": -0.018133,
+            "log_loss": 0.763863,
+            "adaptive_ece": 0.151273,
+            "calibration_slope": 0.363147,
+            "calibration_intercept": -0.419174
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.433049,
+              "mcc": 0.2225
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.455618,
+              "mcc": 0.2052
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.448841,
+              "mcc": 0.2143
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.454011,
+              "mcc": 0.2059
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.455618,
+            "mcc": 0.2052
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "prespecified_reference_baseline",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "concatenation": {
+          "threshold": 0.2893,
+          "mcc": 0.2327,
+          "auroc": 0.6761,
+          "auprc": 0.602,
+          "brier": 0.241214,
+          "precision": 0.5172,
+          "recall": 0.7743,
+          "f1": 0.6202,
+          "tp": 176320,
+          "fp": 164590,
+          "fn": 51387,
+          "tn": 134761,
+          "specificity": 0.4502,
+          "npv": 0.7239,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": 0.016979,
+            "log_loss": 0.70784,
+            "adaptive_ece": 0.11876,
+            "calibration_slope": 0.410119,
+            "calibration_intercept": -0.241812
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.384307,
+              "mcc": 0.2829
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.400536,
+              "mcc": 0.2605
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.400877,
+              "mcc": 0.2495
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.409778,
+              "mcc": 0.2327
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.400536,
+            "mcc": 0.2605
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_fusion_model",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "gated_fusion": {
+          "threshold": 0.3006,
+          "mcc": 0.272,
+          "auroc": 0.6978,
+          "auprc": 0.626,
+          "brier": 0.231104,
+          "precision": 0.5429,
+          "recall": 0.7493,
+          "f1": 0.6296,
+          "tp": 170629,
+          "fp": 143669,
+          "fn": 57078,
+          "tn": 155682,
+          "specificity": 0.5201,
+          "npv": 0.7317,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": 0.05818,
+            "log_loss": 0.680955,
+            "adaptive_ece": 0.105354,
+            "calibration_slope": 0.459839,
+            "calibration_intercept": -0.193013
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.344638,
+              "mcc": 0.3413
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.369088,
+              "mcc": 0.3062
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.369613,
+              "mcc": 0.2947
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.380882,
+              "mcc": 0.272
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.369088,
+            "mcc": 0.3062
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_fusion_model",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "reliability_residual": {
+          "threshold": 0.231,
+          "mcc": 0.0992,
+          "auroc": 0.6722,
+          "auprc": 0.6308,
+          "brier": 0.270245,
+          "precision": 0.4509,
+          "recall": 0.9096,
+          "f1": 0.6029,
+          "tp": 207129,
+          "fp": 252235,
+          "fn": 20578,
+          "tn": 47116,
+          "specificity": 0.1574,
+          "npv": 0.696,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": -0.101329,
+            "log_loss": 0.802991,
+            "adaptive_ece": 0.19955,
+            "calibration_slope": 0.389342,
+            "calibration_intercept": -0.568852
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.517639,
+              "mcc": 0.0586
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.528667,
+              "mcc": 0.0577
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.532106,
+              "mcc": 0.0751
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.517615,
+              "mcc": 0.0992
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.528667,
+            "mcc": 0.0577
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_reliability_conditioned_residual_fusion_model",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "evidential_residual": {
+          "threshold": 0.238,
+          "mcc": 0.1692,
+          "auroc": 0.6722,
+          "auprc": 0.6308,
+          "brier": 0.25833,
+          "precision": 0.4909,
+          "recall": 0.7612,
+          "f1": 0.5969,
+          "tp": 173329,
+          "fp": 179772,
+          "fn": 54378,
+          "tn": 119579,
+          "specificity": 0.3995,
+          "npv": 0.6874,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": -0.052773,
+            "log_loss": 0.782468,
+            "adaptive_ece": 0.184172,
+            "calibration_slope": 0.3371,
+            "calibration_intercept": -0.363935
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.43229,
+              "mcc": 0.1731
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.44061,
+              "mcc": 0.1769
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.443162,
+              "mcc": 0.1711
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.444259,
+              "mcc": 0.1692
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.44061,
+            "mcc": 0.1769
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "candidate_availability_weighted_expert_residual_fusion_model",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "cross_attention": {
+          "threshold": 0.299,
+          "mcc": 0.2675,
+          "auroc": 0.7013,
+          "auprc": 0.6362,
+          "brier": 0.249985,
+          "precision": 0.5381,
+          "recall": 0.7589,
+          "f1": 0.6297,
+          "tp": 172812,
+          "fp": 148321,
+          "fn": 54895,
+          "tn": 151030,
+          "specificity": 0.5045,
+          "npv": 0.7334,
+          "calibration": {
+            "prevalence": 0.432034,
+            "prevalence_brier": 0.245381,
+            "brier_skill": -0.018765,
+            "log_loss": 0.756226,
+            "adaptive_ece": 0.167102,
+            "calibration_slope": 0.372432,
+            "calibration_intercept": -0.330078
+          },
+          "risk_coverage": {
+            "coverage_50": {
+              "coverage": 0.5,
+              "risk": 0.355908,
+              "mcc": 0.3243
+            },
+            "coverage_80": {
+              "coverage": 0.8,
+              "risk": 0.376879,
+              "mcc": 0.3006
+            },
+            "coverage_90": {
+              "coverage": 0.9,
+              "risk": 0.374369,
+              "mcc": 0.2899
+            },
+            "coverage_100": {
+              "coverage": 1.0,
+              "risk": 0.385567,
+              "mcc": 0.2675
+            }
+          },
+          "risk_coverage_confidence_source": "provided_classifier_decision_confidence",
+          "selective": {
+            "coverage": 0.8,
+            "risk": 0.376879,
+            "mcc": 0.3006
+          },
+          "ci95": null,
+          "output_scale": "calibrated_probability",
+          "model_role": "legacy_pooled_vector_pseudo_slot_comparator",
+          "uncertainty_interpretation": "descriptive_pooled_metric",
+          "selective_prediction_interpretation": {
+            "status": "descriptive_only",
+            "selection_confidence": "majority_margin_of_frozen_internal_fold_decisions",
+            "threshold_or_coverage_tuned_on_external_labels": false,
+            "clinical_utility_claimed": false,
+            "note": "Risk-coverage values describe this frozen cohort; they are not a prospective abstention guarantee."
+          },
+          "calibration_reporting": {
+            "status": "experimental_label_calibration_not_clinical",
+            "recalibrated_on_external_labels": false,
+            "clinical_calibration_claimed": false
+          },
+          "reporting_role": "descriptive_pooled_row_metric_without_inferential_interval"
+        },
+        "esm_zero_shot": {
+          "output_scale": "raw_ranking_score",
+          "score_orientation": "higher_is_more_deleterious",
+          "threshold": null,
+          "mcc": null,
+          "auroc": 0.6722,
+          "auprc": 0.6308,
+          "brier": null,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "model_role": "prespecified_reference_baseline",
+          "ci95": null
+        }
+      },
+      "primary_endpoints": [
+        "equal_weight_assay_macro_functional_spearman",
+        "equal_weight_assay_macro_auroc"
+      ],
+      "reliability_diagnostics": {
+        "status": "descriptive_post_selection_not_primary",
+        "model": "reliability_residual",
+        "n": 527058,
+        "stratification": {
+          "uses_labels": false,
+          "prespecified_from": "positive natural structure/conservation reliability before outcome evaluation",
+          "code_mapping": {
+            "0": "anchor_only",
+            "1": "structure_only",
+            "2": "conservation_only",
+            "3": "structure_and_conservation"
+          }
+        },
+        "selection_or_refitting": {
+          "used_for_model_selection": false,
+          "used_for_threshold_selection": false,
+          "external_labels_used_for_refitting": false,
+          "inference_claim_allowed": false
+        },
+        "component_semantics": {
+          "anchor_logit": "mean_uncalibrated_sequence_anchor_logit",
+          "anchor_probability": "same_frozen_affine_logit_calibration_as_deployed_model",
+          "gate": "mean_learned_gate_after_natural_evidence_quality",
+          "bounded_residual": "mean_pre_gate_bounded_residual_logit",
+          "hard_availability": "label_independent_any_trustworthy_structure_or_conservation",
+          "structure_reliability": "label_independent_natural_structure_quality",
+          "conservation_reliability": "label_independent_observed_conservation_fraction",
+          "interpretation_limit": "mechanistic_model_diagnostics_not_causal_feature_attributions"
+        },
+        "gate_behavior": {
+          "mean": 0.0,
+          "median": 0.0,
+          "p05": 0.0,
+          "p95": 0.0,
+          "active_rate": 0.0,
+          "exact_fallback_rate": 1.0,
+          "hard_unavailable_rate": 1.0,
+          "maximum_anchor_identity_error_on_hard_fallback": 1.2e-07
+        },
+        "bounded_residual_behavior": {
+          "mean": -0.242871,
+          "mean_absolute": 1.516665,
+          "maximum_absolute_observed": 2.988672,
+          "p05": -2.858203,
+          "p95": 2.514453
+        },
+        "strata": {
+          "anchor_only": {
+            "code": 0,
+            "definition": {
+              "structure_reliability_positive": false,
+              "conservation_reliability_positive": false
+            },
+            "n": 527058,
+            "coverage": 1.0,
+            "positives": 227707,
+            "prevalence": 0.432034,
+            "mean_gate": 0.0,
+            "exact_fallback_rate": 1.0,
+            "proposed_model": {
+              "mcc": 0.0992,
+              "auroc": 0.6722,
+              "auprc": 0.6308,
+              "brier": 0.270245,
+              "precision": 0.4509,
+              "recall": 0.9096,
+              "f1": 0.6029,
+              "specificity": 0.1574
+            },
+            "anchor_ablation_same_frozen_threshold_vote": {
+              "mcc": 0.0992,
+              "auroc": 0.6722,
+              "auprc": 0.6308,
+              "brier": 0.270245,
+              "precision": 0.4509,
+              "recall": 0.9096,
+              "f1": 0.6029,
+              "specificity": 0.1574
+            },
+            "proposed_minus_anchor": {
+              "mcc": 0.0,
+              "auroc": 0.0,
+              "auprc": 0.0,
+              "brier": 0.0
+            }
+          },
+          "structure_only": {
+            "code": 1,
+            "definition": {
+              "structure_reliability_positive": true,
+              "conservation_reliability_positive": false
+            },
+            "n": 0,
+            "coverage": 0.0,
+            "positives": 0,
+            "prevalence": null,
+            "mean_gate": null,
+            "exact_fallback_rate": null,
+            "proposed_model": null,
+            "anchor_ablation_same_frozen_threshold_vote": null,
+            "proposed_minus_anchor": null
+          },
+          "conservation_only": {
+            "code": 2,
+            "definition": {
+              "structure_reliability_positive": false,
+              "conservation_reliability_positive": true
+            },
+            "n": 0,
+            "coverage": 0.0,
+            "positives": 0,
+            "prevalence": null,
+            "mean_gate": null,
+            "exact_fallback_rate": null,
+            "proposed_model": null,
+            "anchor_ablation_same_frozen_threshold_vote": null,
+            "proposed_minus_anchor": null
+          },
+          "structure_and_conservation": {
+            "code": 3,
+            "definition": {
+              "structure_reliability_positive": true,
+              "conservation_reliability_positive": true
+            },
+            "n": 0,
+            "coverage": 0.0,
+            "positives": 0,
+            "prevalence": null,
+            "mean_gate": null,
+            "exact_fallback_rate": null,
+            "proposed_model": null,
+            "anchor_ablation_same_frozen_threshold_vote": null,
+            "proposed_minus_anchor": null
+          }
+        },
+        "metric_interpretation": {
+          "all_metrics": "descriptive_post_selection_without_uncertainty_claims",
+          "anchor_ablation": "same frozen deployment calibration and fold thresholds; no label-based refit",
+          "brier_delta_orientation": "proposed_minus_anchor_lower_is_better",
+          "other_delta_orientation": "proposed_minus_anchor_higher_is_better"
+        },
+        "evaluation_scope": "external_frozen_deployment_folds_descriptive_only",
+        "fold_aggregation": "arithmetic_mean_component_and_calibrated_probability_across_five_frozen_internal_deployment_folds",
+        "analysis_unit_aggregation": "none_assay_variant_row"
+      }
+    }
+  }
+}

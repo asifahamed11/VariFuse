@@ -1,0 +1,2201 @@
+[
+  {
+    "pmid": "37201251",
+    "doi": "10.1016/j.cmpb.2023.107596",
+    "title": "DARVIC: Dihedral angle-reliant variant impact classifier for functional prediction of missense VUS.",
+    "authorString": "Lagniton PNP, Tam B, Wang SM.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Lagniton PNP",
+          "lastName": "Lagniton",
+          "firstName": "Philip Naderev P",
+          "initials": "PNP",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Cancer Centre and Institute of Translational Medicine, Department of Public Health and Medical Administration, Faculty of Health Sciences, Ministry of Education Frontiers Science Center for Precision Oncology, University of Macau, Macao."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Tam B",
+          "lastName": "Tam",
+          "firstName": "Benjamin",
+          "initials": "B",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-8119-3996"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Cancer Centre and Institute of Translational Medicine, Department of Public Health and Medical Administration, Faculty of Health Sciences, Ministry of Education Frontiers Science Center for Precision Oncology, University of Macau, Macao."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Wang SM",
+          "lastName": "Wang",
+          "firstName": "San Ming",
+          "initials": "SM",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Cancer Centre and Institute of Translational Medicine, Department of Public Health and Medical Administration, Faculty of Health Sciences, Ministry of Education Frontiers Science Center for Precision Oncology, University of Macau, Macao; Senior Author, Macao. Electronic address: sanmingwang@um.edu.mo."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "238",
+      "journalIssueId": 3587929,
+      "dateOfPublication": "2023 Aug",
+      "monthOfPublication": 8,
+      "yearOfPublication": 2023,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2023-08-01"
+    },
+    "pubYear": "2023",
+    "pageInfo": "107596",
+    "electronicPublicationDate": "2023-05-11",
+    "firstPublicationDate": "2023-05-11"
+  },
+  {
+    "pmid": "42556139",
+    "doi": "10.1016/j.cmpb.2026.109580",
+    "title": "Reinforcement learning-based dynamic ensemble for missense variant effect prediction and tiered prioritization of VUS.",
+    "authorString": "Abbas SH, Wu J, Shi T.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Abbas SH",
+          "lastName": "Abbas",
+          "firstName": "Syed Hassan",
+          "initials": "SH",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-8478-4847"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Center for Bioinformatics and Computational Biology, The Institute of Biomedical Sciences, School of Life Sciences, East China Normal University, Shanghai 200241, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Wu J",
+          "lastName": "Wu",
+          "firstName": "Jun",
+          "initials": "J",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Center for Bioinformatics and Computational Biology, The Institute of Biomedical Sciences, School of Life Sciences, East China Normal University, Shanghai 200241, China; Institute of Wildlife Epidemics, Shanghai, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Shi T",
+          "lastName": "Shi",
+          "firstName": "Tieliu",
+          "initials": "T",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Center for Bioinformatics and Computational Biology, The Institute of Biomedical Sciences, School of Life Sciences, East China Normal University, Shanghai 200241, China; Institute of Wildlife Epidemics, Shanghai, China; Key Laboratory of Advanced Theory and Application in Statistics and Data Science-MOE, School of Statistics, East China Normal University, Shanghai 200062, China. Electronic address: tlshi@bio.ecnu.edu.cn."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "286",
+      "journalIssueId": 4254723,
+      "dateOfPublication": "2026 Nov",
+      "monthOfPublication": 11,
+      "yearOfPublication": 2026,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2026-11-01"
+    },
+    "pubYear": "2026",
+    "pageInfo": "109580",
+    "electronicPublicationDate": "2026-07-30",
+    "firstPublicationDate": "2026-07-30"
+  },
+  {
+    "pmid": "38537495",
+    "doi": "10.1016/j.cmpb.2024.108078",
+    "title": "Atom-ProteinQA: Atom-level protein model quality assessment through fine-grained joint learning.",
+    "authorString": "Han Y, Lu Y, Yan X, Cui H, Cheng S, Zheng J, Zhou Y, Wang S, Li Z.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Han Y",
+          "lastName": "Han",
+          "firstName": "Yatong",
+          "initials": "Y",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Future Network of Intelligence Institute, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China; School of Science and Engineering, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Lu Y",
+          "lastName": "Lu",
+          "firstName": "Yingfeng",
+          "initials": "Y",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Future Network of Intelligence Institute, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China; School of Science and Engineering, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Yan X",
+          "lastName": "Yan",
+          "firstName": "Xu",
+          "initials": "X",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Future Network of Intelligence Institute, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China; School of Science and Engineering, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Cui H",
+          "lastName": "Cui",
+          "firstName": "Hannah",
+          "initials": "H",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0009-0004-7567-1885"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Future Network of Intelligence Institute, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China; School of Science and Engineering, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Cheng S",
+          "lastName": "Cheng",
+          "firstName": "Shenghui",
+          "initials": "S",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-3767-8371"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Westlake University, Hangzhou, 310024, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Zheng J",
+          "lastName": "Zheng",
+          "firstName": "Jiayou",
+          "initials": "J",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Future Network of Intelligence Institute, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China; School of Science and Engineering, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Zhou Y",
+          "lastName": "Zhou",
+          "firstName": "Yuzhe",
+          "initials": "Y",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Future Network of Intelligence Institute, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China; School of Science and Engineering, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Wang S",
+          "lastName": "Wang",
+          "firstName": "Sheng",
+          "initials": "S",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Shanghai Zelixir Biotech Company Ltd., Shanghai, 200030, China. Electronic address: wangsheng@zelixir.com."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Li Z",
+          "lastName": "Li",
+          "firstName": "Zhen",
+          "initials": "Z",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Future Network of Intelligence Institute, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China; School of Science and Engineering, the Chinese University of Hong Kong (Shenzhen), Shenzhen, 518172, China. Electronic address: lizhen@cuhk.edu.cn."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "249",
+      "journalIssueId": 3758508,
+      "dateOfPublication": "2024 Jun",
+      "monthOfPublication": 6,
+      "yearOfPublication": 2024,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2024-06-01"
+    },
+    "pubYear": "2024",
+    "pageInfo": "108078",
+    "electronicPublicationDate": "2024-02-23",
+    "firstPublicationDate": "2024-02-23"
+  },
+  {
+    "pmid": "38064959",
+    "doi": "10.1016/j.cmpb.2023.107955",
+    "title": "MaTPIP: A deep-learning architecture with eXplainable AI for sequence-driven, feature mixed protein-protein interaction prediction.",
+    "authorString": "Ghosh S, Mitra P.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Ghosh S",
+          "lastName": "Ghosh",
+          "firstName": "Shubhrangshu",
+          "initials": "S",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Computer Science and Engineering, Indian Institute of Technology Kharagpur, West Bengal, India; TCS Research, Tata Consultancy Services Limited, Kolkata, West Bengal, India."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Mitra P",
+          "lastName": "Mitra",
+          "firstName": "Pralay",
+          "initials": "P",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0003-4119-3788"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Computer Science and Engineering, Indian Institute of Technology Kharagpur, West Bengal, India. Electronic address: pralay@cse.iitkgp.ac.in."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "244",
+      "journalIssueId": 3701983,
+      "dateOfPublication": "2024 Feb",
+      "monthOfPublication": 2,
+      "yearOfPublication": 2024,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2024-02-01"
+    },
+    "pubYear": "2024",
+    "pageInfo": "107955",
+    "electronicPublicationDate": "2023-11-30",
+    "firstPublicationDate": "2023-11-30"
+  },
+  {
+    "pmid": "37004267",
+    "doi": "10.1016/j.cmpb.2023.107504",
+    "title": "Predicting gene and protein expression levels from DNA and protein sequences with Perceiver.",
+    "authorString": "Stefanini M, Lovino M, Cucchiara R, Ficarra E.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Stefanini M",
+          "lastName": "Stefanini",
+          "firstName": "Matteo",
+          "initials": "M",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0001-6153-926X"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "DIEF, University of Modena and Reggio Emilia, Via Vivarelli 10/1, Modena, 41125, Italy."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Lovino M",
+          "lastName": "Lovino",
+          "firstName": "Marta",
+          "initials": "M",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0001-7124-8319"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "DIEF, University of Modena and Reggio Emilia, Via Vivarelli 10/1, Modena, 41125, Italy. Electronic address: marta.lovino@unimore.it."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Cucchiara R",
+          "lastName": "Cucchiara",
+          "firstName": "Rita",
+          "initials": "R",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "DIEF, University of Modena and Reggio Emilia, Via Vivarelli 10/1, Modena, 41125, Italy."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Ficarra E",
+          "lastName": "Ficarra",
+          "firstName": "Elisa",
+          "initials": "E",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "DIEF, University of Modena and Reggio Emilia, Via Vivarelli 10/1, Modena, 41125, Italy."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "234",
+      "journalIssueId": 3549866,
+      "dateOfPublication": "2023 Jun",
+      "monthOfPublication": 6,
+      "yearOfPublication": 2023,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2023-06-01"
+    },
+    "pubYear": "2023",
+    "pageInfo": "107504",
+    "electronicPublicationDate": "2023-03-22",
+    "firstPublicationDate": "2023-03-22"
+  },
+  {
+    "pmid": "40174317",
+    "doi": "10.1016/j.cmpb.2025.108756",
+    "title": "Predicting protein-protein interaction with interpretable bilinear attention network.",
+    "authorString": "Han Y, Zhang SW, Shi MH, Zhang QQ, Li Y, Cui X.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Han Y",
+          "lastName": "Han",
+          "firstName": "Yong",
+          "initials": "Y",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "MOE Key Laboratory of Information Fusion Technology, School of Automation, Northwestern Polytechnical University, Xi'an, 710072, China; Henan Judicial Police Vocational College, Zhengzhou, 450046, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Zhang SW",
+          "lastName": "Zhang",
+          "firstName": "Shao-Wu",
+          "initials": "SW",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "MOE Key Laboratory of Information Fusion Technology, School of Automation, Northwestern Polytechnical University, Xi'an, 710072, China. Electronic address: zhangsw@nwpu.edu.cn."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Shi MH",
+          "lastName": "Shi",
+          "firstName": "Ming-Hui",
+          "initials": "MH",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "MOE Key Laboratory of Information Fusion Technology, School of Automation, Northwestern Polytechnical University, Xi'an, 710072, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Zhang QQ",
+          "lastName": "Zhang",
+          "firstName": "Qing-Qing",
+          "initials": "QQ",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "MOE Key Laboratory of Information Fusion Technology, School of Automation, Northwestern Polytechnical University, Xi'an, 710072, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Li Y",
+          "lastName": "Li",
+          "firstName": "Yi",
+          "initials": "Y",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Henan Judicial Police Vocational College, Zhengzhou, 450046, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Cui X",
+          "lastName": "Cui",
+          "firstName": "Xiaodong",
+          "initials": "X",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-4762-6161"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Marine Science and Technology, Northwestern Polytechnical University, Xi'an 710072, China. Electronic address: xiaodong.cui@nwpu.edu.cn."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "265",
+      "journalIssueId": 3931937,
+      "dateOfPublication": "2025 Jun",
+      "monthOfPublication": 6,
+      "yearOfPublication": 2025,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2025-06-01"
+    },
+    "pubYear": "2025",
+    "pageInfo": "108756",
+    "electronicPublicationDate": "2025-03-30",
+    "firstPublicationDate": "2025-03-30"
+  },
+  {
+    "pmid": "41285097",
+    "doi": "10.1016/j.cmpb.2025.109163",
+    "title": "MDM-DTA: Message Passing Neural Network with molecular descriptors and Mixture of Experts for drug-target affinity prediction.",
+    "authorString": "Dai Y, Tan X, Wang H, Ma G, Xiong Y, Qiu X.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Dai Y",
+          "lastName": "Dai",
+          "firstName": "Yang",
+          "initials": "Y",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Electronic and Electrical Engineering, Shanghai University of Engineering Science, Shanghai, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Tan X",
+          "lastName": "Tan",
+          "firstName": "Xiaoyu",
+          "initials": "X",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0003-3555-7143"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Electronic and Electrical Engineering, Shanghai University of Engineering Science, Shanghai, China; Tencent Youtu Lab, Shanghai, Shanghai, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Wang H",
+          "lastName": "Wang",
+          "firstName": "Haoyu",
+          "initials": "H",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0001-9575-7345"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Electronic and Electrical Engineering, Shanghai University of Engineering Science, Shanghai, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Ma G",
+          "lastName": "Ma",
+          "firstName": "Gengchen",
+          "initials": "G",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0009-0002-3841-9889"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Electronic and Electrical Engineering, Shanghai University of Engineering Science, Shanghai, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Xiong Y",
+          "lastName": "Xiong",
+          "firstName": "Yujie",
+          "initials": "Y",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Electronic and Electrical Engineering, Shanghai University of Engineering Science, Shanghai, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Qiu X",
+          "lastName": "Qiu",
+          "firstName": "Xihe",
+          "initials": "X",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0003-4024-925X"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Electronic and Electrical Engineering, Shanghai University of Engineering Science, Shanghai, China. Electronic address: qiuxihe@sues.edu.cn."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "274",
+      "journalIssueId": 4067653,
+      "dateOfPublication": "2026 Feb",
+      "monthOfPublication": 2,
+      "yearOfPublication": 2026,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2026-02-01"
+    },
+    "pubYear": "2026",
+    "pageInfo": "109163",
+    "electronicPublicationDate": "2025-11-21",
+    "firstPublicationDate": "2025-11-21"
+  },
+  {
+    "pmid": "39826483",
+    "doi": "10.1016/j.cmpb.2025.108603",
+    "title": "Benchmarking multi-omics integrative clustering methods for subtype identification in colorectal cancer.",
+    "authorString": "Zhang S, Lv J, Zhang J, Fan Z, Gu B, Fan B, Li C, Wang C, Zhang T.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Zhang S",
+          "lastName": "Zhang",
+          "firstName": "Shuai",
+          "initials": "S",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Biostatistics, School of Public Health, Cheeloo College of Medicine, Shandong University, Jinan, Shandong, 250012, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Lv J",
+          "lastName": "Lv",
+          "firstName": "Jiali",
+          "initials": "J",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Biostatistics, School of Public Health, Cheeloo College of Medicine, Shandong University, Jinan, Shandong, 250012, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Zhang J",
+          "lastName": "Zhang",
+          "firstName": "Jinglan",
+          "initials": "J",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Life Science, Shandong University, Qingdao, 266237, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Fan Z",
+          "lastName": "Fan",
+          "firstName": "Zhe",
+          "initials": "Z",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Biostatistics, School of Public Health, Cheeloo College of Medicine, Shandong University, Jinan, Shandong, 250012, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Gu B",
+          "lastName": "Gu",
+          "firstName": "Bingbing",
+          "initials": "B",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Biostatistics, School of Public Health, Cheeloo College of Medicine, Shandong University, Jinan, Shandong, 250012, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Fan B",
+          "lastName": "Fan",
+          "firstName": "Bingbing",
+          "initials": "B",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Biostatistics, School of Public Health, Cheeloo College of Medicine, Shandong University, Jinan, Shandong, 250012, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Li C",
+          "lastName": "Li",
+          "firstName": "Chunxia",
+          "initials": "C",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Biostatistics, School of Public Health, Cheeloo College of Medicine, Shandong University, Jinan, Shandong, 250012, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Wang C",
+          "lastName": "Wang",
+          "firstName": "Cheng",
+          "initials": "C",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Biostatistics, School of Public Health, Cheeloo College of Medicine, Shandong University, Jinan, Shandong, 250012, China. Electronic address: chengwang@sdu.edu.cn."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Zhang T",
+          "lastName": "Zhang",
+          "firstName": "Tao",
+          "initials": "T",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Biostatistics, School of Public Health, Cheeloo College of Medicine, Shandong University, Jinan, Shandong, 250012, China; Department of Epidemiology and Biostatistics, School of Public Health, Tianjin Medical University, Tianjin, 300070, China. Electronic address: taozhang@sdu.edu.cn."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "261",
+      "journalIssueId": 3903237,
+      "dateOfPublication": "2025 Apr",
+      "monthOfPublication": 4,
+      "yearOfPublication": 2025,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2025-04-01"
+    },
+    "pubYear": "2025",
+    "pageInfo": "108603",
+    "electronicPublicationDate": "2025-01-13",
+    "firstPublicationDate": "2025-01-13"
+  },
+  {
+    "pmid": "40946520",
+    "doi": "10.1016/j.cmpb.2025.109063",
+    "title": "Integration of nested cross-validation, automated hyperparameter optimization, high-performance computing to reduce and quantify the variance of test performance estimation of deep learning models.",
+    "authorString": "Calle P, Bates A, Reynolds JC, Liu Y, Cui H, Ly S, Wang C, Zhang Q, de Armendi AJ, Shettar SS, Fu KM, Tang Q, Pan C.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Calle P",
+          "lastName": "Calle",
+          "firstName": "Paul",
+          "initials": "P",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Computer Science, University of Oklahoma, Norman, 73019, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Bates A",
+          "lastName": "Bates",
+          "firstName": "Averi",
+          "initials": "A",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Computer Science, University of Oklahoma, Norman, 73019, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Reynolds JC",
+          "lastName": "Reynolds",
+          "firstName": "Justin C",
+          "initials": "JC",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Computer Science, University of Oklahoma, Norman, 73019, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Liu Y",
+          "lastName": "Liu",
+          "firstName": "Yunlong",
+          "initials": "Y",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Computer Science, University of Oklahoma, Norman, 73019, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Cui H",
+          "lastName": "Cui",
+          "firstName": "Haoyang",
+          "initials": "H",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Computer Science, University of Oklahoma, Norman, 73019, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Ly S",
+          "lastName": "Ly",
+          "firstName": "Sinaro",
+          "initials": "S",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Computer Science, University of Oklahoma, Norman, 73019, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Wang C",
+          "lastName": "Wang",
+          "firstName": "Chen",
+          "initials": "C",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Stephenson School of Biomedical Engineer, University of Oklahoma, Norman, 73019, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Zhang Q",
+          "lastName": "Zhang",
+          "firstName": "Qinghao",
+          "initials": "Q",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Stephenson School of Biomedical Engineer, University of Oklahoma, Norman, 73019, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "de Armendi AJ",
+          "lastName": "de Armendi",
+          "firstName": "Alberto J",
+          "initials": "AJ",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Anesthesiology, University of Oklahoma Health Sciences Center, Oklahoma City, 73104, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Shettar SS",
+          "lastName": "Shettar",
+          "firstName": "Shashank S",
+          "initials": "SS",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-3484-205X"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Pathology, University of Oklahoma Health Sciences Center, Oklahoma City, 73104, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Fu KM",
+          "lastName": "Fu",
+          "firstName": "Kar-Ming",
+          "initials": "KM",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Pathology, University of Oklahoma Health Sciences Center, Oklahoma City, 73104, OK, USA; Stephenson Cancer Center, University of Oklahoma Health Sciences Center, Oklahoma City, 73104, OK, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Tang Q",
+          "lastName": "Tang",
+          "firstName": "Qinggong",
+          "initials": "Q",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0001-9499-5384"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Stephenson School of Biomedical Engineer, University of Oklahoma, Norman, 73019, OK, USA; Stephenson Cancer Center, University of Oklahoma Health Sciences Center, Oklahoma City, 73104, OK, USA. Electronic address: qtang@ou.edu."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Pan C",
+          "lastName": "Pan",
+          "firstName": "Chongle",
+          "initials": "C",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Computer Science, University of Oklahoma, Norman, 73019, OK, USA; Stephenson School of Biomedical Engineer, University of Oklahoma, Norman, 73019, OK, USA. Electronic address: cpan@ou.edu."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "272",
+      "journalIssueId": 4032349,
+      "dateOfPublication": "2025 Dec",
+      "monthOfPublication": 12,
+      "yearOfPublication": 2025,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2025-12-01"
+    },
+    "pubYear": "2025",
+    "pageInfo": "109063",
+    "electronicPublicationDate": "2025-09-10",
+    "firstPublicationDate": "2025-09-10"
+  },
+  {
+    "pmid": "34352688",
+    "doi": "10.1016/j.cmpb.2021.106288",
+    "title": "The importance of being external. methodological insights for the external validation of machine learning models in medicine.",
+    "authorString": "Cabitza F, Campagner A, Soares F, García de Guadiana-Romualdo L, Challa F, Sulejmani A, Seghezzi M, Carobene A.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Cabitza F",
+          "lastName": "Cabitza",
+          "firstName": "Federico",
+          "initials": "F",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-4065-3415"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "University of Milano-Bicocca, Viale Sarca 336, Milano, 20126, Italy. Electronic address: federico.cabitza@unimib.it."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Campagner A",
+          "lastName": "Campagner",
+          "firstName": "Andrea",
+          "initials": "A",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-0027-5157"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "University of Milano-Bicocca, Viale Sarca 336, Milano, 20126, Italy."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Soares F",
+          "lastName": "Soares",
+          "firstName": "Felipe",
+          "initials": "F",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-2837-1853"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Industrial Engineering - Universidade Federal do Rio Grande do Sul. Porto Alegre, Brazil."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "García de Guadiana-Romualdo L",
+          "lastName": "García de Guadiana-Romualdo",
+          "firstName": "Luis",
+          "initials": "L",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratory Medicine Department, Hospital Universitario Santa Lucia, Cartagena, Spain."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Challa F",
+          "lastName": "Challa",
+          "firstName": "Feyissa",
+          "initials": "F",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "National Reference Laboratory for Clinical Chemistry, Ethiopian Public Health Institute, Addis Ababa, Ethiopia."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Sulejmani A",
+          "lastName": "Sulejmani",
+          "firstName": "Adela",
+          "initials": "A",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratorio di chimica clinica, Ospedale di Desio e Monza, ASST-Monza, Dipartimento di medicina e chirurgia, Universit di Milano-Bicocca, Monza, Italy."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Seghezzi M",
+          "lastName": "Seghezzi",
+          "firstName": "Michela",
+          "initials": "M",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratorio di chimica clinica, Ospedale Papa Giovanni XXIII, Bergamo, Italy."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Carobene A",
+          "lastName": "Carobene",
+          "firstName": "Anna",
+          "initials": "A",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratory Medicine, IRCCS San Raffaele Scientific Institute, Milan, Italy."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "208",
+      "journalIssueId": 3218237,
+      "dateOfPublication": "2021 Sep",
+      "monthOfPublication": 9,
+      "yearOfPublication": 2021,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2021-09-01"
+    },
+    "pubYear": "2021",
+    "pageInfo": "106288",
+    "electronicPublicationDate": "2021-07-22",
+    "firstPublicationDate": "2021-07-22"
+  },
+  {
+    "pmid": "37778139",
+    "doi": "10.1016/j.cmpb.2023.107816",
+    "title": "Understanding calibration of deep neural networks for medical image classification.",
+    "authorString": "Sambyal AS, Niyaz U, Krishnan NC, Bathula DR.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Sambyal AS",
+          "lastName": "Sambyal",
+          "firstName": "Abhishek Singh",
+          "initials": "AS",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Computer Science and Engineering, Indian Institute of Technology Ropar, Rupnagar, 140001, Punjab, India. Electronic address: abhishek.19csz0001@iitrpr.ac.in."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Niyaz U",
+          "lastName": "Niyaz",
+          "firstName": "Usma",
+          "initials": "U",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Computer Science and Engineering, Indian Institute of Technology Ropar, Rupnagar, 140001, Punjab, India. Electronic address: usma.20csz0015@iitrpr.ac.in."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Krishnan NC",
+          "lastName": "Krishnan",
+          "firstName": "Narayanan C",
+          "initials": "NC",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Data Science, Indian Institute of Technology Palakkad, Palakkad, 678532, Kerala, India. Electronic address: ckn@iitpkd.ac.in."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Bathula DR",
+          "lastName": "Bathula",
+          "firstName": "Deepti R",
+          "initials": "DR",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Computer Science and Engineering, Indian Institute of Technology Ropar, Rupnagar, 140001, Punjab, India. Electronic address: bathula@iitrpr.ac.in."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "242",
+      "journalIssueId": 3663498,
+      "dateOfPublication": "2023 Dec",
+      "monthOfPublication": 12,
+      "yearOfPublication": 2023,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2023-12-01"
+    },
+    "pubYear": "2023",
+    "pageInfo": "107816",
+    "electronicPublicationDate": "2023-09-22",
+    "firstPublicationDate": "2023-09-22"
+  },
+  {
+    "pmid": "42308713",
+    "doi": "10.1016/j.cmpb.2026.109520",
+    "title": "An integrated calibration-uncertainty framework for improving the reliability of deep learning models for seizure detection in EEG signals.",
+    "authorString": "Seoni S, Molinari F, Benevieri M, Salvi M.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Seoni S",
+          "lastName": "Seoni",
+          "firstName": "Silvia",
+          "initials": "S",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Biolab, PolitoBIOMedLab, Department of Electronics and Telecommunications, Politecnico di Torino, Turin, Italy. Electronic address: silvia.seoni@polito.it."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Molinari F",
+          "lastName": "Molinari",
+          "firstName": "Filippo",
+          "initials": "F",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Biolab, PolitoBIOMedLab, Department of Electronics and Telecommunications, Politecnico di Torino, Turin, Italy."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Benevieri M",
+          "lastName": "Benevieri",
+          "firstName": "Margherita",
+          "initials": "M",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Biolab, PolitoBIOMedLab, Department of Electronics and Telecommunications, Politecnico di Torino, Turin, Italy."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Salvi M",
+          "lastName": "Salvi",
+          "firstName": "Massimo",
+          "initials": "M",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0001-7225-7401"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Biolab, PolitoBIOMedLab, Department of Electronics and Telecommunications, Politecnico di Torino, Turin, Italy."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "285",
+      "journalIssueId": 4240687,
+      "dateOfPublication": "2026 Oct",
+      "monthOfPublication": 10,
+      "yearOfPublication": 2026,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2026-10-01"
+    },
+    "pubYear": "2026",
+    "pageInfo": "109520",
+    "electronicPublicationDate": "2026-06-12",
+    "firstPublicationDate": "2026-06-12"
+  },
+  {
+    "pmid": "41319559",
+    "doi": "10.1016/j.cmpb.2025.109179",
+    "title": "An uncertainty-aware dynamic decision framework for progressive multi-omics integration in classification tasks.",
+    "authorString": "Mu N, Yang H, Zhao C.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Mu N",
+          "lastName": "Mu",
+          "firstName": "Nan",
+          "initials": "N",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0003-0476-7500"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "College of Computer Science, Sichuan Normal University, Chengdu, Sichuan 610101, China; Visual Computing and Virtual Reality Key Laboratory of Sichuan, Sichuan Normal University, Chengdu, Sichuan 610068, China; Education Big Data Collaborative Innovation Center of Sichuan 2011, Chengdu, Sichuan 610101, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Yang H",
+          "lastName": "Yang",
+          "firstName": "Hongbo",
+          "initials": "H",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "College of Computer Science, Sichuan Normal University, Chengdu, Sichuan 610101, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Zhao C",
+          "lastName": "Zhao",
+          "firstName": "Chen",
+          "initials": "C",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-5782-3329"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Computer Science, Kennesaw State University, Marietta, GA 30060, USA. Electronic address: czhao4@kennesaw.edu."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "275",
+      "journalIssueId": 4080325,
+      "dateOfPublication": "2026 Feb",
+      "monthOfPublication": 2,
+      "yearOfPublication": 2026,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2026-02-01"
+    },
+    "pubYear": "2026",
+    "pageInfo": "109179",
+    "electronicPublicationDate": "2025-11-26",
+    "firstPublicationDate": "2025-11-26"
+  },
+  {
+    "pmid": "39709743",
+    "doi": "10.1016/j.cmpb.2024.108568",
+    "title": "Robust multi-modal fusion architecture for medical data with knowledge distillation.",
+    "authorString": "Wang M, Fan S, Li Y, Gao B, Xie Z, Chen H.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Wang M",
+          "lastName": "Wang",
+          "firstName": "Muyu",
+          "initials": "M",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-1606-5058"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Biomedical Engineering, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China; Beijing Key Laboratory of Fundamental Research on Biomechanics in Clinical Application, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Fan S",
+          "lastName": "Fan",
+          "firstName": "Shiyu",
+          "initials": "S",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Biomedical Engineering, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China; Beijing Key Laboratory of Fundamental Research on Biomechanics in Clinical Application, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Li Y",
+          "lastName": "Li",
+          "firstName": "Yichen",
+          "initials": "Y",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Biomedical Engineering, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China; Beijing Key Laboratory of Fundamental Research on Biomechanics in Clinical Application, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Gao B",
+          "lastName": "Gao",
+          "firstName": "Binyu",
+          "initials": "B",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Biomedical Engineering, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China; Beijing Key Laboratory of Fundamental Research on Biomechanics in Clinical Application, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Xie Z",
+          "lastName": "Xie",
+          "firstName": "Zhongrang",
+          "initials": "Z",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Biomedical Engineering, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China; Beijing Key Laboratory of Fundamental Research on Biomechanics in Clinical Application, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Chen H",
+          "lastName": "Chen",
+          "firstName": "Hui",
+          "initials": "H",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "School of Biomedical Engineering, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China; Beijing Key Laboratory of Fundamental Research on Biomechanics in Clinical Application, Capital Medical University, No.10, Xitoutiao, You An Men, Fengtai District, Beijing 100069, China. Electronic address: chenhui@ccmu.edu.cn."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "260",
+      "journalIssueId": 3899368,
+      "dateOfPublication": "2025 Mar",
+      "monthOfPublication": 3,
+      "yearOfPublication": 2025,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2025-03-01"
+    },
+    "pubYear": "2025",
+    "pageInfo": "108568",
+    "electronicPublicationDate": "2024-12-18",
+    "firstPublicationDate": "2024-12-18"
+  },
+  {
+    "pmid": "40188576",
+    "doi": "10.1016/j.cmpb.2025.108759",
+    "title": "Towards robust multimodal ultrasound classification for liver tumor diagnosis: A generative approach to modality missingness.",
+    "authorString": "Guo J, Bu R, Shen W, Feng T.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Guo J",
+          "lastName": "Guo",
+          "firstName": "Jiali",
+          "initials": "J",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Yunnan University of Finance and Economics, Kunming, Yunnan, China; Yunnan Key Laboratory of Service Computing, Yunnan University of Finance and Economics, Kunming, Yunnan, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Bu R",
+          "lastName": "Bu",
+          "firstName": "Rui",
+          "initials": "R",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "The Second Affiliated Hospital of Kunming Medical University, Kunming, Yunnan, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Shen W",
+          "lastName": "Shen",
+          "firstName": "Wanting",
+          "initials": "W",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0009-0009-0090-3465"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Yunnan University of Finance and Economics, Kunming, Yunnan, China."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Feng T",
+          "lastName": "Feng",
+          "firstName": "Tao",
+          "initials": "T",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-4443-157X"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Yunnan University of Finance and Economics, Kunming, Yunnan, China; Yunnan Key Laboratory of Service Computing, Yunnan University of Finance and Economics, Kunming, Yunnan, China. Electronic address: vonpower@ynufe.edu.cn."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "265",
+      "journalIssueId": 3931937,
+      "dateOfPublication": "2025 Jun",
+      "monthOfPublication": 6,
+      "yearOfPublication": 2025,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2025-06-01"
+    },
+    "pubYear": "2025",
+    "pageInfo": "108759",
+    "electronicPublicationDate": "2025-03-30",
+    "firstPublicationDate": "2025-03-30"
+  },
+  {
+    "pmid": "38968829",
+    "doi": "10.1016/j.cmpb.2024.108308",
+    "title": "A deep learning approach for overall survival prediction in lung cancer with missing values.",
+    "authorString": "Caruso CM, Guarrasi V, Ramella S, Soda P.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Caruso CM",
+          "lastName": "Caruso",
+          "firstName": "Camillo Maria",
+          "initials": "CM",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-7320-4173"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Research Unit of Computer Systems and Bioinformatics, Department of Engineering, Università Campus Bio-Medico di Roma, Rome, Italy. Electronic address: camillomaria.caruso@unicampus.it."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Guarrasi V",
+          "lastName": "Guarrasi",
+          "firstName": "Valerio",
+          "initials": "V",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-1860-7447"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Research Unit of Computer Systems and Bioinformatics, Department of Engineering, Università Campus Bio-Medico di Roma, Rome, Italy. Electronic address: valerio.guarrasi@unicampus.it."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Ramella S",
+          "lastName": "Ramella",
+          "firstName": "Sara",
+          "initials": "S",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-5782-7717"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Operative Research Unit of Radiation Oncology, Fondazione Policlinico Universitario Campus Bio-Medico, Rome, Italy. Electronic address: s.ramella@policlinicocampus.it."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Soda P",
+          "lastName": "Soda",
+          "firstName": "Paolo",
+          "initials": "P",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Research Unit of Computer Systems and Bioinformatics, Department of Engineering, Università Campus Bio-Medico di Roma, Rome, Italy; Department of Diagnostics and Intervention, Radiation Physics, Biomedical Engineering, Umeå University, Umeå, Sweden. Electronic address: p.soda@unicampus.it."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "254",
+      "journalIssueId": 3804935,
+      "dateOfPublication": "2024 Sep",
+      "monthOfPublication": 9,
+      "yearOfPublication": 2024,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2024-09-01"
+    },
+    "pubYear": "2024",
+    "pageInfo": "108308",
+    "electronicPublicationDate": "2024-06-28",
+    "firstPublicationDate": "2024-06-28"
+  },
+  {
+    "pmid": "36260971",
+    "doi": "10.1016/j.cmpb.2022.107172",
+    "title": "Missing data imputation using utility-based regression and sampling approaches.",
+    "authorString": "Haliduola HN, Bretz F, Mansmann U.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Haliduola HN",
+          "lastName": "Haliduola",
+          "firstName": "Halimu N",
+          "initials": "HN",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-9157-8187"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Institute for Medical Information Processing, Biometry and Epidemiology - IBE, LMU Munich, Munich, Germany."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Bretz F",
+          "lastName": "Bretz",
+          "firstName": "Frank",
+          "initials": "F",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-2008-8340"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Novartis Pharma AG, Basel, Switzerland; Section for Medical Statistics, Medical University of Vienna, Vienna, Austria."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Mansmann U",
+          "lastName": "Mansmann",
+          "firstName": "Ulrich",
+          "initials": "U",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-9955-8906"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Institute for Medical Information Processing, Biometry and Epidemiology - IBE, LMU Munich, Munich, Germany. Electronic address: mansmann@ibe.med.uni-muenchen.de."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "226",
+      "journalIssueId": 3455742,
+      "dateOfPublication": "2022 Nov",
+      "monthOfPublication": 11,
+      "yearOfPublication": 2022,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2022-11-01"
+    },
+    "pubYear": "2022",
+    "pageInfo": "107172",
+    "electronicPublicationDate": "2022-10-03",
+    "firstPublicationDate": "2022-10-03"
+  },
+  {
+    "pmid": "37307766",
+    "doi": "10.1016/j.cmpb.2023.107644",
+    "title": "A single stage knowledge distillation network for brain tumor segmentation on limited MR image modalities.",
+    "authorString": "Choi Y, Al-Masni MA, Jung KJ, Yoo RE, Lee SY, Kim DH.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Choi Y",
+          "lastName": "Choi",
+          "firstName": "Yoonseok",
+          "initials": "Y",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Electrical and Electronic Engineering, College of Engineering, Yonsei University, Seoul 03722, Republic of Korea."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Al-Masni MA",
+          "lastName": "Al-Masni",
+          "firstName": "Mohammed A",
+          "initials": "MA",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-1548-965X"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Artificial Intelligence, College of Software & Convergence Technology, Daeyang AI Center, Sejong University, Seoul 05006, Republic of Korea."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Jung KJ",
+          "lastName": "Jung",
+          "firstName": "Kyu-Jin",
+          "initials": "KJ",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0003-2842-1707"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Electrical and Electronic Engineering, College of Engineering, Yonsei University, Seoul 03722, Republic of Korea."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Yoo RE",
+          "lastName": "Yoo",
+          "firstName": "Roh-Eul",
+          "initials": "RE",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Radiology, Seoul National University Hospital, 101 Daehak-ro Jongno-gu, Seoul 03080, Republic of Korea; Department of Radiology, Seoul National University College of Medicine, 103 Daehak-ro Jongno-gu, Seoul 03080, Republic of Korea."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Lee SY",
+          "lastName": "Lee",
+          "firstName": "Seong-Yeong",
+          "initials": "SY",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Radiology, Seoul National University Hospital, 101 Daehak-ro Jongno-gu, Seoul 03080, Republic of Korea."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Kim DH",
+          "lastName": "Kim",
+          "firstName": "Dong-Hyun",
+          "initials": "DH",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Electrical and Electronic Engineering, College of Engineering, Yonsei University, Seoul 03722, Republic of Korea. Electronic address: donghyunkim@yonsei.ac.kr."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "240",
+      "journalIssueId": 3622467,
+      "dateOfPublication": "2023 Oct",
+      "monthOfPublication": 10,
+      "yearOfPublication": 2023,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2023-10-01"
+    },
+    "pubYear": "2023",
+    "pageInfo": "107644",
+    "electronicPublicationDate": "2023-06-04",
+    "firstPublicationDate": "2023-06-04"
+  },
+  {
+    "pmid": "39644781",
+    "doi": "10.1016/j.cmpb.2024.108537",
+    "title": "Raw photoplethysmogram waveforms versus peak-to-peak intervals for machine learning detection of atrial fibrillation: Does waveform matter?",
+    "authorString": "Isaksen JL, Arildsen B, Lind C, Nørregaard M, Vernooy K, Schotten U, Jespersen T, Betz K, Hermans ANL, Kanters JK, Linz D.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Isaksen JL",
+          "lastName": "Isaksen",
+          "firstName": "Jonas L",
+          "initials": "JL",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0003-3227-1131"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratory of Experimental Cardiology, Department of Biomedical Sciences, University of Copenhagen, Denmark. Electronic address: jonasisaksen@sund.ku.dk."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Arildsen B",
+          "lastName": "Arildsen",
+          "firstName": "Bolette",
+          "initials": "B",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratory of Experimental Cardiology, Department of Biomedical Sciences, University of Copenhagen, Denmark."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Lind C",
+          "lastName": "Lind",
+          "firstName": "Cathrine",
+          "initials": "C",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratory of Experimental Cardiology, Department of Biomedical Sciences, University of Copenhagen, Denmark."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Nørregaard M",
+          "lastName": "Nørregaard",
+          "firstName": "Malene",
+          "initials": "M",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratory of Experimental Cardiology, Department of Biomedical Sciences, University of Copenhagen, Denmark."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Vernooy K",
+          "lastName": "Vernooy",
+          "firstName": "Kevin",
+          "initials": "K",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-8818-5964"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Cardiology, Maastricht University Medical Center and Cardiovascular Research Institute Maastricht, Maastricht, the Netherlands."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Schotten U",
+          "lastName": "Schotten",
+          "firstName": "Ulrich",
+          "initials": "U",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0003-1532-3315"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Cardiology, Maastricht University Medical Center and Cardiovascular Research Institute Maastricht, Maastricht, the Netherlands."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Jespersen T",
+          "lastName": "Jespersen",
+          "firstName": "Thomas",
+          "initials": "T",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0001-6575-360X"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratory of Cardiac Physiology, Department of Biomedical Sciences, University of Copenhagen, Denmark."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Betz K",
+          "lastName": "Betz",
+          "firstName": "Konstanze",
+          "initials": "K",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Cardiology, Maastricht University Medical Center and Cardiovascular Research Institute Maastricht, Maastricht, the Netherlands; Department of Internal Medicine, Eifelklinik St. Brigida GmbH & CO KG., Simmerath, Germany."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Hermans ANL",
+          "lastName": "Hermans",
+          "firstName": "Astrid N L",
+          "initials": "ANL",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0002-9034-1479"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Cardiology, Maastricht University Medical Center and Cardiovascular Research Institute Maastricht, Maastricht, the Netherlands."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Kanters JK",
+          "lastName": "Kanters",
+          "firstName": "Jørgen K",
+          "initials": "JK",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratory of Experimental Cardiology, Department of Biomedical Sciences, University of Copenhagen, Denmark; Center for Biosignal Research, University of California, San Francisco, CA, USA."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Linz D",
+          "lastName": "Linz",
+          "firstName": "Dominik",
+          "initials": "D",
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Laboratory of Cardiac Physiology, Department of Biomedical Sciences, University of Copenhagen, Denmark; Department of Internal Medicine, Eifelklinik St. Brigida GmbH & CO KG., Simmerath, Germany."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "260",
+      "journalIssueId": 3899368,
+      "dateOfPublication": "2025 Mar",
+      "monthOfPublication": 3,
+      "yearOfPublication": 2025,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2025-03-01"
+    },
+    "pubYear": "2025",
+    "pageInfo": "108537",
+    "electronicPublicationDate": "2024-11-28",
+    "firstPublicationDate": "2024-11-28"
+  },
+  {
+    "pmid": "38823117",
+    "doi": "10.1016/j.cmpb.2024.108238",
+    "title": "On the evaluation of deep learning interpretability methods for medical images under the scope of faithfulness.",
+    "authorString": "Lamprou V, Kallipolitis A, Maglogiannis I.",
+    "authorList": {
+      "author": [
+        {
+          "fullName": "Lamprou V",
+          "lastName": "Lamprou",
+          "firstName": "Vangelis",
+          "initials": "V",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0009-0003-1524-5051"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Digital Systems, University of Piraeus, 80, M. Karaoli & A. Dimitriou St, Piraeus 18534, Greece."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Kallipolitis A",
+          "lastName": "Kallipolitis",
+          "firstName": "Athanasios",
+          "initials": "A",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0001-9234-0069"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Digital Systems, University of Piraeus, 80, M. Karaoli & A. Dimitriou St, Piraeus 18534, Greece. Electronic address: nasskall@unipi.gr."
+              }
+            ]
+          }
+        },
+        {
+          "fullName": "Maglogiannis I",
+          "lastName": "Maglogiannis",
+          "firstName": "Ilias",
+          "initials": "I",
+          "authorId": {
+            "type": "ORCID",
+            "value": "0000-0003-2860-399X"
+          },
+          "authorAffiliationDetailsList": {
+            "authorAffiliation": [
+              {
+                "affiliation": "Department of Digital Systems, University of Piraeus, 80, M. Karaoli & A. Dimitriou St, Piraeus 18534, Greece."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "journalInfo": {
+      "volume": "253",
+      "journalIssueId": 3785197,
+      "dateOfPublication": "2024 Aug",
+      "monthOfPublication": 8,
+      "yearOfPublication": 2024,
+      "journal": {
+        "medlineAbbreviation": "Comput Methods Programs Biomed",
+        "title": "Computer methods and programs in biomedicine",
+        "essn": "1872-7565",
+        "issn": "0169-2607",
+        "nlmid": "8506513",
+        "isoabbreviation": "Comput Methods Programs Biomed"
+      },
+      "printPublicationDate": "2024-08-01"
+    },
+    "pubYear": "2024",
+    "pageInfo": "108238",
+    "electronicPublicationDate": "2024-05-28",
+    "firstPublicationDate": "2024-05-28"
+  }
+]

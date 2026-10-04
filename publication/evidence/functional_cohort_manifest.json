@@ -1,0 +1,38 @@
+{
+  "created_utc": "2026-09-19T20:21:07.463875+00:00",
+  "status": "prepared",
+  "scientific_role": "exploratory_structure_transfer_sensitivity_analysis",
+  "untouched": false,
+  "label_blind_selection": true,
+  "training_gene_disjoint": true,
+  "training_protein_variant_disjoint": true,
+  "homology_disjoint": "not_established_do_not_claim",
+  "sequence_contract": "identical_full_sequence_hash_and_reference_amino_acid_position",
+  "conservation_transferred": false,
+  "new_esm_extraction": false,
+  "limitations": [
+    "Previously evaluated DMS labels; not an untouched cohort",
+    "Availability-selected residues; not all possible residues or proteins",
+    "Human reference covariates; protein/gene-disjointness is not homology-disjointness",
+    "Later annotation releases do not reconstruct a historical deployment"
+  ],
+  "total_dms_rows": 696311,
+  "rows_matching_structure": 9459,
+  "ambiguous_residue_covariate_keys_excluded": 29037,
+  "exact_protein_variant_disjoint_rows": 8911,
+  "gene_disjoint_rows": 19,
+  "assays": 1,
+  "genes": 1,
+  "source_sha256": {
+    "I:\\VariFuse_2\\outputs\\10_esm_features\\internal_with_esm.parquet": "e5bf6ecddaea837dba4a3302074f80e1a1930c65e15d875f2df6c481adee0935",
+    "I:\\VariFuse_2\\outputs\\10_esm_features\\clinvar_with_esm.parquet": "0e946430973ef80fdabf6d97bab1b26841dc90b32e32e6f8c9b4804b9a76a80c",
+    "I:\\VariFuse_2\\outputs\\10_esm_features\\dms_with_esm.parquet": "6b75f40197b1dc35ca8315020b85278df092ad2f7a1265ed2fc85a0819b72ca1"
+  },
+  "source_embedding_sha256": "ac572a2f381c3a628392f988d67897a26f7b15a256bbc72ce7849311197cde0a",
+  "code_sha256": "32770f02cb81c4094a80f004071867e3c1f2d38eafaa262c4509c08d43e5e8ba",
+  "outputs": {
+    "functional_cohort_membership.parquet": "08413db7f4fe7c06c725050be890415996432424bcba11dba4917ea4fb44ad8e",
+    "functional_esm_embeddings.npy": "fb5e34b318fe262ce0b26cae41c79d6337cd53e9e9a58eb55aae6f239528c534",
+    "functional_with_structure.parquet": "86eb2bda64ae1209093b1ec0bab5061bf0064a5508e2404012a1d33e424d195e"
+  }
+}

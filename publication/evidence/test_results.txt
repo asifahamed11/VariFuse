@@ -1,0 +1,19 @@
+........................................................................ [ 28%]
+........................................................................ [ 56%]
+........................................................................ [ 84%]
+.......................................                                  [100%]
+============================== warnings summary ===============================
+tests/test_publication_common.py::test_gated_fusion_has_valid_shape_and_fewer_parameters_than_legacy_attention
+  I:\VariFuse_2\.venv-publication\Lib\site-packages\torch\nn\modules\transformer.py:392: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.norm_first was True
+    warnings.warn(
+
+tests/test_reliability_diagnostics.py: 12 warnings
+  I:\VariFuse_2\.venv-publication\Lib\site-packages\torch\utils\data\_utils\pin_memory.py:57: DeprecationWarning: The argument 'device' of Tensor.pin_memory() is deprecated. Please do not pass this argument. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\aten\src\ATen\native\Memory.cpp:48.)
+    return data.pin_memory(device)
+
+tests/test_reliability_diagnostics.py: 12 warnings
+  I:\VariFuse_2\.venv-publication\Lib\site-packages\torch\utils\data\_utils\pin_memory.py:57: DeprecationWarning: The argument 'device' of Tensor.is_pinned() is deprecated. Please do not pass this argument. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\aten\src\ATen\native\Memory.cpp:33.)
+    return data.pin_memory(device)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+255 passed, 25 warnings in 28.37s

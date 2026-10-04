@@ -1,0 +1,508 @@
+{
+  "protocol_version": "fixed_nested_group_cv_v4_reliability_residual",
+  "n_rows": 48197,
+  "row_order_sha256": "007c462468d08fad6e1d656946d3ea12c441d741e811da519d84119968312304",
+  "split_group_column": "split_group",
+  "input_sha256": "e5bf6ecddaea837dba4a3302074f80e1a1930c65e15d875f2df6c481adee0935",
+  "embedding_sha256": "a74e27574ff2d715b21c3203bda97dd52e94133e07b97bcea7a47183f753df2d",
+  "outer_folds": 5,
+  "inner_folds": 3,
+  "split_seed": 42,
+  "training_seed": 42,
+  "search_ensemble": 1,
+  "final_ensemble": 3,
+  "final_epochs": 60,
+  "final_patience": 10,
+  "deterministic": true,
+  "protocol_fingerprint": {
+    "source_sha256": {
+      "stage14": "31b008c1b5ec684ff67dd3147745e24fa0881c137fc9af8fb06e15e24cbc413c",
+      "common": "aaacf5e0ef46897b5416af3c61899fcbf24d6de7a39354fc2bbb8d44db8fb391",
+      "gpu_runtime": "204a283323082d7ebb6da3a4d671336b56019b70705e8da06f35ecd6a5072fb0",
+      "config": "36ab2795d0c31131e9f61d757e951f681979e722f763e3fd90005e45f705e3e9",
+      "schema": "f228b8681a4d81a814aef51449569d5e36fc9cfcb487e0933bf456aedad44c8f"
+    },
+    "runtime": {
+      "python": "3.12.13",
+      "platform": "Linux-6.12.90+-x86_64-with-glibc2.35",
+      "numpy": "2.0.2",
+      "pandas": "2.3.3",
+      "torch": "2.10.0+cu128",
+      "lightgbm": "4.6.0",
+      "scikit_learn": "1.6.1",
+      "optuna": "4.9.0"
+    },
+    "accelerator": {
+      "device": "cuda",
+      "cuda_available": true,
+      "visible_cuda_devices": 2,
+      "selected_cuda_devices": [
+        0,
+        1
+      ],
+      "data_parallel": true,
+      "devices": [
+        {
+          "index": 0,
+          "name": "Tesla T4",
+          "total_bytes": 15636037632,
+          "free_bytes": 15526068224,
+          "capability": [
+            7,
+            5
+          ]
+        },
+        {
+          "index": 1,
+          "name": "Tesla T4",
+          "total_bytes": 15636037632,
+          "free_bytes": 15526068224,
+          "capability": [
+            7,
+            5
+          ]
+        }
+      ],
+      "available": true,
+      "torch_cuda": "12.8",
+      "cudnn": 91002,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "deterministic": true,
+    "early_stopping_metric": "auprc",
+    "threshold_policy": {
+      "recall_floor": 0.9,
+      "fallback_fbeta": 2.0
+    },
+    "search_budget": {
+      "trials": 40,
+      "ensemble": 1,
+      "epochs": 25,
+      "patience": 5
+    },
+    "final_budget": {
+      "ensemble": 3,
+      "epochs": 60,
+      "patience": 10
+    },
+    "lightgbm_nested_grid": [
+      {
+        "num_leaves": 15,
+        "min_child_samples": 30
+      },
+      {
+        "num_leaves": 15,
+        "min_child_samples": 90
+      },
+      {
+        "num_leaves": 31,
+        "min_child_samples": 30
+      },
+      {
+        "num_leaves": 31,
+        "min_child_samples": 90
+      },
+      {
+        "num_leaves": 63,
+        "min_child_samples": 30
+      },
+      {
+        "num_leaves": 63,
+        "min_child_samples": 90
+      }
+    ],
+    "reliability_residual_contract": {
+      "architecture": "reliability_residual",
+      "sequence_anchor": "esm_variant_score",
+      "anchor_direction": "lower_esm_log_likelihood_ratio_is_more_pathogenic",
+      "anchor_constraint": "positive_softplus_slope_on_negated_score",
+      "fusion_rule": "anchor_logit_plus_reliability_gate_times_bounded_residual",
+      "safe_fallback": "exact_sequence_anchor_when_no_reliable_structure_or_conservation",
+      "availability_features_are_gate_only": true,
+      "local_structure_encoder": "dedicated_lightweight_structural_expert_zeroed_when_structure_unreliable",
+      "evolution_encoder": "dedicated_conservation_expert_zeroed_when_conservation_unavailable",
+      "modality_dropout_training_only": true,
+      "mixup_disabled": true,
+      "required_gate_features": [
+        "HAS_STRUCTURE",
+        "LOW_CONFIDENCE_STRUCTURE"
+      ],
+      "conservation_missing_features": [
+        "GERP++_RS__missing",
+        "phyloP100way_vertebrate__missing",
+        "phastCons100way_vertebrate__missing"
+      ],
+      "optional_gate_features": [
+        "HAS_DOMAIN_ANNOTATION",
+        "HAS_ACTIVE_SITE_ANNOTATION",
+        "HAS_BINDING_SITE_ANNOTATION",
+        "HAS_TRANSMEMBRANE_ANNOTATION",
+        "PLDDT_SCORE",
+        "LOCAL_MEAN_PLDDT_8A",
+        "LOCAL_MIN_PLDDT_8A",
+        "LOCAL_CONFIDENT_CONTACT_FRACTION_8A",
+        "LOCAL_CONTACT_COUNT_8A",
+        "LOCAL_CONTACT_COUNT_12A",
+        "LOCAL_LONG_RANGE_CONTACT_COUNT_8A"
+      ],
+      "available_gate_features": [],
+      "modality_dropout_probability": 0.25,
+      "maximum_absolute_residual_logit": 2.0
+    }
+  },
+  "canonical_sha256": "eeb2283b3539c8a17f0f9b76e3b3431b3fb3a276458ce34d280bf8a261067487",
+  "folds": [
+    {
+      "outer_fold": 1,
+      "final_training_seeds": [
+        100000142,
+        100000242,
+        100000342
+      ],
+      "outer_train": {
+        "n": 38093,
+        "positives": 13149,
+        "split_groups": 2972,
+        "genes": 3719,
+        "row_ids_sha256": "f80c27eff4ff53f47feb52e83fa71e62d515fd93d10700f060e55ec756570266",
+        "genes_sha256": "110d0a43141d5e4536e877c8dd8301d49a7e940b3763cfe465e4de4a227babc1",
+        "split_groups_sha256": "c4dde1721dc63ff0c0a5465cd0f1fbebfe767155c0c2371addf2d8285ecab697",
+        "n_rows": 38093
+      },
+      "outer_validation": {
+        "n": 10104,
+        "positives": 3591,
+        "split_groups": 746,
+        "genes": 973,
+        "row_ids_sha256": "e40b29e739b0edc80f3b751698d454c25b76842c314ef79d15ca27a91c4ba6bc",
+        "genes_sha256": "ecd0b310a991d5d9621bde95792fcda62d28c539b60e263be193c7324d7b7d98",
+        "split_groups_sha256": "820268649e2b8596762fda061702e1cca7b1d805569702c5603ad744df5be85c",
+        "n_rows": 10104
+      },
+      "final_partitions": {
+        "fit": {
+          "n": 25087,
+          "positives": 8485,
+          "split_groups": 1984,
+          "genes": 2475,
+          "row_ids_sha256": "2f89e92d28e2e118d0d7e4b62d0cc9a0d35a38fdd6e8329e2e9e551c85301303",
+          "genes_sha256": "d3a23e80807abb515b245580b5f0b416067b4ce4a0434c8c3e8de34d35e3b552",
+          "split_groups_sha256": "c30d7262e8d9e96dfeaf87734c69c641812dfd229c589ce7f93bedb21f4f1d2a",
+          "n_rows": 25087
+        },
+        "early_stopping": {
+          "n": 3983,
+          "positives": 1218,
+          "split_groups": 311,
+          "genes": 399,
+          "row_ids_sha256": "b94db846b5650223d796e5153b708902973ebe8162ef0f8630df09a6b72548a4",
+          "genes_sha256": "f082db526944c93ab849c0da38862a70afa73f20a35bfce150ef242781d4854c",
+          "split_groups_sha256": "ff8067dcd0fa9adb41c1533c94ee0baaeb86175be70367384069037c6d330589",
+          "n_rows": 3983
+        },
+        "temperature": {
+          "n": 4776,
+          "positives": 1878,
+          "split_groups": 339,
+          "genes": 415,
+          "row_ids_sha256": "c9dcf3ce8037e79669b3fe1ff4fc60fc1490f065434ba3f2d05cc6ebb4e5a696",
+          "genes_sha256": "7bd65ae837b9fa9e91f4a838c73efb53082a3bef8b99d1b4bdac2cdb82947dd9",
+          "split_groups_sha256": "1edbf5b09922c6a309fc347ed23fed5972b332be98ac463d8f9061e054115f51",
+          "n_rows": 4776
+        },
+        "threshold": {
+          "n": 4247,
+          "positives": 1568,
+          "split_groups": 338,
+          "genes": 430,
+          "row_ids_sha256": "e9e9b3b4cf75126e224f5725db8614126eb5c30fa334d9895f58376e8d8f34ff",
+          "genes_sha256": "2f6e173e47e47baa4eacb585c9ab4a0ba693dc78ab62fd70e8e01104529ad201",
+          "split_groups_sha256": "8cbe44da6db0d818c89d4ec8028b886b6010b54915add9e42227f60d29980f0b",
+          "n_rows": 4247
+        }
+      }
+    },
+    {
+      "outer_fold": 2,
+      "final_training_seeds": [
+        200000142,
+        200000242,
+        200000342
+      ],
+      "outer_train": {
+        "n": 37813,
+        "positives": 13075,
+        "split_groups": 2951,
+        "genes": 3704,
+        "row_ids_sha256": "65e2af46102488b367f4291064f0fc675b567328a51a8ca966287683b1727931",
+        "genes_sha256": "1d4f398e504772e7e3f9ad096abafe128fd1a648c404ce1d08775a6b917071d6",
+        "split_groups_sha256": "d5fb071727f52a19616bafb9a755181a8ca4b14a9346bbaf988badbc3d04e7c5",
+        "n_rows": 37813
+      },
+      "outer_validation": {
+        "n": 10384,
+        "positives": 3665,
+        "split_groups": 767,
+        "genes": 988,
+        "row_ids_sha256": "2e4a4cc0a68258357b7a466b36e477569afd55b2eb2a0754876166ee681c606c",
+        "genes_sha256": "c78fe7a426b6d1d294a6b58a2a24e3f588786f389f395fc31cc16aeae26a5bd7",
+        "split_groups_sha256": "b0a57e9adff802a9413c5518611a69e9a145320e6c2baa60802512b2606dd946",
+        "n_rows": 10384
+      },
+      "final_partitions": {
+        "fit": {
+          "n": 26045,
+          "positives": 9181,
+          "split_groups": 1970,
+          "genes": 2470,
+          "row_ids_sha256": "f97705acef109681a793ac371cc1873a1f56015fa60d80e2189c6dba2ff1a9c7",
+          "genes_sha256": "fd0ff2525495448a1e7734e9a975f87332fedf94284883145e758447db39429f",
+          "split_groups_sha256": "4c7c4983b00ad4037c8132fa7e11998d253cc64480f54a868a5f88154001abda",
+          "n_rows": 26045
+        },
+        "early_stopping": {
+          "n": 3446,
+          "positives": 934,
+          "split_groups": 321,
+          "genes": 411,
+          "row_ids_sha256": "038d10e606620cdcd62e96c6841cbf9f657b023cf0e129dd899ce5a3e15196f6",
+          "genes_sha256": "746590d8a0205370cd870554d1db3f71ec285ccc2048272ea1fe2d3f7c1974ca",
+          "split_groups_sha256": "203b11f61b029be5371404533d8598dc32871d5418f94308467f3f4308a7e2ca",
+          "n_rows": 3446
+        },
+        "temperature": {
+          "n": 4264,
+          "positives": 1604,
+          "split_groups": 350,
+          "genes": 443,
+          "row_ids_sha256": "8f2f0f8dbc09cdc3079f4553ec76c29809e8b73691382b1e03896158b66341c1",
+          "genes_sha256": "dec790e797a9a250a6b9575dc8a69ae89bdc692897205d6983a6ec254a1d2a41",
+          "split_groups_sha256": "702621f465647449b356f57c0da78c7acf5f47cb83381c534060af7b4c39150f",
+          "n_rows": 4264
+        },
+        "threshold": {
+          "n": 4058,
+          "positives": 1356,
+          "split_groups": 310,
+          "genes": 380,
+          "row_ids_sha256": "29fb62d9aea3dcbb1165e125f30b6ac3462ce7da71257d89132e1d6c0821cb2c",
+          "genes_sha256": "55d429593111ceea8422d4569dc0482034b0738dbbaa80f26a44a1515b7ef7d2",
+          "split_groups_sha256": "0205684688ab7b564bf06143a39054657031119b0e9fe493cb9c99a60d6a430d",
+          "n_rows": 4058
+        }
+      }
+    },
+    {
+      "outer_fold": 3,
+      "final_training_seeds": [
+        300000142,
+        300000242,
+        300000342
+      ],
+      "outer_train": {
+        "n": 38641,
+        "positives": 13530,
+        "split_groups": 2974,
+        "genes": 3783,
+        "row_ids_sha256": "38740582e8ed51831d35f741b10df270eb30de2d0b0cfb8892125a5bade18e8d",
+        "genes_sha256": "a6f49eeaff8bb11a7607c326327aac3b6259745399a5efff36717e899c6c70d4",
+        "split_groups_sha256": "89c6ca42295200350f366b2d7ca0a3f5fd8b149519abbcaecc5762cb1435adf0",
+        "n_rows": 38641
+      },
+      "outer_validation": {
+        "n": 9556,
+        "positives": 3210,
+        "split_groups": 744,
+        "genes": 909,
+        "row_ids_sha256": "1319738b9968af2dfdce9342c0391682aac9e6e607b51e2e8378d615e569669e",
+        "genes_sha256": "f4f0e6079b3956f130141fcb5979acd32535ec3e91286226828a8ac0e712c3df",
+        "split_groups_sha256": "7b1d24d973f556c1350109805f7c823cdac86ece20ec17a3ae8af93e3c5a2f9d",
+        "n_rows": 9556
+      },
+      "final_partitions": {
+        "fit": {
+          "n": 24627,
+          "positives": 8448,
+          "split_groups": 1965,
+          "genes": 2497,
+          "row_ids_sha256": "65cc478ce6c5f7140c56d742cef2b7c9ec1265edcc2b04783bd5ba684e6217d4",
+          "genes_sha256": "6be8ca20d8440098fbb1a4bffe44710b95cb65177f51bf3f0eef11b58870aff3",
+          "split_groups_sha256": "99c52c6c85deb4b118697f574f13048dd6ef19fe06419a5e4857de995b3cb940",
+          "n_rows": 24627
+        },
+        "early_stopping": {
+          "n": 5095,
+          "positives": 2042,
+          "split_groups": 344,
+          "genes": 439,
+          "row_ids_sha256": "5375bc00e396d3b0bb1828bd341d8c7e7416e05555d59c1457190432c8401081",
+          "genes_sha256": "1ffe5a57609d59adfa65805a7ddd9fda8b99a95162da90d11d6ff7fc224ff5b4",
+          "split_groups_sha256": "4449b1aa825a8f7fb82a167b6b19608b5780fec270100f56a8fc0b703959ac04",
+          "n_rows": 5095
+        },
+        "temperature": {
+          "n": 4622,
+          "positives": 1728,
+          "split_groups": 332,
+          "genes": 417,
+          "row_ids_sha256": "4edbd87c000e3ed114022a89a3c4f842c5c28fbdd27aec182cffa9f9680de629",
+          "genes_sha256": "e2a8464c7dd38e2a66633d7aad158519eade2beca8e96ede48cea5525bdef284",
+          "split_groups_sha256": "0f5ca04d181c7fd64675bcc6da41df559abf5d7388e2e5263d72d0279543a1e3",
+          "n_rows": 4622
+        },
+        "threshold": {
+          "n": 4297,
+          "positives": 1312,
+          "split_groups": 333,
+          "genes": 430,
+          "row_ids_sha256": "8d4c55c02a303418f65d26c961f3a5b5894275ae6840befcdec61d321886b2b7",
+          "genes_sha256": "31f1783ef60112aa601090f14c4d711fca9709633d98357435fc9f2f0dd9a766",
+          "split_groups_sha256": "f0ac0d9271dda12155d52f3b390039af3f9c59f07a282f5da16a6eeb4828509e",
+          "n_rows": 4297
+        }
+      }
+    },
+    {
+      "outer_fold": 4,
+      "final_training_seeds": [
+        400000142,
+        400000242,
+        400000342
+      ],
+      "outer_train": {
+        "n": 38613,
+        "positives": 13416,
+        "split_groups": 3008,
+        "genes": 3794,
+        "row_ids_sha256": "168f216ed2f90e252282e0a21838f3070492cc4e0ded3717ee294b033a34d373",
+        "genes_sha256": "8fdc2d823d63fd6b87e88500820b7e4d60474e92ae52a44713da7c08fb41df3a",
+        "split_groups_sha256": "2783eeddd8c03b95c9ed84a4f57531c9e1edb3ec7bf6f16212973ee59006e4f4",
+        "n_rows": 38613
+      },
+      "outer_validation": {
+        "n": 9584,
+        "positives": 3324,
+        "split_groups": 710,
+        "genes": 898,
+        "row_ids_sha256": "ade336e79563d9b41071f12688633f9bef5143402c59497d78823f540105e494",
+        "genes_sha256": "ceed147c115e62e8bbc8a8a4b4d570ddf6910cb4f907f9a8c830701baf55bb96",
+        "split_groups_sha256": "c34cc0aef391a1d03f71ce39f59d4e67808faa1a8e19cb0f7961bc24616dccfd",
+        "n_rows": 9584
+      },
+      "final_partitions": {
+        "fit": {
+          "n": 26198,
+          "positives": 9337,
+          "split_groups": 2013,
+          "genes": 2567,
+          "row_ids_sha256": "c65172eb66914d83a5a5966f71a4e711ba3e899513729590fb52c99378fe154a",
+          "genes_sha256": "7e8a704c241862ad38fa677c8871dfdd0944dbaab765364fc5d4439857f7b3f3",
+          "split_groups_sha256": "848fda3e921b312a88606497cc4db33c83acf5bdb6d7b4c6b84fff1dd95058e3",
+          "n_rows": 26198
+        },
+        "early_stopping": {
+          "n": 4635,
+          "positives": 1783,
+          "split_groups": 338,
+          "genes": 403,
+          "row_ids_sha256": "717a2ba8e9b3a62473ed452691b26b8dc29fc491b1a61656ef94538b139da790",
+          "genes_sha256": "8f2a1e0adeca24064e5401c112655f60e44d3c54858ee7dc4f394f2e319694ce",
+          "split_groups_sha256": "979cb353cbd4373b15a6a917179032f872fc71cf338adc27a91ee6721336b6c7",
+          "n_rows": 4635
+        },
+        "temperature": {
+          "n": 3784,
+          "positives": 1187,
+          "split_groups": 323,
+          "genes": 410,
+          "row_ids_sha256": "a5e34eef339721ca2ab5d324dcc94b24fb6e2c8b2578c10dd507f40f3ae5c65c",
+          "genes_sha256": "f8a554faf490e826b15da8b0a3da34c81d8483262b56405d8bdaac3b335b63f2",
+          "split_groups_sha256": "cc9c2c6242cf1293f5cd477110f78684d3474ae78b3c447d23ced75431d4d29e",
+          "n_rows": 3784
+        },
+        "threshold": {
+          "n": 3996,
+          "positives": 1109,
+          "split_groups": 334,
+          "genes": 414,
+          "row_ids_sha256": "28b43cee29b5c218fbd357437eb0d43e44bbd960a5444959d4908f6ada2c2a95",
+          "genes_sha256": "e820d00fa285d18e32412d72656bfba664de9d8192d206ed868ebb9ada687db5",
+          "split_groups_sha256": "8fe0c2d3c1687b11eed254e3b6cf3c4fbb39e8373396e3c195d4466496afb603",
+          "n_rows": 3996
+        }
+      }
+    },
+    {
+      "outer_fold": 5,
+      "final_training_seeds": [
+        500000142,
+        500000242,
+        500000342
+      ],
+      "outer_train": {
+        "n": 39628,
+        "positives": 13790,
+        "split_groups": 2967,
+        "genes": 3768,
+        "row_ids_sha256": "e6962625d7b78f9fbea7775e28adc2eb1e4778da8e3a540b98c34a311b893c13",
+        "genes_sha256": "104b24ab04e21dfb67d5f6e1d9db794526e1c2e717354da86c49f11a9d1031ec",
+        "split_groups_sha256": "8343b709407bf28e11cef44faac1087b7bec476b1122252e12dfa9491e762104",
+        "n_rows": 39628
+      },
+      "outer_validation": {
+        "n": 8569,
+        "positives": 2950,
+        "split_groups": 751,
+        "genes": 924,
+        "row_ids_sha256": "3996e9b39af7e05a08d94745905ee527cd5d1c157f50827ffe925bdc8a4799e9",
+        "genes_sha256": "02393361e18e12101710b72b58d89998e99b6775d720120dae41f44d9aadb390",
+        "split_groups_sha256": "762609e3f90a8f730eef24dfef286865e3bd8034efeec6aa8f1d5067e686c698",
+        "n_rows": 8569
+      },
+      "final_partitions": {
+        "fit": {
+          "n": 26089,
+          "positives": 9337,
+          "split_groups": 1972,
+          "genes": 2516,
+          "row_ids_sha256": "f1d398aaef7af6480e7bb662ca644df8859319ea88a5b2d74b12180cfbd5532b",
+          "genes_sha256": "250cabddf00086ebbfc38ac4717b68a972602ce712f37832f8a42ad19bcd0858",
+          "split_groups_sha256": "8bffac71172d932e4d04573f3fa2188aef8d0a79b53c54697849cffad7fd5358",
+          "n_rows": 26089
+        },
+        "early_stopping": {
+          "n": 4618,
+          "positives": 1670,
+          "split_groups": 330,
+          "genes": 413,
+          "row_ids_sha256": "ae8ebca09c9728a6c94c9310eb32c04297b8d60e9d496600caa072917036af4b",
+          "genes_sha256": "7c88abac4be4a86cc267e393efe8135803a3090c4bcd0b608161cf822d5cd236",
+          "split_groups_sha256": "3561a5b0ed43a9fdbe02e3fdef2d7406961950190c08a0c13937b9c900b7f396",
+          "n_rows": 4618
+        },
+        "temperature": {
+          "n": 4616,
+          "positives": 1563,
+          "split_groups": 318,
+          "genes": 396,
+          "row_ids_sha256": "21e8cb246461b26d9ce07dd23c27bec3f5742b82e8cffc8ae17cccf43a8033e6",
+          "genes_sha256": "6c76e2320d6348e91da3cbf8c1f335e183e0672dab6b019dbc8a2da4a63ec9c6",
+          "split_groups_sha256": "1c6f864c1f9e2bd7917715afca343c42dc39dae6533604df24566251ec46af9a",
+          "n_rows": 4616
+        },
+        "threshold": {
+          "n": 4305,
+          "positives": 1220,
+          "split_groups": 347,
+          "genes": 443,
+          "row_ids_sha256": "5b3335c21dceffc378cb8dc1c7a75b4b3cbe322326b9b16b2ce0f1db2016c75e",
+          "genes_sha256": "d84cfb35b012e9fa0269ed484b31e4887236605036dea3751a4d65123b36e836",
+          "split_groups_sha256": "ee13abf7cba22365e1039ba0fdd61cd03fb5274aac96ebc6b84c41e932cf2112",
+          "n_rows": 4305
+        }
+      }
+    }
+  ],
+  "full_partition_source_sha256": "9d07b64214691ed303303538479a0c303b9c0aa39b3bb435f7d3fac85e34b46a",
+  "indices_included": false
+}
